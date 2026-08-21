@@ -1,0 +1,6 @@
+{
+  "name": "AutoArchive - Archivo Automotriz",
+  "description": "Plataforma editorial de documentales, historia y datos curiosos del automovilismo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
