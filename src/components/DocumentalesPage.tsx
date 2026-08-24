@@ -9,6 +9,7 @@ import { supraImages } from '../data/supraData';
 import { mazda787bImages } from '../data/mazda787bData';
 import { nsxImages } from '../data/nsxData';
 import { camaroMustangImages } from '../data/camaroMustangData';
+import { f1Images } from '../data/f1Data';
 import { UserAccountNav } from './UserAccountNav';
 import { Logo } from './Logo';
 
@@ -20,14 +21,14 @@ interface DocumentalesPageProps {
 }
 
 type EraFilter = 'all' | '60s' | '70s' | '80s' | '90s' | '2000s';
-type CountryFilter = 'all' | 'italia' | 'uk' | 'japon' | 'usa';
+type CountryFilter = 'all' | 'italia' | 'uk' | 'japon' | 'usa' | 'global';
 
 interface DocItem {
-  id: 'countach' | 'f40-miura' | 'xj220' | 'r34' | 'supra' | 'mazda-787b' | 'nsx' | 'camaro-mustang';
+  id: 'countach' | 'f40-miura' | 'xj220' | 'r34' | 'supra' | 'mazda-787b' | 'nsx' | 'camaro-mustang' | 'f1';
   number: string;
   badge: string;
   badgeColor: string;
-  country: 'italia' | 'uk' | 'japon' | 'usa';
+  country: 'italia' | 'uk' | 'japon' | 'usa' | 'global';
   era: '60s' | '70s' | '80s' | '90s' | '2000s';
   origin: string;
   years: string;
@@ -52,9 +53,37 @@ interface DocItem {
 
 const DOCUMENTARIES: DocItem[] = [
   {
+    id: 'f1',
+    number: '009',
+    badge: '★ NUEVO ESTRENO // EL PINÁCULO DE LA VELOCIDAD (75 AÑOS)',
+    badgeColor: '#e62628',
+    country: 'global',
+    era: '80s',
+    origin: 'SILVERSTONE, MONZA, SPA & MÓNACO // GLOBAL',
+    years: '1950 — PRESENTE',
+    title: 'LA HISTORIA DE LA',
+    titleAccent: 'FÓRMULA 1',
+    accentColor: '#e62628',
+    borderColor: 'border-[#e62628]/50 hover:border-[#e62628]',
+    bgCard: 'bg-[#180809]',
+    description:
+      'La epopeya definitiva del automovilismo mundial con 12 capítulos extendidos. Del debut en Silverstone 1950 y los 5 títulos de Juan Manuel Fangio, a la revolución del monocasco Lotus, los monstruos Turbo de 1.400 CV de los años 80, la guerra sagrada Senna vs. Prost, el sacrificio de Imola 1994, la sinfonía V10 a 20.000 RPM de Schumacher, la era híbrida y el retorno del Efecto Suelo.',
+    specs: ['V12 / V10 / TURBO / HÍBRIDO', '372.6 KM/H', '1.400+ CV (TURBO) / 1.050+ CV (HÍBRIDO)', '12 CAPÍTULOS EXTENDIDOS'],
+    topSpeed: '372.6 KM/H',
+    power: '1.400+ CV (TURBO) / 1.050+ CV (HÍBRIDO)',
+    engine: 'V12 ATM / V10 3.0L / 1.5L TURBO / 1.6L V6 TURBO HÍBRIDO',
+    units: '1.100+ GRANDES PREMIOS',
+    chaptersCount: 12,
+    image: f1Images.hero,
+    imageAlt: 'Evolución Histórica de la Fórmula 1',
+    audioVisualTag: 'V10 REVS, TURBO FLAMES & GROUND EFFECT',
+    blueprintCode: 'DWG-FIA-F1-1950',
+    tags: ['Juan Manuel Fangio', 'Lotus Efecto Suelo', 'BMW Turbo 1.400 CV', 'Senna vs Prost', 'Ferrari V10 Schumacher', 'Adrian Newey'],
+  },
+  {
     id: 'camaro-mustang',
     number: '008',
-    badge: '★ NUEVO // LA GUERRA DE DETROIT (60 AÑOS)',
+    badge: '★ LA GUERRA DE DETROIT (60 AÑOS)',
     badgeColor: '#ff5500',
     country: 'usa',
     era: '60s',

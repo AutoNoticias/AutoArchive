@@ -1797,7 +1797,7 @@ export const AudioNarrator: React.FC<AudioNarratorProps> = ({
   }, []);
 
   // Safe documentary slug for persistence across browser tabs/refreshes
-  const docStorageKey = `autoarchive_audio_pos_${documentaryTitle.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+  const docStorageKey = `autoarchive_audio_pos_${(documentaryTitle || 'documental').toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
 
   // Initialize SpeechSynthesis on mount & restore previous progress
   useEffect(() => {

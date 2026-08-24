@@ -13,6 +13,7 @@ import { SupraDocumentaryPage } from './components/SupraDocumentaryPage';
 import { Mazda787bDocumentaryPage } from './components/Mazda787bDocumentaryPage';
 import { NsxDocumentaryPage } from './components/NsxDocumentaryPage';
 import { CamaroMustangDocumentaryPage } from './components/CamaroMustangDocumentaryPage';
+import { F1DocumentaryPage } from './components/F1DocumentaryPage';
 import { DatosPage } from './components/DatosPage';
 import { ForoPage } from './components/ForoPage';
 import { AdminPanelPage } from './components/AdminPanelPage';
@@ -34,6 +35,7 @@ function AppContent() {
     const hash = window.location.hash.replace('#', '');
     if (
       hash === 'documentales' ||
+      hash === 'f1' ||
       hash === 'camaro-mustang' ||
       hash === 'nsx' ||
       hash === 'mazda-787b' ||
@@ -59,6 +61,7 @@ function AppContent() {
       const hash = window.location.hash.replace('#', '');
       if (
         hash === 'documentales' ||
+        hash === 'f1' ||
         hash === 'camaro-mustang' ||
         hash === 'nsx' ||
         hash === 'mazda-787b' ||
@@ -183,6 +186,9 @@ function AppContent() {
               onOpenAccountModal={handleOpenAccountModal}
               onOpenBroadcastModal={handleOpenBroadcastModal}
             />
+          )}
+          {currentPage === 'f1' && (
+            <F1DocumentaryPage onNavigate={handleNavigate} onOpenAuthModal={handleOpenAuthModal} />
           )}
           {currentPage === 'xj220' && (
             <Xj220DocumentaryPage onNavigate={handleNavigate} onOpenAuthModal={handleOpenAuthModal} />

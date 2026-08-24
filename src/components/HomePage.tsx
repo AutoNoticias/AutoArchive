@@ -12,6 +12,7 @@ import { nsxImages } from '../data/nsxData';
 import { countachImages } from '../data/countachData';
 import { f40MiuraImages } from '../data/f40MiuraData';
 import { camaroMustangImages } from '../data/camaroMustangData';
+import { f1Images } from '../data/f1Data';
 import { UserAccountNav } from './UserAccountNav';
 import { Logo } from './Logo';
 import { 
@@ -53,27 +54,35 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   const latestDoc = {
-    id: 'camaro-mustang' as RoutePage,
-    title: 'Camaro vs Mustang: La Guerra de Detroit',
-    number: '008',
-    era: '1964 — Presente',
-    origin: 'Detroit & Dearborn, Michigan, USA',
-    engine: 'V8 Big & Small Blocks / Predator 5.2L / LT4 Supercharged',
-    power: '760 CV (GT500) / 650 CV (ZL1 1LE)',
-    topSpeed: '320+ km/h',
-    image: camaroMustangImages.hero,
-    tag: '★ NUEVO ESTRENO // CAPÍTULOS EXTENDIDOS',
-    accent: '#ff5500',
+    id: 'f1' as RoutePage,
+    title: 'La Historia de la Fórmula 1: El Pináculo de la Velocidad',
+    number: '009',
+    era: '1950 — Presente',
+    origin: 'Silverstone, Monza, Spa & Mónaco // Global',
+    engine: 'V12 / V10 3.0L / Turbo 1.400 CV / V6 Turbo Híbrido',
+    power: '1.400+ CV (Turbo) / 1.050+ CV (Híbrido)',
+    topSpeed: '372.6 km/h',
+    image: f1Images.hero,
+    tag: '★ NUEVO ESTRENO // 75 AÑOS DE HISTORIA',
+    accent: '#e62628',
     description:
-      'La rivalidad más feroz de la historia del automóvil con capítulos extendidos. Del debut del Mustang en 1964 y el Proyecto Panther en 1966, a la guerra del Trans-Am, los Big Blocks 427 ZL-1 y Boss 429, el Fox 5.0 vs IROC-Z y la era moderna de 760 CV.',
+      'La epopeya definitiva del automovilismo mundial con 12 capítulos extendidos. Del debut en Silverstone 1950 y los 5 títulos de Juan Manuel Fangio, a la revolución del monocasco Lotus, los monstruos Turbo de 1.400 CV de los años 80, la guerra sagrada Senna vs. Prost, el sacrificio de Imola 1994, la sinfonía V10 a 20.000 RPM de Schumacher, la era híbrida y el retorno del Efecto Suelo.',
   };
 
   const mobileLegends = [
     {
+      id: 'f1' as RoutePage,
+      title: 'Historia de la F1',
+      subtitle: '75 Años de Leyenda · Turbo & V10',
+      tag: 'NUEVO #009',
+      accent: '#e62628',
+      image: f1Images.hero,
+    },
+    {
       id: 'camaro-mustang' as RoutePage,
       title: 'Camaro vs Mustang',
       subtitle: 'La Guerra de Detroit · V8',
-      tag: 'NUEVO #008',
+      tag: 'EXPEDIENTE #008',
       accent: '#ff5500',
       image: camaroMustangImages.hero,
     },
@@ -461,7 +470,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             aria-hidden="true"
             className="absolute right-[-2vw] top-1/2 -translate-y-1/2 text-[clamp(100px,16vw,240px)] font-black text-white/[0.03] select-none pointer-events-none tracking-tighter font-mono uppercase"
           >
-            MUSTANG
+            FORMULA 1
           </div>
 
           {/* Main Hero Content Area */}
@@ -474,7 +483,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             >
               <div className="flex flex-wrap items-center gap-2.5">
                 <span 
-                  className="px-3 py-1 text-[10px] font-bold font-mono tracking-widest uppercase rounded shadow-lg bg-[#ff5500]/20 text-[#ff5500] border border-[#ff5500]/60"
+                  className="px-3 py-1 text-[10px] font-bold font-mono tracking-widest uppercase rounded shadow-lg bg-[#e62628]/20 text-[#ff4a4d] border border-[#e62628]/60"
                 >
                   {latestDoc.tag}
                 </span>
@@ -485,7 +494,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </span>
 
                 <span className="px-2.5 py-1 bg-black/40 border border-white/10 text-[10px] font-mono text-[#8a9db5] rounded">
-                  🇺🇸 USA
+                  🏁 F1 GLOBAL
                 </span>
               </div>
 
@@ -509,9 +518,9 @@ export const HomePage: React.FC<HomePageProps> = ({
                   whileTap={{ scale: 0.98 }}
                   id={`hero-read-doc-${latestDoc.id}`}
                   onClick={() => onNavigate(latestDoc.id)}
-                  className="px-8 py-4 text-black text-xs font-black tracking-[0.16em] uppercase rounded-xl transition-all shadow-2xl flex items-center justify-center gap-2.5 cursor-pointer font-mono bg-[#ff5500] hover:bg-[#ff661a] shadow-[0_0_30px_rgba(255,85,0,0.4)]"
+                  className="px-8 py-4 text-white text-xs font-black tracking-[0.16em] uppercase rounded-xl transition-all shadow-2xl flex items-center justify-center gap-2.5 cursor-pointer font-mono bg-[#e62628] hover:bg-[#ff3b3e] shadow-[0_0_30px_rgba(230,38,40,0.5)]"
                 >
-                  <Play className="w-4 h-4 fill-black" />
+                  <Play className="w-4 h-4 fill-white" />
                   <span>LEER O ESCUCHAR DOCUMENTAL</span>
                 </motion.button>
 
@@ -537,7 +546,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <span>EXPLORAR COLECCIONES EDITORIALES</span>
               <ChevronRight className="w-4 h-4 text-[#ffd451] rotate-90" />
             </button>
-            <span className="text-white/30 hidden lg:inline">8 GRANDES REPORTAJES · DATOS TÉCNICOS · FORO ABIERTO</span>
+            <span className="text-white/30 hidden lg:inline">9 GRANDES REPORTAJES · DATOS TÉCNICOS · FORO ABIERTO</span>
           </div>
         </section>
 
@@ -609,7 +618,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   01
                 </div>
                 <span className="px-3 py-1 bg-[#4ea0ff]/15 border border-[#4ea0ff]/40 text-[10px] tracking-[0.2em] font-bold text-[#7cbcff] uppercase font-mono rounded-full">
-                  8 DOCUMENTALES
+                  9 DOCUMENTALES
                 </span>
               </div>
 
@@ -621,12 +630,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                   DOCUMENTALES
                 </h3>
                 <p className="mt-3 text-[#b5c7db] text-xs leading-relaxed">
-                  Historias completas de superdeportivos míticos, rivalidades de resistencia, telemetría de época y narración de audio interactiva.
+                  Historias completas de superdeportivos míticos, monoplazas legendarios, rivalidades de resistencia, telemetría y narración de audio interactiva.
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-1.5 font-mono text-[9px]">
-                  <span className="px-2 py-0.5 bg-[#ff5500]/20 border border-[#ff5500]/40 text-[#ffd451] font-bold rounded">CAMARO VS MUSTANG</span>
-                  <span className="px-2 py-0.5 bg-[#e62628]/20 border border-[#e62628]/40 text-[#ff8082] rounded">HONDA NSX</span>
+                  <span className="px-2 py-0.5 bg-[#e62628]/20 border border-[#e62628]/40 text-[#ff8082] font-bold rounded">HISTORIA F1</span>
+                  <span className="px-2 py-0.5 bg-[#ff5500]/20 border border-[#ff5500]/40 text-[#ffd451] rounded">CAMARO VS MUSTANG</span>
                   <span className="px-2 py-0.5 bg-[#22c55e]/20 border border-[#22c55e]/40 text-[#81b292] rounded">MAZDA 787B</span>
                 </div>
 
