@@ -34,7 +34,7 @@ export const ForumNewPostModal: React.FC<Props> = ({
   onPostCreated,
   onOpenAuthModal,
 }) => {
-  const { user, profile, isAdmin } = useAuth();
+  const { user, userProfile, isAdmin } = useAuth();
 
   const [category, setCategory] = useState<ForumCategory>(initialCategory);
   const [title, setTitle] = useState('');
@@ -90,8 +90,8 @@ export const ForumNewPostModal: React.FC<Props> = ({
     setIsSubmitting(true);
     setError(null);
 
-    const authorRole = isAdmin ? 'admin' : (profile?.role || 'subscriber');
-    const authorName = profile?.displayName || user.displayName || user.email?.split('@')[0] || 'Entusiasta';
+    const authorRole = isAdmin ? 'admin' : (userProfile?.role || 'subscriber');
+    const authorName = userProfile?.displayName || user.displayName || user.email?.split('@')[0] || 'Entusiasta';
 
     const newPostData = {
       userId: user.uid,

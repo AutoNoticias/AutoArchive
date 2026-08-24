@@ -34,7 +34,7 @@ export const ForumPostCard: React.FC<Props> = ({
   onOpenAuthModal,
   onDeletePost,
 }) => {
-  const { user, profile, isAdmin } = useAuth();
+  const { user, userProfile, isAdmin } = useAuth();
 
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [comments, setComments] = useState<ForumComment[]>([]);
@@ -87,8 +87,8 @@ export const ForumPostCard: React.FC<Props> = ({
     if (!newCommentText.trim()) return;
 
     setIsSubmittingComment(true);
-    const authorRole = isAdmin ? 'admin' : (profile?.role || 'subscriber');
-    const authorName = profile?.displayName || user.displayName || user.email?.split('@')[0] || 'Entusiasta';
+    const authorRole = isAdmin ? 'admin' : (userProfile?.role || 'subscriber');
+    const authorName = userProfile?.displayName || user.displayName || user.email?.split('@')[0] || 'Entusiasta';
 
     const commentData = {
       userId: user.uid,

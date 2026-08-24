@@ -9,6 +9,7 @@ import { supraImages } from '../data/supraData';
 import { mazda787bImages } from '../data/mazda787bData';
 import { nsxImages } from '../data/nsxData';
 import { camaroMustangImages } from '../data/camaroMustangData';
+import { f1Images } from '../data/f1Data';
 import { User, LogOut, LogIn, ShieldCheck, LayoutDashboard, Home, BookOpen, Lightbulb, Sparkles, X, ChevronRight, Compass } from 'lucide-react';
 
 interface NavigationProps {
@@ -53,13 +54,22 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   const carDocumentaries = [
     {
+      id: 'f1' as RoutePage,
+      num: '009',
+      title: 'HISTORIA DE LA FÓRMULA 1',
+      subtitle: '75 Años de Leyenda · Turbo & V10',
+      accent: '#e62628',
+      image: f1Images.hero,
+      tag: 'NUEVO ESTRENO',
+    },
+    {
       id: 'camaro-mustang' as RoutePage,
       num: '008',
       title: 'CAMARO VS MUSTANG',
       subtitle: 'La Guerra de los Pony Cars · 60 Años',
       accent: '#ff5500',
       image: camaroMustangImages.hero,
-      tag: 'NUEVO ESTRENO',
+      tag: 'EXPEDIENTE #008',
     },
     {
       id: 'nsx' as RoutePage,
@@ -128,6 +138,7 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   const isCurrentDoc =
     currentPage === 'documentales' ||
+    currentPage === 'f1' ||
     currentPage === 'camaro-mustang' ||
     currentPage === 'nsx' ||
     currentPage === 'mazda-787b' ||
