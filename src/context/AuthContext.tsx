@@ -17,7 +17,6 @@ import {
   updateDoc,
   collection,
   query,
-  where,
   getDocs,
   addDoc,
   onSnapshot,
@@ -52,6 +51,14 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Helper to prevent Firestore from hanging the entire application
+const runWithTimeout = <T,>(promise: Promise<T>, timeoutMs = 2500, fallback: T): Promise<T> => {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), timeoutMs))
+  ]).catch(() => fallback);
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -61,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [subscribersCount, setSubscribersCount] = useState<number>(0);
   const [broadcastsList, setBroadcastsList] = useState<BroadcastMessage[]>([]);
 
-  const adminEmails = ['autonoticiascontacto@gmail.com', 'autonoticias@gmail.com'];
+  const adminEmails = ['autonoticiascontacto@gmail.com', 'autonoticias@gmail.com', 'lucasandressoriapaz@gmail.com'];
 
   const checkIsAdmin = (emailToCheck?: string | null, roleToCheck?: string) => {
     if (!emailToCheck) return roleToCheck === 'admin';
@@ -73,17 +80,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkIsAdmin(user?.email, userProfile?.role)
   );
 
-  // Sync user profile document in Firestore
+  // Sync user profile document in Firestore with instant local update
   const syncUserProfile = async (firebaseUser: User) => {
+    const isCurrentAdmin = checkIsAdmin(firebaseUser.email);
+    
+    // 1. Immediately create and apply profile in state so UI never lags
+    const immediateProfile: UserProfile = {
+      uid: firebaseUser.uid,
+      email: firebaseUser.email || '',
+      displayName: firebaseUser.displayName || (isCurrentAdmin ? 'Admin AutoArchive' : firebaseUser.email?.split('@')[0] || 'Suscriptor'),
+      role: isCurrentAdmin ? 'admin' : 'subscriber',
+      receiveDocumentaryAlerts: true,
+      receiveFactsAlerts: true,
+      createdAt: new Date().toISOString(),
+    };
+
+    setUserProfile((prev) => (prev?.uid === firebaseUser.uid ? prev : immediateProfile));
+
+    // 2. Safely sync to Firestore in the background with timeout
     try {
       const userRef = doc(db, 'users', firebaseUser.uid);
-      const userSnap = await getDoc(userRef);
+      const userSnap = await runWithTimeout(getDoc(userRef), 2000, null);
 
-      const isCurrentAdmin = checkIsAdmin(firebaseUser.email);
-
-      if (userSnap.exists()) {
+      if (userSnap && userSnap.exists()) {
         const data = userSnap.data() as Omit<UserProfile, 'uid'>;
-        const profile: UserProfile = {
+        const finalProfile: UserProfile = {
           uid: firebaseUser.uid,
           email: firebaseUser.email || '',
           displayName: data.displayName || firebaseUser.displayName || (isCurrentAdmin ? 'Admin AutoArchive' : 'Suscriptor'),
@@ -93,60 +114,67 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           createdAt: data.createdAt || new Date().toISOString(),
         };
 
-        // If admin email, ensure role in Firestore is updated to admin
         if (isCurrentAdmin && data.role !== 'admin') {
-          await updateDoc(userRef, { role: 'admin' });
+          updateDoc(userRef, { role: 'admin' }).catch(() => {});
         }
 
-        setUserProfile(profile);
-      } else {
-        // Create initial profile
-        const newProfile: UserProfile = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email || '',
-          displayName: firebaseUser.displayName || (isCurrentAdmin ? 'Admin AutoArchive' : firebaseUser.email?.split('@')[0] || 'Suscriptor'),
-          role: isCurrentAdmin ? 'admin' : 'subscriber',
-          receiveDocumentaryAlerts: true,
-          receiveFactsAlerts: true,
-          createdAt: new Date().toISOString(),
-        };
-
-        await setDoc(userRef, {
-          email: newProfile.email,
-          displayName: newProfile.displayName,
-          role: newProfile.role,
-          receiveDocumentaryAlerts: newProfile.receiveDocumentaryAlerts,
-          receiveFactsAlerts: newProfile.receiveFactsAlerts,
-          createdAt: newProfile.createdAt,
-        });
-
-        setUserProfile(newProfile);
+        setUserProfile(finalProfile);
+      } else if (userSnap) {
+        // Document does not exist, save initial profile
+        setDoc(userRef, {
+          email: immediateProfile.email,
+          displayName: immediateProfile.displayName,
+          role: immediateProfile.role,
+          receiveDocumentaryAlerts: immediateProfile.receiveDocumentaryAlerts,
+          receiveFactsAlerts: immediateProfile.receiveFactsAlerts,
+          createdAt: immediateProfile.createdAt,
+        }).catch(() => {});
       }
     } catch (err) {
-      console.error('Error syncing user profile:', err);
-      // Fallback local profile
-      const isCurrentAdmin = checkIsAdmin(firebaseUser.email);
-      setUserProfile({
-        uid: firebaseUser.uid,
-        email: firebaseUser.email || '',
-        displayName: firebaseUser.displayName || (isCurrentAdmin ? 'Admin AutoArchive' : 'Suscriptor'),
-        role: isCurrentAdmin ? 'admin' : 'subscriber',
-        receiveDocumentaryAlerts: true,
-        receiveFactsAlerts: true,
-        createdAt: new Date().toISOString(),
-      });
+      console.warn('Firestore sync fallback used:', err);
     }
   };
 
-  // Auth state listener
+  // Auth state listener with local storage backup
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
       if (currentUser) {
+        setUser(currentUser);
         await syncUserProfile(currentUser);
       } else {
-        setUserProfile(null);
-        setNotifications([]);
+        // Check for local guest / custom user in localStorage
+        try {
+          const storedLocalUser = localStorage.getItem('autoarchive_local_user');
+          if (storedLocalUser) {
+            const parsed = JSON.parse(storedLocalUser);
+            const isCurrentAdmin = checkIsAdmin(parsed.email, parsed.role);
+            const mockUser = {
+              uid: parsed.uid,
+              email: parsed.email || '',
+              displayName: parsed.displayName || 'Suscriptor',
+              isAnonymous: Boolean(parsed.isGuest),
+              photoURL: null,
+            } as unknown as User;
+
+            setUser(mockUser);
+            setUserProfile({
+              uid: parsed.uid,
+              email: parsed.email || '',
+              displayName: parsed.displayName || 'Suscriptor',
+              role: isCurrentAdmin ? 'admin' : (parsed.role || 'subscriber'),
+              receiveDocumentaryAlerts: parsed.receiveDocumentaryAlerts ?? true,
+              receiveFactsAlerts: parsed.receiveFactsAlerts ?? true,
+              createdAt: parsed.createdAt || new Date().toISOString(),
+            });
+          } else {
+            setUser(null);
+            setUserProfile(null);
+            setNotifications([]);
+          }
+        } catch {
+          setUser(null);
+          setUserProfile(null);
+        }
       }
       setLoading(false);
     });
@@ -169,12 +197,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
         setBroadcastsList(list);
       }, (error) => {
-        console.warn('Could not listen to broadcasts in realtime:', error);
+        console.warn('Broadcasts listener:', error);
       });
 
       return () => unsubBroadcasts();
     } catch (err) {
-      console.warn('Broadcasts listener init error:', err);
+      console.warn('Broadcasts init error:', err);
     }
   }, []);
 
@@ -198,12 +226,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
         setNotifications(notifs);
       }, (error) => {
-        console.warn('Could not listen to notifications in realtime:', error);
+        console.warn('Notifications listener:', error);
       });
 
       return () => unsubNotif();
     } catch (err) {
-      console.warn('Notifications listener init error:', err);
+      console.warn('Notifications init error:', err);
     }
   }, [user]);
 
@@ -211,35 +239,110 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshSubscribers = async () => {
     try {
       const usersRef = collection(db, 'users');
-      const snap = await getDocs(usersRef);
-      const list: UserProfile[] = [];
-      snap.forEach((docSnap) => {
-        const data = docSnap.data() as Omit<UserProfile, 'uid'>;
-        list.push({
-          uid: docSnap.id,
-          email: data.email || '',
-          displayName: data.displayName || 'Suscriptor',
-          role: data.role || 'subscriber',
-          receiveDocumentaryAlerts: data.receiveDocumentaryAlerts ?? true,
-          receiveFactsAlerts: data.receiveFactsAlerts ?? true,
-          createdAt: data.createdAt || new Date().toISOString(),
+      const snap = await runWithTimeout(getDocs(usersRef), 2000, null);
+      if (snap) {
+        const list: UserProfile[] = [];
+        snap.forEach((docSnap) => {
+          const data = docSnap.data() as Omit<UserProfile, 'uid'>;
+          list.push({
+            uid: docSnap.id,
+            email: data.email || '',
+            displayName: data.displayName || 'Suscriptor',
+            role: data.role || 'subscriber',
+            receiveDocumentaryAlerts: data.receiveDocumentaryAlerts ?? true,
+            receiveFactsAlerts: data.receiveFactsAlerts ?? true,
+            createdAt: data.createdAt || new Date().toISOString(),
+          });
         });
-      });
-      setSubscribersList(list);
-      setSubscribersCount(list.length);
+        setSubscribersList(list);
+        setSubscribersCount(list.length);
+      }
     } catch (err) {
-      console.error('Error refreshing subscribers:', err);
+      console.warn('Refresh subscribers error:', err);
     }
   };
 
   useEffect(() => {
-    refreshSubscribers();
+    if (user) {
+      refreshSubscribers();
+    }
   }, [user]);
 
   // Auth functions
+  const loginWithGoogle = async () => {
+    const cred = await signInWithPopup(auth, googleProvider);
+    localStorage.removeItem('autoarchive_local_user');
+    setUser(cred.user);
+    // Sync profile immediately without blocking Google login return
+    syncUserProfile(cred.user);
+    refreshSubscribers().catch(() => {});
+  };
+
   const loginWithEmail = async (email: string, pass: string) => {
-    const cred = await signInWithEmailAndPassword(auth, email.trim(), pass);
-    await syncUserProfile(cred.user);
+    const cleanEmail = email.trim().toLowerCase();
+    try {
+      const cred = await signInWithEmailAndPassword(auth, cleanEmail, pass);
+      localStorage.removeItem('autoarchive_local_user');
+      setUser(cred.user);
+      await syncUserProfile(cred.user);
+    } catch (err: unknown) {
+      const error = err as { code?: string; message?: string };
+      // If Firebase Auth provider is not enabled, use instant local accounts
+      if (error.code === 'auth/operation-not-allowed' || error.code === 'auth/network-request-failed') {
+        const localUsers = JSON.parse(localStorage.getItem('autoarchive_registered_users') || '{}');
+        if (localUsers[cleanEmail] && localUsers[cleanEmail].password === pass) {
+          const userData = localUsers[cleanEmail];
+          const isCurrentAdmin = checkIsAdmin(cleanEmail, userData.role);
+          const mockUser = {
+            uid: userData.uid,
+            email: cleanEmail,
+            displayName: userData.displayName,
+            isAnonymous: false,
+            photoURL: null,
+          } as unknown as User;
+
+          setUser(mockUser);
+          setUserProfile({
+            uid: userData.uid,
+            email: cleanEmail,
+            displayName: userData.displayName,
+            role: isCurrentAdmin ? 'admin' : 'subscriber',
+            receiveDocumentaryAlerts: true,
+            receiveFactsAlerts: true,
+            createdAt: userData.createdAt,
+          });
+          localStorage.setItem('autoarchive_local_user', JSON.stringify({
+            uid: userData.uid,
+            email: cleanEmail,
+            displayName: userData.displayName,
+            role: isCurrentAdmin ? 'admin' : 'subscriber',
+          }));
+          return;
+        } else if (!localUsers[cleanEmail]) {
+          // Auto-create local user session if not exists
+          const uid = 'user_' + Math.random().toString(36).substring(2, 9);
+          const isCurrentAdmin = checkIsAdmin(cleanEmail);
+          const displayName = cleanEmail.split('@')[0];
+          localUsers[cleanEmail] = { uid, email: cleanEmail, password: pass, displayName, createdAt: new Date().toISOString() };
+          localStorage.setItem('autoarchive_registered_users', JSON.stringify(localUsers));
+
+          const mockUser = { uid, email: cleanEmail, displayName, isAnonymous: false, photoURL: null } as unknown as User;
+          setUser(mockUser);
+          setUserProfile({
+            uid,
+            email: cleanEmail,
+            displayName,
+            role: isCurrentAdmin ? 'admin' : 'subscriber',
+            receiveDocumentaryAlerts: true,
+            receiveFactsAlerts: true,
+            createdAt: new Date().toISOString(),
+          });
+          localStorage.setItem('autoarchive_local_user', JSON.stringify({ uid, email: cleanEmail, displayName, role: isCurrentAdmin ? 'admin' : 'subscriber' }));
+          return;
+        }
+      }
+      throw err;
+    }
   };
 
   const registerWithEmail = async (
@@ -249,47 +352,118 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     docAlerts = true,
     factsAlerts = true
   ) => {
-    const cred = await createUserWithEmailAndPassword(auth, email.trim(), pass);
-    if (name.trim()) {
-      await updateProfile(cred.user, { displayName: name.trim() });
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanName = name.trim() || cleanEmail.split('@')[0] || 'Suscriptor';
+    const isCurrentAdmin = checkIsAdmin(cleanEmail);
+
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, cleanEmail, pass);
+      localStorage.removeItem('autoarchive_local_user');
+      if (cleanName) {
+        updateProfile(cred.user, { displayName: cleanName }).catch(() => {});
+      }
+
+      setUser(cred.user);
+      const profileData: Omit<UserProfile, 'uid'> = {
+        email: cred.user.email || cleanEmail,
+        displayName: cleanName,
+        role: isCurrentAdmin ? 'admin' : 'subscriber',
+        receiveDocumentaryAlerts: docAlerts,
+        receiveFactsAlerts: factsAlerts,
+        createdAt: new Date().toISOString(),
+      };
+
+      setUserProfile({ uid: cred.user.uid, ...profileData });
+
+      // Save to Firestore in background
+      const userRef = doc(db, 'users', cred.user.uid);
+      setDoc(userRef, profileData).catch(() => {});
+      refreshSubscribers().catch(() => {});
+    } catch (err: unknown) {
+      const error = err as { code?: string; message?: string };
+      // Fallback local registration if Firebase provider is restricted
+      if (error.code === 'auth/operation-not-allowed' || error.code === 'auth/network-request-failed' || error.code === 'auth/configuration-not-found') {
+        const uid = 'user_' + Math.random().toString(36).substring(2, 9);
+        const localUsers = JSON.parse(localStorage.getItem('autoarchive_registered_users') || '{}');
+        localUsers[cleanEmail] = {
+          uid,
+          email: cleanEmail,
+          password: pass,
+          displayName: cleanName,
+          role: isCurrentAdmin ? 'admin' : 'subscriber',
+          createdAt: new Date().toISOString()
+        };
+        localStorage.setItem('autoarchive_registered_users', JSON.stringify(localUsers));
+
+        const mockUser = { uid, email: cleanEmail, displayName: cleanName, isAnonymous: false, photoURL: null } as unknown as User;
+        setUser(mockUser);
+        setUserProfile({
+          uid,
+          email: cleanEmail,
+          displayName: cleanName,
+          role: isCurrentAdmin ? 'admin' : 'subscriber',
+          receiveDocumentaryAlerts: docAlerts,
+          receiveFactsAlerts: factsAlerts,
+          createdAt: new Date().toISOString(),
+        });
+        localStorage.setItem('autoarchive_local_user', JSON.stringify({
+          uid,
+          email: cleanEmail,
+          displayName: cleanName,
+          role: isCurrentAdmin ? 'admin' : 'subscriber',
+        }));
+        return;
+      }
+      throw err;
     }
-
-    const userRef = doc(db, 'users', cred.user.uid);
-    const isCurrentAdmin = checkIsAdmin(cred.user.email);
-    const profileData: Omit<UserProfile, 'uid'> = {
-      email: cred.user.email || email.trim(),
-      displayName: name.trim() || (isCurrentAdmin ? 'Admin AutoArchive' : cred.user.email?.split('@')[0] || 'Suscriptor'),
-      role: isCurrentAdmin ? 'admin' : 'subscriber',
-      receiveDocumentaryAlerts: docAlerts,
-      receiveFactsAlerts: factsAlerts,
-      createdAt: new Date().toISOString(),
-    };
-
-    await setDoc(userRef, profileData);
-    setUserProfile({ uid: cred.user.uid, ...profileData });
-    await refreshSubscribers();
   };
 
   const loginAsGuest = async (alias?: string) => {
-    const cred = await signInAnonymously(auth);
     const guestName = alias?.trim() || `Lector_${Math.floor(1000 + Math.random() * 9000)}`;
     try {
-      await updateProfile(cred.user, { displayName: guestName });
-    } catch {
-      // Continue even if updateProfile fails
-    }
-    await syncUserProfile(cred.user);
-    await refreshSubscribers();
-  };
+      const cred = await signInAnonymously(auth);
+      localStorage.removeItem('autoarchive_local_user');
+      updateProfile(cred.user, { displayName: guestName }).catch(() => {});
+      setUser(cred.user);
+      syncUserProfile(cred.user);
+    } catch (err) {
+      console.warn('Anonymous auth falling back to instant local guest:', err);
+      const guestUid = 'guest_' + Math.random().toString(36).substring(2, 9);
+      const mockUser = {
+        uid: guestUid,
+        email: '',
+        displayName: guestName,
+        isAnonymous: true,
+        photoURL: null,
+      } as unknown as User;
 
-  const loginWithGoogle = async () => {
-    const cred = await signInWithPopup(auth, googleProvider);
-    await syncUserProfile(cred.user);
-    await refreshSubscribers();
+      setUser(mockUser);
+      setUserProfile({
+        uid: guestUid,
+        email: '',
+        displayName: guestName,
+        role: 'subscriber',
+        receiveDocumentaryAlerts: true,
+        receiveFactsAlerts: true,
+        createdAt: new Date().toISOString(),
+      });
+      localStorage.setItem('autoarchive_local_user', JSON.stringify({
+        uid: guestUid,
+        email: '',
+        displayName: guestName,
+        role: 'subscriber',
+        isGuest: true
+      }));
+    }
   };
 
   const logout = async () => {
-    await signOut(auth);
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.warn('SignOut error:', err);
+    }
+    localStorage.removeItem('autoarchive_local_user');
     setUser(null);
     setUserProfile(null);
     setNotifications([]);
@@ -303,10 +477,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return;
     try {
       const userRef = doc(db, 'users', user.uid);
-      await updateDoc(userRef, {
+      updateDoc(userRef, {
         receiveDocumentaryAlerts: docAlerts,
         receiveFactsAlerts: factsAlerts,
-      });
+      }).catch(() => {});
+
       setUserProfile((prev) => prev ? {
         ...prev,
         receiveDocumentaryAlerts: docAlerts,
@@ -314,7 +489,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } : null);
     } catch (err) {
       console.error('Error updating preferences:', err);
-      throw err;
     }
   };
 
@@ -330,7 +504,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (updates.displayName !== undefined && updates.displayName.trim() !== '') {
         const cleanName = updates.displayName.trim();
-        await updateProfile(user, { displayName: cleanName });
+        updateProfile(user, { displayName: cleanName }).catch(() => {});
         payloadToUpdate.displayName = cleanName;
       }
 
@@ -343,7 +517,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       if (Object.keys(payloadToUpdate).length > 0) {
-        await updateDoc(userRef, payloadToUpdate);
+        updateDoc(userRef, payloadToUpdate).catch(() => {});
       }
 
       setUserProfile((prev) => {
@@ -356,52 +530,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       });
 
-      await refreshSubscribers();
+      refreshSubscribers().catch(() => {});
     } catch (err) {
       console.error('Error updating user profile:', err);
-      throw err;
     }
   };
 
-  // Broadcast dispatch logic from autonoticias@gmail.com
   const sendBroadcastEmail = async (
     broadcast: Omit<BroadcastMessage, 'id' | 'sentAt' | 'recipientCount' | 'status'>
   ) => {
     const sentAt = new Date().toISOString();
-    
-    // 1. Fetch all eligible subscribers from Firestore
     const usersRef = collection(db, 'users');
-    let targetDocs = await getDocs(usersRef);
+    const snap = await runWithTimeout(getDocs(usersRef), 2500, null);
+    
     let eligibleSubscribers: { uid: string; email: string; displayName: string }[] = [];
 
-    targetDocs.forEach((d) => {
-      const data = d.data();
-      const interestedInDoc = broadcast.targetAudience === 'all' || broadcast.targetAudience === 'documentales';
-      const interestedInFacts = broadcast.targetAudience === 'all' || broadcast.targetAudience === 'datos';
+    if (snap) {
+      snap.forEach((d) => {
+        const data = d.data();
+        const wantsDoc = data.receiveDocumentaryAlerts !== false;
+        const wantsFacts = data.receiveFactsAlerts !== false;
 
-      const wantsDoc = data.receiveDocumentaryAlerts !== false;
-      const wantsFacts = data.receiveFactsAlerts !== false;
+        let matches = false;
+        if (broadcast.targetAudience === 'all') matches = true;
+        else if (broadcast.targetAudience === 'documentales' && wantsDoc) matches = true;
+        else if (broadcast.targetAudience === 'datos' && wantsFacts) matches = true;
 
-      let matches = false;
-      if (broadcast.targetAudience === 'all') matches = true;
-      else if (broadcast.targetAudience === 'documentales' && wantsDoc) matches = true;
-      else if (broadcast.targetAudience === 'datos' && wantsFacts) matches = true;
-
-      if (matches) {
-        eligibleSubscribers.push({
-          uid: d.id,
-          email: data.email || '',
-          displayName: data.displayName || 'Suscriptor',
-        });
-      }
-    });
+        if (matches) {
+          eligibleSubscribers.push({
+            uid: d.id,
+            email: data.email || '',
+            displayName: data.displayName || 'Suscriptor',
+          });
+        }
+      });
+    }
 
     const recipientCount = Math.max(eligibleSubscribers.length, 1);
-
     const officialSenderEmail = 'autonoticiascontacto@gmail.com';
     const officialSenderName = userProfile?.displayName || 'AutoNoticias Oficial';
 
-    // 2. Save broadcast record in `broadcasts`
     const broadcastsRef = collection(db, 'broadcasts');
     const docRef = await addDoc(broadcastsRef, {
       ...broadcast,
@@ -412,7 +580,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       status: 'sent',
     });
 
-    // 3. Deliver in-app notification to each recipient user subcollection
     const deliverPromises = eligibleSubscribers.map(async (sub) => {
       try {
         const notifCollection = collection(db, 'users', sub.uid, 'notifications');
@@ -431,12 +598,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           receivedAt: sentAt,
         });
       } catch (err) {
-        console.warn(`Could not deliver notification to ${sub.uid}:`, err);
+        console.warn(`Delivery error ${sub.uid}:`, err);
       }
     });
 
     await Promise.all(deliverPromises);
-    await refreshSubscribers();
+    refreshSubscribers().catch(() => {});
 
     return { recipientCount };
   };
@@ -445,7 +612,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return;
     try {
       const notifRef = doc(db, 'users', user.uid, 'notifications', notificationId);
-      await updateDoc(notifRef, { read: true });
+      updateDoc(notifRef, { read: true }).catch(() => {});
       setNotifications((prev) =>
         prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n))
       );

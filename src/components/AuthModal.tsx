@@ -32,18 +32,18 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
       setSuccessMsg('¡Sesión iniciada con éxito!');
       setTimeout(() => {
         onClose();
-      }, 500);
+      }, 300);
     } catch (err: unknown) {
       const error = err as { message?: string; code?: string };
       console.error('Google Auth Error:', error);
       if (error.code === 'auth/popup-closed-by-user') {
         setErrorMsg('Ventana de autenticación cerrada. Por favor inténtalo de nuevo.');
       } else if (error.code === 'auth/unauthorized-domain') {
-        setErrorMsg('Dominio no autorizado en Firebase. Usa el inicio por Email/Contraseña o Invitado abajo.');
+        setErrorMsg('Dominio no autorizado para Google OAuth. Puedes ingresar con Correo o como Invitado en las pestañas arriba.');
       } else if (error.code === 'auth/popup-blocked') {
-        setErrorMsg('El navegador bloqueó la ventana emergente de Google. Usa Email/Contraseña abajo.');
+        setErrorMsg('El navegador bloqueó la ventana emergente. Habilita popups o ingresa con Correo / Invitado.');
       } else {
-        setErrorMsg(error.message || 'Error al iniciar sesión con Google.');
+        setErrorMsg(error.message || 'Error al conectar con Google. Puedes usar la pestaña Correo o Invitado.');
       }
     } finally {
       setLoading(false);
