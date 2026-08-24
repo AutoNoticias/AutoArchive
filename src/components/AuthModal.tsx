@@ -28,8 +28,13 @@ export function AuthModal({ isOpen, onClose, customMessage }: AuthModalProps) {
       }, 500);
     } catch (err: unknown) {
       const error = err as { message?: string; code?: string };
+      console.error('Google Auth Error:', error);
       if (error.code === 'auth/popup-closed-by-user') {
         setErrorMsg('Ventana de autenticación cerrada. Por favor inténtalo de nuevo.');
+      } else if (error.code === 'auth/unauthorized-domain') {
+        setErrorMsg('Dominio no autorizado en Firebase. Agrega tu dominio de GitHub Pages en Firebase Console > Authentication > Settings > Authorized domains.');
+      } else if (error.code === 'auth/popup-blocked') {
+        setErrorMsg('El navegador bloqueó la ventana emergente de Google. Permite las ventanas emergentes (popups) para este sitio.');
       } else {
         setErrorMsg(error.message || 'Error al iniciar sesión con Google.');
       }
