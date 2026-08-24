@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React from 'react';
+import { motion } from 'motion/react';
 import { RoutePage } from '../types';
 import { useAuth } from '../context/AuthContext';
 import vintageSupercarsHero from '../assets/images/vintage_supercar_hero_1787273928020.jpg';
@@ -27,13 +27,6 @@ import {
   ArrowRight, 
   ChevronRight, 
   Users,
-  Gauge,
-  Zap,
-  Radio,
-  Timer,
-  Activity,
-  Award,
-  Layers,
   Volume2
 } from 'lucide-react';
 
@@ -44,25 +37,6 @@ interface HomePageProps {
   onOpenBroadcastModal?: () => void;
 }
 
-interface HeroCarData {
-  id: RoutePage;
-  title: string;
-  shortName: string;
-  number: string;
-  era: string;
-  origin: string;
-  flag: string;
-  engine: string;
-  power: string;
-  topSpeed: string;
-  zeroToHundred: string;
-  image: string;
-  tag: string;
-  accent: string;
-  soundNote: string;
-  description: string;
-}
-
 export const HomePage: React.FC<HomePageProps> = ({
   onNavigate,
   onOpenAuthModal,
@@ -70,164 +44,6 @@ export const HomePage: React.FC<HomePageProps> = ({
   onOpenBroadcastModal,
 }) => {
   const { user, isAdmin, subscribersCount } = useAuth();
-  const [selectedHeroIndex, setSelectedHeroIndex] = useState<number>(0);
-
-  const heroCars: HeroCarData[] = [
-    {
-      id: 'camaro-mustang',
-      title: 'Camaro vs Mustang: La Guerra de Detroit',
-      shortName: 'Mustang vs Camaro',
-      number: '008',
-      era: '1964 — Presente',
-      origin: 'Detroit & Dearborn, Michigan, USA',
-      flag: '🇺🇸 USA',
-      engine: 'V8 Big & Small Blocks / Predator 5.2L / LT4',
-      power: '760 CV (GT500) / 650 CV (ZL1)',
-      topSpeed: '320+ km/h',
-      zeroToHundred: '3.3s',
-      image: camaroMustangImages.hero,
-      tag: '★ NUEVO ESTRENO // CAPÍTULOS EXTENDIDOS',
-      accent: '#ff5500',
-      soundNote: 'Rugido V8 Cross-Plane & Súpercargador Roots',
-      description:
-        'La rivalidad más feroz de la historia del automóvil con capítulos extendidos. Del debut del Mustang en 1964 y el Proyecto Panther en 1966, a la guerra del Trans-Am, los Big Blocks 427 ZL-1 y Boss 429, el Fox 5.0 vs IROC-Z y la era moderna de 760 CV.',
-    },
-    {
-      id: 'nsx',
-      title: 'Honda NSX: La Perfección de Ayrton Senna',
-      shortName: 'Honda NSX (Senna)',
-      number: '007',
-      era: '1990 — 2005',
-      origin: 'Tochigi & Suzuka, Japón',
-      flag: '🇯🇵 JAPÓN',
-      engine: 'C30A 3.0L V6 VTEC 8.000 RPM Biela Titanio',
-      power: '274 CV (Norma Japonesa)',
-      topSpeed: '270 km/h',
-      zeroToHundred: '5.2s',
-      image: nsxImages.hero,
-      tag: 'CHASIS ALUMINIO MONOCASCO',
-      accent: '#e62628',
-      soundNote: 'Aullido VTEC a 8.000 RPM en Suzuka',
-      description:
-        'El superdeportivo que obligó a Ferrari a reinventarse. Desarrollado con telemetría de Ayrton Senna en Suzuka, primer chasis monocasco de aluminio del mundo y bielas forjadas de titanio.',
-    },
-    {
-      id: 'mazda-787b',
-      title: 'Mazda 787B: El Rugido Inmortal de Le Mans',
-      shortName: 'Mazda 787B (Wankel)',
-      number: '006',
-      era: '1991',
-      origin: 'Hiroshima & Circuito de la Sarthe',
-      flag: '🇯🇵 LE MANS',
-      engine: 'R26B 4-Rotores Wankel 2.6L Atmosférico',
-      power: '700 CV a 9.000 RPM (830 kg)',
-      topSpeed: '340+ km/h Mulsanne',
-      zeroToHundred: '2.8s',
-      image: mazda787bImages.hero,
-      tag: 'LE MANS WINNER 1991 // ROTATIVO',
-      accent: '#22c55e',
-      soundNote: 'Sinfonía Wankel 4 Rotores a 9.000 RPM',
-      description:
-        'El único automóvil con motor rotativo Wankel en consagrarse campeón absoluto de las 24 Horas de Le Mans en 1991, superando a los gigantescos prototipos de Mercedes-Benz, Jaguar y Porsche.',
-    },
-    {
-      id: 'r34',
-      title: 'Nissan Skyline GT-R R34: Godzilla y ATTESA',
-      shortName: 'Skyline R34 GT-R',
-      number: '005',
-      era: '1999 — 2002',
-      origin: 'Tochigi / Omori Factory, Japón',
-      flag: '🇯🇵 JDM',
-      engine: 'RB26DETT 2.6L Twin Turbo Bloque Hierro',
-      power: '327 CV Stock (1.000+ CV Tuned)',
-      topSpeed: '300+ km/h',
-      zeroToHundred: '4.6s Stock',
-      image: r34Images.hero,
-      tag: 'ATTESA E-TS PRO // GODZILLA',
-      accent: '#4ea0ff',
-      soundNote: 'Doble Turbo Garret T28 & Válvula de Alivio',
-      description:
-        'La máxima evolución de la saga Skyline. Con pantalla digital MFD de telemetría de fuerzas G en tiempo real desarrollada con Polyphony Digital y tracción integral predictiva vectorial.',
-    },
-    {
-      id: 'supra',
-      title: 'Toyota Supra MK4: El Coloso 2JZ-GTE',
-      shortName: 'Supra MK4 (2JZ)',
-      number: '004',
-      era: '1993 — 2002',
-      origin: 'Aichi & Motomachi, Japón',
-      flag: '🇯🇵 JDM',
-      engine: '2JZ-GTE 3.0L Biturbo Secuencial Culata Yamaha',
-      power: '330 CV Stock (1.200+ CV Forjado)',
-      topSpeed: '290+ km/h',
-      zeroToHundred: '4.9s Stock',
-      image: supraImages.hero,
-      tag: 'BLOQUE DE HIERRO INDESTRUCTIBLE',
-      accent: '#ffd451',
-      soundNote: 'Soplado Secuencial 2JZ Twin Turbo',
-      description:
-        'El bloque cerrado de seis cilindros más resistente jamás construido por la industria japonesa. Capaz de tolerar más de 800 CV con componentes internos originales de fábrica.',
-    },
-    {
-      id: 'countach',
-      title: 'Lamborghini Countach: La Cuña Espacial',
-      shortName: 'Lamborghini Countach',
-      number: '003',
-      era: '1974 — 1990',
-      origin: 'Sant’Agata Bolognese, Italia',
-      flag: '🇮🇹 ITALIA',
-      engine: 'V12 Bizzarrini 4.0L a 5.2L 6 Carburadores Weber',
-      power: '375 a 455 CV',
-      topSpeed: '300+ km/h',
-      zeroToHundred: '4.8s',
-      image: countachImages.hero,
-      tag: 'DISEÑO GANDINI // PUERTAS DE TIJERA',
-      accent: '#ffd451',
-      soundNote: '6 Carburadores Weber Doble Boca DCOE',
-      description:
-        'El póster definitivo de una generación. Obra maestra de Marcello Gandini con chasis multitubular, radiadores laterales y el bramido del V12 longitudinal italiano.',
-    },
-    {
-      id: 'f40-miura',
-      title: 'Ferrari F40 vs Lamborghini Miura',
-      shortName: 'F40 vs Miura SV',
-      number: '002',
-      era: '1966 — 1992',
-      origin: 'Maranello vs Sant’Agata, Italia',
-      flag: '🇮🇹 ITALIA',
-      engine: 'V8 2.9L Biturbo (F40) vs V12 4.0L Transversal (Miura)',
-      power: '478 CV (F40) / 385 CV (Miura SV)',
-      topSpeed: '324 km/h (F40) / 280 km/h',
-      zeroToHundred: '3.8s (F40)',
-      image: f40MiuraImages.f40Hero,
-      tag: 'KILÓMETRO CERO // DUELO HISTÓRICO',
-      accent: '#e62628',
-      soundNote: 'Turbos IHI sin filtros & V12 Transversal Puro',
-      description:
-        'El último automóvil bendecido por Enzo Ferrari frente a la máquina que inventó el concepto de superdeportivo de motor central transversal en 1966.',
-    },
-    {
-      id: 'xj220',
-      title: 'Jaguar XJ220: El Récord de 349.4 km/h',
-      shortName: 'Jaguar XJ220 (TWR)',
-      number: '001',
-      era: '1992 — 1994',
-      origin: 'Bloxham, Oxfordshire, Reino Unido',
-      flag: '🇬🇧 UK',
-      engine: 'JR6 3.5L V6 Biturbo Grupo B TWR',
-      power: '550 CV a 7.200 RPM / 644 Nm',
-      topSpeed: '349.4 km/h (Récord Nardò)',
-      zeroToHundred: '3.6s',
-      image: xj220Images.hero,
-      tag: 'RÉCORD MUNDIAL DE VELOCIDAD',
-      accent: '#4ea0ff',
-      soundNote: 'V6 Biturbo derivado de Grupo B con Wastegate',
-      description:
-        'El bólido británico nacido en secreto durante el "Saturday Club" que conquistó el anillo peraltado de Nardò alcanzando 349.4 km/h en manos de Martin Brundle.',
-    },
-  ];
-
-  const currentHero = heroCars[selectedHeroIndex] || heroCars[0];
 
   const scrollToContent = () => {
     const el = document.getElementById('explore-sections');
@@ -246,7 +62,8 @@ export const HomePage: React.FC<HomePageProps> = ({
     power: '760 CV (GT500) / 650 CV (ZL1 1LE)',
     topSpeed: '320+ km/h',
     image: camaroMustangImages.hero,
-    tag: '★ NUEVO ESTRENO // CAPÍTULOS LARGOS // DOC 008',
+    tag: '★ NUEVO ESTRENO // CAPÍTULOS EXTENDIDOS',
+    accent: '#ff5500',
     description:
       'La rivalidad más feroz de la historia del automóvil con capítulos extendidos. Del debut del Mustang en 1964 y el Proyecto Panther en 1966, a la guerra del Trans-Am, los Big Blocks 427 ZL-1 y Boss 429, el Fox 5.0 vs IROC-Z y la era moderna de 760 CV.',
   };
@@ -539,7 +356,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ========================================================= */}
       <div className="hidden md:flex flex-col flex-1">
         
-        {/* Top Telemetry & Global Archival Broadcast Ticker */}
+        {/* Top Global Archival Broadcast Ticker */}
         <div className="bg-[#05080e] border-b border-white/10 px-6 sm:px-12 md:px-20 py-2 flex items-center justify-between text-[10px] font-mono text-[#8a9db5]">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5 text-[#22c55e] font-bold">
@@ -559,7 +376,6 @@ export const HomePage: React.FC<HomePageProps> = ({
               <Volume2 className="w-3 h-3 text-[#ffd451]" />
               <span>NARRACIÓN DE AUDIO HI-RES</span>
             </span>
-            <span>TELEMETRÍA DE BANCO DE PRUEBAS</span>
           </div>
         </div>
 
@@ -624,24 +440,17 @@ export const HomePage: React.FC<HomePageProps> = ({
         </header>
 
         {/* ========================================================= */}
-        {/* INTERACTIVE HERO WITH DYNAMIC SUPERCAR SWITCHER */}
+        {/* PREMIERE HERO SHOWCASE */}
         {/* ========================================================= */}
-        <section className="relative min-h-[88vh] flex flex-col justify-between px-6 sm:px-12 md:px-20 pt-12 pb-10 overflow-hidden border-b border-white/10 bg-[#070b11]">
-          {/* Dynamic Background Image with Smooth Crossfade Transition */}
+        <section className="relative min-h-[82vh] flex flex-col justify-between px-6 sm:px-12 md:px-20 pt-16 pb-12 overflow-hidden border-b border-white/10 bg-[#070b11]">
+          {/* Background Image */}
           <div className="absolute inset-0 z-0 pointer-events-none">
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={currentHero.id}
-                src={currentHero.image}
-                alt={currentHero.title}
-                referrerPolicy="no-referrer"
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 0.45, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.7 }}
-                className="w-full h-full object-cover object-center"
-              />
-            </AnimatePresence>
+            <img
+              src={latestDoc.image}
+              alt={latestDoc.title}
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover object-center opacity-40"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-[#070b11] via-[#070b11]/70 to-[#070b11]/40" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#070b11] via-[#070b11]/90 to-transparent" />
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
@@ -652,53 +461,45 @@ export const HomePage: React.FC<HomePageProps> = ({
             aria-hidden="true"
             className="absolute right-[-2vw] top-1/2 -translate-y-1/2 text-[clamp(100px,16vw,240px)] font-black text-white/[0.03] select-none pointer-events-none tracking-tighter font-mono uppercase"
           >
-            {currentHero.shortName.split(' ')[0]}
+            MUSTANG
           </div>
 
-          {/* Main Hero Content Area & Telemetry Cockpit */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-6">
-            
-            {/* Left Column: Heading, Synopsis & Direct CTAs */}
+          {/* Main Hero Content Area */}
+          <div className="relative z-10 max-w-4xl pt-6 space-y-6">
             <motion.div
-              key={`text-${currentHero.id}`}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="lg:col-span-7 space-y-5"
+              className="space-y-5"
             >
               <div className="flex flex-wrap items-center gap-2.5">
                 <span 
-                  className="px-3 py-1 text-[10px] font-bold font-mono tracking-widest uppercase rounded shadow-lg"
-                  style={{ 
-                    backgroundColor: `${currentHero.accent}25`,
-                    color: currentHero.accent,
-                    border: `1px solid ${currentHero.accent}60`
-                  }}
+                  className="px-3 py-1 text-[10px] font-bold font-mono tracking-widest uppercase rounded shadow-lg bg-[#ff5500]/20 text-[#ff5500] border border-[#ff5500]/60"
                 >
-                  {currentHero.tag}
+                  {latestDoc.tag}
                 </span>
 
                 <span className="px-3 py-1 bg-white/5 border border-white/15 text-[10px] font-mono tracking-widest text-[#ffd451] font-bold uppercase flex items-center gap-1.5 rounded">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#ffd451] animate-pulse" />
-                  <span>EXPEDIENTE #{currentHero.number}</span>
+                  <span>EXPEDIENTE #{latestDoc.number}</span>
                 </span>
 
                 <span className="px-2.5 py-1 bg-black/40 border border-white/10 text-[10px] font-mono text-[#8a9db5] rounded">
-                  {currentHero.flag}
+                  🇺🇸 USA
                 </span>
               </div>
 
               <div>
                 <span className="text-xs font-mono tracking-[0.25em] text-[#8a9db5] uppercase block mb-1">
-                  {currentHero.era} // {currentHero.origin}
+                  {latestDoc.era} // {latestDoc.origin}
                 </span>
-                <h1 className="text-[clamp(32px,4.5vw,62px)] font-black tracking-tighter leading-[0.92] text-white uppercase max-w-3xl">
-                  {currentHero.title}
+                <h1 className="text-[clamp(34px,5vw,68px)] font-black tracking-tighter leading-[0.92] text-white uppercase max-w-3xl">
+                  {latestDoc.title}
                 </h1>
               </div>
 
               <p className="max-w-2xl text-[#b8c7d8] text-sm sm:text-base leading-relaxed font-light">
-                {currentHero.description}
+                {latestDoc.description}
               </p>
 
               {/* Action Buttons */}
@@ -706,13 +507,9 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <motion.button
                   whileHover={{ scale: 1.03, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  id={`hero-read-doc-${currentHero.id}`}
-                  onClick={() => onNavigate(currentHero.id)}
-                  className="px-8 py-4 text-black text-xs font-black tracking-[0.16em] uppercase rounded-xl transition-all shadow-2xl flex items-center justify-center gap-2.5 cursor-pointer font-mono"
-                  style={{ 
-                    backgroundColor: currentHero.accent,
-                    boxShadow: `0 0 30px ${currentHero.accent}50`
-                  }}
+                  id={`hero-read-doc-${latestDoc.id}`}
+                  onClick={() => onNavigate(latestDoc.id)}
+                  className="px-8 py-4 text-black text-xs font-black tracking-[0.16em] uppercase rounded-xl transition-all shadow-2xl flex items-center justify-center gap-2.5 cursor-pointer font-mono bg-[#ff5500] hover:bg-[#ff661a] shadow-[0_0_30px_rgba(255,85,0,0.4)]"
                 >
                   <Play className="w-4 h-4 fill-black" />
                   <span>LEER O ESCUCHAR DOCUMENTAL</span>
@@ -729,115 +526,18 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </motion.button>
               </div>
             </motion.div>
-
-            {/* Right Column: Live Telemetry Cockpit Card */}
-            <motion.div
-              key={`telemetry-${currentHero.id}`}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="lg:col-span-5 bg-gradient-to-br from-[#0c1624] via-[#09101a] to-[#060a12] border border-white/15 rounded-2xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md"
-            >
-              <div 
-                className="absolute top-0 left-0 right-0 h-1"
-                style={{ background: `linear-gradient(to right, ${currentHero.accent}, transparent)` }}
-              />
-
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                <div className="flex items-center gap-2">
-                  <Gauge className="w-4 h-4 text-[#ffd451]" />
-                  <span className="text-xs font-mono font-bold tracking-wider text-white uppercase">
-                    TELEMETRÍA & ESPECIFICACIONES
-                  </span>
-                </div>
-                <span className="px-2 py-0.5 bg-white/5 text-white/60 text-[10px] font-mono rounded">
-                  DOC #{currentHero.number}
-                </span>
-              </div>
-
-              {/* Specs Grid */}
-              <div className="mt-4 space-y-3 font-mono text-xs">
-                <div className="p-3 bg-black/40 border border-white/5 rounded-xl flex items-start justify-between gap-3">
-                  <div>
-                    <span className="text-[10px] text-[#6d7582] uppercase block">ARQUITECTURA DE MOTOR</span>
-                    <span className="text-white font-bold">{currentHero.engine}</span>
-                  </div>
-                  <Zap className="w-4 h-4 text-[#ffd451] shrink-0 mt-1" />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
-                    <span className="text-[10px] text-[#6d7582] uppercase block">POTENCIA MÁXIMA</span>
-                    <span className="text-[#ffd451] text-sm font-black">{currentHero.power}</span>
-                  </div>
-
-                  <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
-                    <span className="text-[10px] text-[#6d7582] uppercase block">VELOCIDAD TOPE</span>
-                    <span className="text-[#4ea0ff] text-sm font-black">{currentHero.topSpeed}</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
-                    <span className="text-[10px] text-[#6d7582] uppercase block">ACELERACIÓN 0-100</span>
-                    <span className="text-[#22c55e] text-sm font-black">{currentHero.zeroToHundred}</span>
-                  </div>
-
-                  <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
-                    <span className="text-[10px] text-[#6d7582] uppercase block">ORIGEN / ERA</span>
-                    <span className="text-white text-xs font-bold truncate block">{currentHero.flag}</span>
-                  </div>
-                </div>
-
-                {/* Sound Note */}
-                <div className="p-3 bg-[#ffd451]/10 border border-[#ffd451]/20 rounded-xl flex items-center gap-2.5">
-                  <Volume2 className="w-4 h-4 text-[#ffd451] shrink-0" />
-                  <div className="text-[11px]">
-                    <span className="text-[#ffd451] font-bold block">Acústica del Motor:</span>
-                    <span className="text-white/80">{currentHero.soundNote}</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
           </div>
 
-          {/* Bottom Interactive Selector Strip: Switch across the 8 Legends */}
-          <div className="relative z-10 mt-10 pt-6 border-t border-white/10">
-            <div className="flex items-center justify-between mb-3 text-[11px] font-mono text-[#8a9db5]">
-              <span className="flex items-center gap-2">
-                <Radio className="w-3.5 h-3.5 text-[#ffd451] animate-pulse" />
-                <span className="font-bold uppercase text-white">SELECTOR DE SUPERDEPORTIVOS EN EL ARCHIVO:</span>
-              </span>
-              <span className="text-white/40">Haz clic en cualquier modelo para cargar su ficha</span>
-            </div>
-
-            <div className="grid grid-cols-4 lg:grid-cols-8 gap-2">
-              {heroCars.map((car, idx) => (
-                <button
-                  key={car.id}
-                  onClick={() => setSelectedHeroIndex(idx)}
-                  className={`p-2.5 rounded-xl border text-left transition-all relative overflow-hidden group cursor-pointer ${
-                    selectedHeroIndex === idx
-                      ? 'bg-gradient-to-b from-[#18283d] to-[#0c1420] border-white text-white shadow-[0_0_20px_rgba(255,255,255,0.15)] scale-[1.03]'
-                      : 'bg-[#0b111a]/80 border-white/10 hover:border-white/30 text-white/70 hover:text-white'
-                  }`}
-                >
-                  <div className="flex items-center justify-between text-[9px] font-mono mb-1">
-                    <span className="font-bold" style={{ color: car.accent }}>#{car.number}</span>
-                    <span className="text-white/40">{car.era.split('—')[0].trim()}</span>
-                  </div>
-                  <div className="text-xs font-bold truncate leading-tight">
-                    {car.shortName}
-                  </div>
-                  {selectedHeroIndex === idx && (
-                    <div 
-                      className="absolute bottom-0 left-0 right-0 h-0.5" 
-                      style={{ backgroundColor: car.accent }} 
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
+          {/* Bottom Scroll Indicator */}
+          <div className="relative z-10 pt-10 flex items-center justify-between text-xs font-mono text-[#8a9db5]">
+            <button
+              onClick={scrollToContent}
+              className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer text-[11px]"
+            >
+              <span>EXPLORAR COLECCIONES EDITORIALES</span>
+              <ChevronRight className="w-4 h-4 text-[#ffd451] rotate-90" />
+            </button>
+            <span className="text-white/30 hidden lg:inline">8 GRANDES REPORTAJES · DATOS TÉCNICOS · FORO ABIERTO</span>
           </div>
         </section>
 
