@@ -1,0 +1,134 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role and automotive subscription settings",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "subscriber"] },
+        "receiveDocumentaryAlerts": { "type": "boolean" },
+        "receiveFactsAlerts": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["email"]
+    },
+    "Broadcast": {
+      "title": "Broadcast",
+      "description": "Email sent from autonoticiascontacto@gmail.com to subscribers",
+      "type": "object",
+      "properties": {
+        "senderEmail": { "type": "string" },
+        "subject": { "type": "string" },
+        "category": { "type": "string" },
+        "targetAudience": { "type": "string" },
+        "body": { "type": "string" },
+        "targetUrl": { "type": "string" },
+        "sentAt": { "type": "string" },
+        "recipientCount": { "type": "number" },
+        "status": { "type": "string" }
+      },
+      "required": ["senderEmail", "subject", "body"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "In-app delivery of broadcast email for user inbox",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "broadcastId": { "type": "string" },
+        "senderEmail": { "type": "string" },
+        "subject": { "type": "string" },
+        "preview": { "type": "string" },
+        "body": { "type": "string" },
+        "category": { "type": "string" },
+        "targetUrl": { "type": "string" },
+        "read": { "type": "boolean" },
+        "receivedAt": { "type": "string" }
+      },
+      "required": ["userId", "subject"]
+    },
+    "CommunityMessage": {
+      "title": "CommunityMessage",
+      "description": "Discussion post or chat message by verified community member",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userRole": { "type": "string" },
+        "channelId": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "likesCount": { "type": "number" },
+        "pinned": { "type": "boolean" }
+      },
+      "required": ["userId", "userName", "channelId", "content"]
+    },
+    "ForumPost": {
+      "title": "ForumPost",
+      "description": "Community forum thread in Autos, Recomendaciones or General categories",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userRole": { "type": "string" },
+        "category": { "type": "string", "enum": ["autos", "recomendaciones", "general"] },
+        "tag": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "carModel": { "type": "string" },
+        "recommendationUrl": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "likesCount": { "type": "number" },
+        "likedBy": { "type": "array" },
+        "commentsCount": { "type": "number" },
+        "pinned": { "type": "boolean" }
+      },
+      "required": ["userId", "userName", "category", "title", "content"]
+    },
+    "ForumComment": {
+      "title": "ForumComment",
+      "description": "Interactive reply to a forum thread",
+      "type": "object",
+      "properties": {
+        "postId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userRole": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["postId", "userId", "userName", "content"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents"
+    },
+    "/broadcasts/{broadcastId}": {
+      "schema": "Broadcast",
+      "description": "Broadcast emails sent by admin"
+    },
+    "/users/{userId}/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User inbox notifications"
+    },
+    "/community_messages/{messageId}": {
+      "schema": "CommunityMessage",
+      "description": "Community discussion messages and dialogue posts"
+    },
+    "/forum_posts/{postId}": {
+      "schema": "ForumPost",
+      "description": "Interactive forum posts in Autos and Recomendaciones"
+    },
+    "/forum_posts/{postId}/comments/{commentId}": {
+      "schema": "ForumComment",
+      "description": "Comments and replies on forum posts"
+    }
+  }
+}

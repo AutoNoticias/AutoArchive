@@ -1,7 +1,7 @@
 import { Chapter, TimelineItem, SpecItem, StatItem } from '../types';
 import xj220HeroImg from '../assets/images/xj220_hero_studio_1787273477819.jpg';
 import xj220BlueprintImg from '../assets/images/xj220_technical_blueprint_1787273488562.jpg';
-import xj220EngineImg from '../assets/images/xj220_engine_bay_1787273499688.jpg';
+import xj220EngineImg from '../assets/images/xj220_jv6_real_engine_1787414405145.jpg';
 import xj220cLeMansImg from '../assets/images/xj220c_lemans_race_1787273509597.jpg';
 import xj220InteriorImg from '../assets/images/xj220_cockpit_interior_1787273521074.jpg';
 
@@ -33,7 +33,7 @@ export const xj220Gallery = [
   {
     id: 'img-3',
     src: xj220EngineImg,
-    title: 'Propulsor JRV-6 3.5L V6 Biturbo (550 PS)',
+    title: 'Propulsor JRV-6 3.5L V6 Biturbo (550 CV)',
     category: 'MECÁNICA & TURBOS',
     description: 'V6 a 90° con doble turbocompresor Garrett T3, intercoolers aire-aire y más de 640 Nm de par motor.',
     aspect: '16:9',
@@ -57,7 +57,7 @@ export const xj220Gallery = [
 ];
 
 export const xj220Stats: StatItem[] = [
-  { value: '550', unit: 'PS', label: 'POTENCIA' },
+  { value: '550', unit: 'CV', label: 'POTENCIA' },
   { value: '3.5', unit: 'L', label: 'V6 BITURBO' },
   { value: '343+', unit: 'KM/H', label: 'VELOCIDAD' },
   { value: '~1470', unit: 'KG', label: 'PESO' },
@@ -109,7 +109,7 @@ export const xj220Timeline: TimelineItem[] = [
 export const xj220Specs: SpecItem[] = [
   { label: 'MOTOR', value: 'V6 3.5 L BITURBO' },
   { label: 'CONFIGURACIÓN', value: 'V6 A 90° LONGITUDINAL' },
-  { label: 'POTENCIA MÁXIMA', value: '550 PS @ 7.200 RPM' },
+  { label: 'POTENCIA MÁXIMA', value: '550 CV @ 7.200 RPM' },
   { label: 'PAR MOTOR', value: '~644 NM @ 4.500 RPM' },
   { label: 'TRACCIÓN', value: 'PROPULSIÓN TRASERA (RWD)' },
   { label: 'TRANSMISIÓN', value: 'MANUAL / 5 VELOCIDADES' },
@@ -220,7 +220,7 @@ export const xj220Chapters: Chapter[] = [
     image: {
       src: xj220EngineImg,
       alt: 'Propulsor Jaguar JRV-6 V6 Biturbo de 3.5 Litros con turbos gemelos Garrett',
-      caption: 'El motor JRV-6 de 3.498 cc con doble turbocompresor Garrett y doble intercooler producía 550 PS y una aceleración demoledora.',
+      caption: 'El motor JRV-6 de 3.498 cc con doble turbocompresor Garrett y doble intercooler producía 550 CV y una aceleración demoledora.',
       tag: 'MOTORIZACIÓN & TURBO',
     },
     paragraphs: [

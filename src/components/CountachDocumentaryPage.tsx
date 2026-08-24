@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RoutePage } from '../types';
+import { AudioNarrator } from './AudioNarrator';
 import {
   countachChapters,
   countachStats,
@@ -10,10 +11,12 @@ import {
 
 interface CountachDocumentaryPageProps {
   onNavigate: (page: RoutePage) => void;
+  onOpenAuthModal?: (reason?: string) => void;
 }
 
 export const CountachDocumentaryPage: React.FC<CountachDocumentaryPageProps> = ({
   onNavigate,
+  onOpenAuthModal,
 }) => {
   const [readingProgress, setReadingProgress] = useState(0);
   const [activeTab, setActiveTab] = useState<'comparativa' | 'lp400' | 'qv' | 'anniv'>('comparativa');
@@ -89,7 +92,7 @@ export const CountachDocumentaryPage: React.FC<CountachDocumentaryPageProps> = (
   ];
 
   return (
-    <div className="min-h-screen bg-[#08090c] text-[#efefed] selection:bg-[#ffd451] selection:text-black">
+    <div className="min-h-screen bg-[#08090c] text-[#efefed] selection:bg-[#ffd451] selection:text-black pb-20 md:pb-0">
       {/* Top Reading Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-[3px] bg-white/10 z-[100]">
         <div
@@ -99,15 +102,16 @@ export const CountachDocumentaryPage: React.FC<CountachDocumentaryPageProps> = (
       </div>
 
       {/* Header bar */}
-      <header className="sticky top-0 z-40 bg-[#08090c]/90 backdrop-blur-md border-b border-white/10 px-6 sm:px-12 md:px-24 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-40 bg-[#08090c]/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-12 md:px-24 py-3.5 sm:py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             id="countach-back-to-docs-btn"
             onClick={() => onNavigate('documentales')}
-            className="flex items-center gap-2 text-xs font-mono tracking-widest text-[#9da0a5] hover:text-white uppercase transition-colors"
+            className="flex items-center gap-1.5 text-xs font-mono tracking-widest text-[#9da0a5] hover:text-white uppercase transition-colors"
           >
             <span>←</span>
-            <span>DOCUMENTALES</span>
+            <span className="hidden sm:inline">DOCUMENTALES</span>
+            <span className="sm:hidden">DOCS</span>
           </button>
           <span className="text-white/20">/</span>
           <span className="text-[10px] font-mono tracking-widest px-2 py-0.5 border border-[#ffd451]/40 bg-[#ffd451]/10 text-[#ffd451]">
@@ -115,7 +119,7 @@ export const CountachDocumentaryPage: React.FC<CountachDocumentaryPageProps> = (
           </span>
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-4 mr-20 md:mr-0">
+        <div className="flex items-center gap-2 sm:gap-4">
           <button
             onClick={() => scrollToSection('countach-gallery-section')}
             className="hidden sm:inline-block px-3 py-1.5 border border-white/15 text-[10px] font-bold tracking-[0.16em] uppercase text-[#cfd3db] hover:text-white hover:border-white/40 transition-all font-mono"
@@ -125,12 +129,26 @@ export const CountachDocumentaryPage: React.FC<CountachDocumentaryPageProps> = (
 
           <button
             onClick={() => setShowIndexMenu(!showIndexMenu)}
-            className="px-3.5 py-1.5 border border-[#ffd451]/40 bg-[#ffd451]/10 text-[10px] font-bold tracking-[0.16em] uppercase text-[#ffd451] hover:bg-[#ffd451] hover:text-black transition-all whitespace-nowrap font-mono"
+            className="px-2.5 sm:px-3.5 py-1.5 border border-[#ffd451]/40 bg-[#ffd451]/10 text-[10px] font-bold tracking-wider sm:tracking-[0.16em] uppercase text-[#ffd451] hover:bg-[#ffd451] hover:text-black transition-all whitespace-nowrap font-mono"
           >
             ÍNDICE (20 CAP.)
           </button>
         </div>
       </header>
+
+      {/* Persistent Audio Narrator Bar */}
+      <AudioNarrator
+        documentaryTitle="LAMBORGHINI COUNTACH"
+        chapters={countachChapters}
+        accentColor="#ffd451"
+        onChapterSelect={(idx) => {
+          const chap = countachChapters[idx];
+          if (chap) {
+            scrollToSection(`capitulo-${chap.number}`);
+          }
+        }}
+        onOpenAuthModal={onOpenAuthModal}
+      />
 
       {/* Quick Index Dropdown Drawer */}
       {showIndexMenu && (

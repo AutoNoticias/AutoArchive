@@ -1,6 +1,6 @@
 import { Chapter, TimelineItem, SpecItem, StatItem } from '../types';
 import countachHeroImg from '../assets/images/countach_lp400_hero_1787274469417.jpg';
-import countachEngineImg from '../assets/images/countach_engine_bay_1787274480350.jpg';
+import countachEngineImg from '../assets/images/countach_v12_real_engine_1787414391361.jpg';
 import countachCadImg from '../assets/images/countach_cad_blueprint_1787274490980.jpg';
 import countachCockpitImg from '../assets/images/countach_cockpit_interior_1787274499397.jpg';
 import countachQvWingImg from '../assets/images/countach_qv_wing_1787274511669.jpg';
@@ -15,7 +15,7 @@ export const countachImages = {
 
 export const countachStats: StatItem[] = [
   { value: '298', unit: 'KM/H', label: 'Velocidad Máx. LP5000 QV (1985)' },
-  { value: '455', unit: 'PS', label: 'Potencia Máxima V12 5.2L QV' },
+  { value: '455', unit: 'CV', label: 'Potencia Máxima V12 5.2L QV' },
   { value: '1.07', unit: 'METROS', label: 'Altura Total del LP400 al Suelo' },
   { value: '16', unit: 'AÑOS', label: 'En Producción Oficial (1974-1990)' },
   { value: '1,983', unit: 'UNIDADES', label: 'Total Producidos en Toda la Saga' },
@@ -87,7 +87,7 @@ export const countachSpecs: { lp400: SpecItem[]; qv: SpecItem[]; anniv: SpecItem
     { label: 'Motor', value: 'V12 Bizzarrini a 60° Longitudinal Trasero DOHC 24V' },
     { label: 'Cilindrada', value: '3.929 cc (3.9 Litros)' },
     { label: 'Alimentación', value: '6 Carburadores horizontales dobles Weber 45 DCOE' },
-    { label: 'Potencia Máxima', value: '375 PS (370 hp / 276 kW) @ 8.000 rpm' },
+    { label: 'Potencia Máxima', value: '375 CV (370 hp / 276 kW) @ 8.000 rpm' },
     { label: 'Par Motor', value: '361 Nm (266 lb-ft) @ 5.000 rpm' },
     { label: 'Transmisión', value: 'Manual de 5 velocidades montada delante del motor' },
     { label: 'Chasis', value: 'Estructura tubular espacial de acero soldado' },
@@ -104,7 +104,7 @@ export const countachSpecs: { lp400: SpecItem[]; qv: SpecItem[]; anniv: SpecItem
     { label: 'Motor', value: 'V12 a 60° Longitudinal Trasero DOHC 48V (4 válvulas/cil)' },
     { label: 'Cilindrada', value: '5.167 cc (5.2 Litros)' },
     { label: 'Alimentación', value: '6 Carburadores verticales Weber 44 DCNF (o Bosch K-Jetronic en EE.UU.)' },
-    { label: 'Potencia Máxima', value: '455 PS (449 hp / 335 kW) @ 7.000 rpm' },
+    { label: 'Potencia Máxima', value: '455 CV (449 hp / 335 kW) @ 7.000 rpm' },
     { label: 'Par Motor', value: '500 Nm (369 lb-ft) @ 5.200 rpm' },
     { label: 'Transmisión', value: 'Manual de 5 velocidades sincronizada con rejilla abierta' },
     { label: 'Chasis', value: 'Tubular de acero con paneles de aluminio y fibra de vidrio' },
@@ -120,7 +120,7 @@ export const countachSpecs: { lp400: SpecItem[]; qv: SpecItem[]; anniv: SpecItem
     { label: 'Unidades Producidas', value: '657 ejemplares (la versión más vendida)' },
     { label: 'Motor', value: 'V12 a 60° Longitudinal Trasero DOHC 48V' },
     { label: 'Cilindrada', value: '5.167 cc (5.2 Litros)' },
-    { label: 'Potencia Máxima', value: '455 PS (449 hp / 335 kW) @ 7.000 rpm' },
+    { label: 'Potencia Máxima', value: '455 CV (449 hp / 335 kW) @ 7.000 rpm' },
     { label: 'Par Motor', value: '500 Nm (369 lb-ft) @ 5.200 rpm' },
     { label: 'Diseño y Aerodinámica', value: 'Rediseño de Horacio Pagani (entradas de aire integradas)' },
     { label: 'Llantas', value: 'OZ Racing de 2 piezas forjadas en aleación ligera' },
@@ -273,7 +273,7 @@ export const countachChapters: Chapter[] = [
       'En el LP400 original, con su carrocería estrecha y bajo coeficiente aerodinámico sin alerones, el coche alcanzaba unos impresionantes 290 km/h reales, coronándose como el automóvil de producción más veloz de la primera mitad de los años setenta.',
     ],
     highlight: {
-      value: '375 PS',
+      value: '375 CV',
       label: 'POTENCIA LP400 ORIGINAL @ 8.000 RPM',
       description: 'Una respuesta al acelerador inmediata gracias a doce mariposas de carburación independientes.',
     },
@@ -345,7 +345,7 @@ export const countachChapters: Chapter[] = [
     subtitle: '1982: Mayor cilindrada y par motor para reconquistar el mercado norteamericano',
     paragraphs: [
       'A principios de los años 80, tras superar una severa crisis financiera bajo la nueva dirección de los hermanos franceses Patrick y Jean-Claude Mimran, Lamborghini decidió revitalizar el corazón mecánico del Countach.',
-      'Nació así en 1982 el Countach LP5000 S (también conocido como LP500S). El motor V12 incrementó su carrera y diámetro para alcanzar los 4.754 cc. Aunque la potencia se mantuvo en 375 PS a 7.000 rpm debido a reglamentaciones de carburación, el par motor trepó hasta los 410 Nm a solo 4.500 rpm.',
+      'Nació así en 1982 el Countach LP5000 S (también conocido como LP500S). El motor V12 incrementó su carrera y diámetro para alcanzar los 4.754 cc. Aunque la potencia se mantuvo en 375 CV a 7.000 rpm debido a reglamentaciones de carburación, el par motor trepó hasta los 410 Nm a solo 4.500 rpm.',
       'El coche se volvió mucho más elástico y utilizable en el tráfico real, convirtiéndose en el primer Countach en ser importado y homologado de forma masiva en los Estados Unidos, donde se convirtió en el juguete predilecto de Wall Street y Hollywood.',
     ],
     highlight: {
@@ -365,7 +365,7 @@ export const countachChapters: Chapter[] = [
       'La alimentación fue una obra de arte mecánica: seis carburadores dobles Weber 44 DCNF montados verticalmente en la parte superior del motor. Para dar cabida a los carburadores, se añadió una característica joroba en el capó motor. El resultado: 455 CV a 7.000 rpm y una aceleración de 0 a 100 km/h en 4.5 segundos, humillando al Testarossa.',
     ],
     highlight: {
-      value: '455 PS',
+      value: '455 CV',
       label: 'POTENCIA 5000 QV @ 7.000 RPM',
       description: 'El superdeportivo atmosférico más potente de su época, superando ampliamente a su rival de Maranello.',
     },

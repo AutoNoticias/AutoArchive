@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RoutePage } from '../types';
+import { AudioNarrator } from './AudioNarrator';
 import {
   f40MiuraChapters,
   f40MiuraStats,
@@ -10,10 +11,12 @@ import {
 
 interface F40MiuraDocumentaryPageProps {
   onNavigate: (page: RoutePage) => void;
+  onOpenAuthModal?: (reason?: string) => void;
 }
 
 export const F40MiuraDocumentaryPage: React.FC<F40MiuraDocumentaryPageProps> = ({
   onNavigate,
+  onOpenAuthModal,
 }) => {
   const [readingProgress, setReadingProgress] = useState(0);
   const [activeTab, setActiveTab] = useState<'f40' | 'miura' | 'comparativa'>('comparativa');
@@ -69,14 +72,14 @@ export const F40MiuraDocumentaryPage: React.FC<F40MiuraDocumentaryPageProps> = (
       src: f40MiuraImages.f40Engine,
       alt: 'Motor V8 Biturbo Tipo F120A',
       caption:
-        'V8 de 2.9 litros a 90° con dos turbocompresores IHI a 1.1 bar e intercoolers gemelos Behr, rindiendo 478 PS oficiales.',
+        'V8 de 2.9 litros a 90° con dos turbocompresores IHI a 1.1 bar e intercoolers gemelos Behr, rindiendo 478 CV oficiales.',
       tag: 'PIEZA 03 // V8 BITURBO F120A',
     },
     {
       src: f40MiuraImages.miuraEngine,
       alt: 'Motor V12 Bizzarrini Transversal',
       caption:
-        'V12 de 3.9 litros y 385 PS montado transversalmente con cuatro carburadores Weber triples y lubricación por cárter dividido.',
+        'V12 de 3.9 litros y 385 CV montado transversalmente con cuatro carburadores Weber triples y lubricación por cárter dividido.',
       tag: 'PIEZA 04 // V12 BIZZARRINI',
     },
     {
@@ -89,7 +92,7 @@ export const F40MiuraDocumentaryPage: React.FC<F40MiuraDocumentaryPageProps> = (
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0c0f] text-[#efefed] selection:bg-[#d92f31] selection:text-white">
+    <div className="min-h-screen bg-[#0a0c0f] text-[#efefed] selection:bg-[#d92f31] selection:text-white pb-20 md:pb-0">
       {/* Top Reading Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-[3px] bg-white/10 z-[100]">
         <div
@@ -99,15 +102,16 @@ export const F40MiuraDocumentaryPage: React.FC<F40MiuraDocumentaryPageProps> = (
       </div>
 
       {/* Header bar */}
-      <header className="sticky top-0 z-40 bg-[#0a0c0f]/90 backdrop-blur-md border-b border-white/10 px-6 sm:px-12 md:px-24 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-40 bg-[#0a0c0f]/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-12 md:px-24 py-3.5 sm:py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             id="f40-back-to-docs-btn"
             onClick={() => onNavigate('documentales')}
-            className="flex items-center gap-2 text-xs font-mono tracking-widest text-[#9da0a5] hover:text-white uppercase transition-colors"
+            className="flex items-center gap-1.5 text-xs font-mono tracking-widest text-[#9da0a5] hover:text-white uppercase transition-colors"
           >
             <span>←</span>
-            <span>DOCUMENTALES</span>
+            <span className="hidden sm:inline">DOCUMENTALES</span>
+            <span className="sm:hidden">DOCS</span>
           </button>
           <span className="text-white/20">/</span>
           <span className="text-[10px] font-mono tracking-widest px-2 py-0.5 border border-[#d92f31]/40 bg-[#d92f31]/10 text-[#ff7173]">
@@ -115,7 +119,7 @@ export const F40MiuraDocumentaryPage: React.FC<F40MiuraDocumentaryPageProps> = (
           </span>
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-4 mr-20 md:mr-0">
+        <div className="flex items-center gap-2 sm:gap-4">
           <button
             onClick={() => scrollToSection('f40-miura-gallery-section')}
             className="hidden sm:inline-block px-3 py-1.5 border border-white/15 text-[10px] font-bold tracking-[0.16em] uppercase text-[#cfd3db] hover:text-white hover:border-white/40 transition-all"
@@ -125,12 +129,26 @@ export const F40MiuraDocumentaryPage: React.FC<F40MiuraDocumentaryPageProps> = (
 
           <button
             onClick={() => setShowIndexMenu(!showIndexMenu)}
-            className="px-3.5 py-1.5 border border-[#d92f31]/40 bg-[#d92f31]/10 text-[10px] font-bold tracking-[0.16em] uppercase text-[#ff8e90] hover:text-white hover:border-[#d92f31] transition-all whitespace-nowrap"
+            className="px-2.5 sm:px-3.5 py-1.5 border border-[#d92f31]/40 bg-[#d92f31]/10 text-[10px] font-bold tracking-wider sm:tracking-[0.16em] uppercase text-[#ff8e90] hover:text-white hover:border-[#d92f31] transition-all whitespace-nowrap"
           >
             ÍNDICE (20 CAP.)
           </button>
         </div>
       </header>
+
+      {/* Persistent Audio Narrator Bar */}
+      <AudioNarrator
+        documentaryTitle="FERRARI F40 Y LAMBORGHINI MIURA SV"
+        chapters={f40MiuraChapters}
+        accentColor="#d92f31"
+        onChapterSelect={(idx) => {
+          const chap = f40MiuraChapters[idx];
+          if (chap) {
+            scrollToSection(`capitulo-${chap.number}`);
+          }
+        }}
+        onOpenAuthModal={onOpenAuthModal}
+      />
 
       {/* Quick Index Dropdown Drawer */}
       {showIndexMenu && (

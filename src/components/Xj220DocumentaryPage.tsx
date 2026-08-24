@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RoutePage } from '../types';
+import { AudioNarrator } from './AudioNarrator';
 import {
   xj220Chapters,
   xj220Stats,
@@ -11,9 +12,10 @@ import {
 
 interface Xj220DocumentaryPageProps {
   onNavigate: (page: RoutePage) => void;
+  onOpenAuthModal?: (reason?: string) => void;
 }
 
-export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNavigate }) => {
+export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNavigate, onOpenAuthModal }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showIndexMenu, setShowIndexMenu] = useState(false);
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
@@ -37,7 +39,7 @@ export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNa
   }, []);
 
   const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
+    const el = document.getElementById(id) || document.getElementById(id.replace('capitulo-', 'chapter-'));
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
       setShowIndexMenu(false);
@@ -47,7 +49,7 @@ export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNa
   const renderChapter = (chap: typeof xj220Chapters[0]) => (
     <section
       key={chap.number}
-      id={`chapter-${chap.number}`}
+      id={`capitulo-${chap.number}`}
       className={`px-6 sm:px-12 md:px-28 py-20 sm:py-32 border-b border-white/10 ${
         chap.isDark ? 'bg-[#060e18]' : 'bg-[#081525]'
       }`}
@@ -134,7 +136,7 @@ export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNa
   );
 
   return (
-    <div className="min-h-screen bg-[#07111d] text-[#eeeeee] flex flex-col justify-between selection:bg-[#4ea0ff] selection:text-black">
+    <div className="min-h-screen bg-[#07111d] text-[#eeeeee] flex flex-col justify-between selection:bg-[#4ea0ff] selection:text-black pb-20 md:pb-0">
       {/* Top Reading Progress Bar */}
       <div
         className="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-[#4ea0ff] to-[#72b9ff] z-50 transition-all duration-150"
@@ -190,8 +192,8 @@ export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNa
       )}
 
       {/* Header */}
-      <header className="sticky top-0 z-40 w-full px-6 sm:px-12 md:px-24 py-5 flex items-center justify-between border-b border-white/10 bg-[#07111d]/90 backdrop-blur-md">
-        <div className="flex items-center gap-6">
+      <header className="sticky top-0 z-40 w-full px-4 sm:px-12 md:px-24 py-3.5 sm:py-5 flex items-center justify-between border-b border-white/10 bg-[#07111d]/90 backdrop-blur-md">
+        <div className="flex items-center gap-3 sm:gap-6">
           <button
             id="xj220-brand-logo-btn"
             onClick={() => onNavigate('home')}
@@ -199,17 +201,18 @@ export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNa
           >
             Auto<span className="text-[#4ea0ff]">Archive</span>
           </button>
-          <span className="hidden sm:inline-block text-[#556980] text-xs">/</span>
+          <span className="text-[#556980] text-xs">/</span>
           <button
             id="xj220-header-doc-crumb-btn"
             onClick={() => onNavigate('documentales')}
-            className="hidden sm:inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-[#8bb4d9] hover:text-white transition-colors"
+            className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#8bb4d9] hover:text-white transition-colors"
           >
-            DOCUMENTALES
+            <span className="hidden sm:inline">DOCUMENTALES</span>
+            <span className="sm:hidden">DOC 001</span>
           </button>
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-4 mr-20 md:mr-0">
+        <div className="flex items-center gap-2 sm:gap-4">
           <button
             id="xj220-gallery-nav-btn"
             onClick={() => scrollToSection('xj220-visual-gallery-section')}
@@ -222,7 +225,7 @@ export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNa
           <button
             id="xj220-quick-index-btn"
             onClick={() => setShowIndexMenu(!showIndexMenu)}
-            className="px-3.5 py-1.5 border border-white/20 text-[10px] font-bold tracking-[0.16em] uppercase text-[#a0c5ea] hover:text-white hover:border-[#4ea0ff] transition-all whitespace-nowrap"
+            className="px-2.5 sm:px-3.5 py-1.5 border border-white/20 text-[10px] font-bold tracking-wider sm:tracking-[0.16em] uppercase text-[#a0c5ea] hover:text-white hover:border-[#4ea0ff] transition-all whitespace-nowrap"
           >
             ÍNDICE (20 CAP.)
           </button>
@@ -232,6 +235,20 @@ export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNa
           </div>
         </div>
       </header>
+
+      {/* Persistent Audio Narrator Bar */}
+      <AudioNarrator
+        documentaryTitle="JAGUAR XJ220"
+        chapters={xj220Chapters}
+        accentColor="#4ea0ff"
+        onChapterSelect={(idx) => {
+          const chap = xj220Chapters[idx];
+          if (chap) {
+            scrollToSection(`capitulo-${chap.number}`);
+          }
+        }}
+        onOpenAuthModal={onOpenAuthModal}
+      />
 
       {/* Quick Chapter Index Drawer / Dropdown */}
       {showIndexMenu && (
@@ -348,7 +365,7 @@ export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNa
             <span className="pr-6 sm:pr-8 border-r border-white/15">1984 — 1994</span>
             <span className="pr-6 sm:pr-8 border-r border-white/15">JAGUAR / TWR</span>
             <span className="pr-6 sm:pr-8 border-r border-white/15">V6 BITURBO</span>
-            <span>550 PS</span>
+            <span>550 CV</span>
           </div>
 
           {/* Quick jump to gallery button */}

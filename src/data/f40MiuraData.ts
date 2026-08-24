@@ -1,8 +1,8 @@
 import { Chapter, TimelineItem, SpecItem, StatItem } from '../types';
 import f40StudioImg from '../assets/images/f40_studio_red_1787274141701.jpg';
 import miuraStudioImg from '../assets/images/miura_sv_studio_1787274165236.jpg';
-import f40EngineImg from '../assets/images/f40_engine_turbos_1787274175395.jpg';
-import miuraEngineImg from '../assets/images/miura_engine_v12_1787274186431.jpg';
+import f40EngineImg from '../assets/images/ferrari_f40_real_engine_1787414365438.jpg';
+import miuraEngineImg from '../assets/images/miura_v12_real_engine_1787414378380.jpg';
 import cadSchematicImg from '../assets/images/f40_miura_cad_schematic_1787274197990.jpg';
 
 export const f40MiuraImages = {
@@ -16,8 +16,8 @@ export const f40MiuraImages = {
 export const f40MiuraStats: StatItem[] = [
   { value: '324', unit: 'KM/H', label: 'Velocidad Máx. F40 (1er > 200 mph)' },
   { value: '290', unit: 'KM/H', label: 'Velocidad Máx. Miura SV (1971)' },
-  { value: '478', unit: 'PS', label: 'Potencia F40 V8 Biturbo' },
-  { value: '385', unit: 'PS', label: 'Potencia Miura SV V12 Atmosférico' },
+  { value: '478', unit: 'CV', label: 'Potencia F40 V8 Biturbo' },
+  { value: '385', unit: 'CV', label: 'Potencia Miura SV V12 Atmosférico' },
   { value: '1,100', unit: 'KG', label: 'Peso en Vacío F40 (Kevlar/Carbono)' },
   { value: '150', unit: 'UNIDADES', label: 'Miura SV Producidos (1971-1973)' },
 ];
@@ -45,7 +45,7 @@ export const f40MiuraTimeline: TimelineItem[] = [
     year: '1971',
     title: 'Miura SV: La Madurez y Perfección Técnica (Spinto Veloce)',
     description:
-      'Presentado junto al prototipo del Countach en Ginebra, el Miura SV soluciona la aerodinámica con pasos de rueda ensanchados, suspensión trasera rediseñada, 385 PS y cárter dividido que separa la lubricación del motor y la caja de cambios.',
+      'Presentado junto al prototipo del Countach en Ginebra, el Miura SV soluciona la aerodinámica con pasos de rueda ensanchados, suspensión trasera rediseñada, 385 CV y cárter dividido que separa la lubricación del motor y la caja de cambios.',
   },
   {
     year: '1984',
@@ -88,7 +88,7 @@ export const f40MiuraSpecs: { f40: SpecItem[]; miura: SpecItem[] } = {
     { label: 'Cilindrada', value: '2.936 cc (2.9 Litros)' },
     { label: 'Sobrealimentación', value: '2 Turbocompresores IHI + Intercoolers Behr' },
     { label: 'Presión de Turbo', value: '1.1 bar (16 psi)' },
-    { label: 'Potencia Máxima', value: '478 PS (471 hp / 352 kW) @ 7.000 rpm' },
+    { label: 'Potencia Máxima', value: '478 CV (471 hp / 352 kW) @ 7.000 rpm' },
     { label: 'Par Motor', value: '577 Nm (426 lb-ft) @ 4.000 rpm' },
     { label: 'Transmisión', value: 'Manual de 5 velocidades con rejilla abierta' },
     { label: 'Chasis', value: 'Tubular de acero + paneles de Kevlar, Carbono y Nomex' },
@@ -106,7 +106,7 @@ export const f40MiuraSpecs: { f40: SpecItem[]; miura: SpecItem[] } = {
     { label: 'Cilindrada', value: '3.929 cc (3.9 Litros)' },
     { label: 'Alimentación', value: '4 Carburadores triples Weber 40 IDL3C' },
     { label: 'Lubricación', value: 'Cárter dividido (aceite de motor y caja separados)' },
-    { label: 'Potencia Máxima', value: '385 PS (380 hp / 283 kW) @ 7.850 rpm' },
+    { label: 'Potencia Máxima', value: '385 CV (380 hp / 283 kW) @ 7.850 rpm' },
     { label: 'Par Motor', value: '400 Nm (295 lb-ft) @ 5.750 rpm' },
     { label: 'Transmisión', value: 'Manual de 5 velocidades integrada en el bloque' },
     { label: 'Chasis', value: 'Monocasco central de acero perforado + subchasis tubulares' },
@@ -202,11 +202,11 @@ export const f40MiuraChapters: Chapter[] = [
     subtitle: 'El propulsor de 385 caballos a casi 8.000 revoluciones',
     paragraphs: [
       'El corazón del Miura SV fue obra del legendario Giotto Bizzarrini, ex-jefe de desarrollo de Ferrari y padre del 250 GTO. Bizzarrini concibió un V12 a 60 grados de 3.929 cc en aleación ligera con doble árbol de levas en cabeza por bancada y dos válvulas por cilindro accionadas por cadena.',
-      'En el SV, los árboles de levas recibieron un cruce de válvulas más agresivo y se instalaron cuatro carburadores de triple cuerpo Weber 40 IDL3C de tiro invertido. La potencia ascendió a unos brutales 385 PS (380 hp) a 7.850 rpm, con un par motor de 400 Nm a 5.750 rpm.',
+      'En el SV, los árboles de levas recibieron un cruce de válvulas más agresivo y se instalaron cuatro carburadores de triple cuerpo Weber 40 IDL3C de tiro invertido. La potencia ascendió a unos brutales 385 CV (380 hp) a 7.850 rpm, con un par motor de 400 Nm a 5.750 rpm.',
       'El sonido de admisión emanando de las 12 trompetas metálicas a escasos centímetros de la nuca de los ocupantes, combinado con el aullido del escape Ansa de cuatro salidas, convirtió al Miura SV en una de las experiencias acústicas más embriagadoras jamás construidas.',
     ],
     highlight: {
-      value: '385 PS',
+      value: '385 CV',
       label: 'POTENCIA MÁXIMA @ 7.850 RPM',
       description: 'Alcanzaba los 290 km/h en 1971 con una pureza de aspiración natural incomparable.',
     },
@@ -257,10 +257,10 @@ export const f40MiuraChapters: Chapter[] = [
     paragraphs: [
       'El motor del Ferrari F40 (código Tipo F120A) era un V8 a 90 grados con bloque y culatas de aleación de aluminio y silicio, con una cilindrada de 2.936 cc. Contaba con 4 válvulas por cilindro accionadas por cuatro árboles de levas, pistones forjados Mahle con recubrimiento de grafito y bielas de acero especial.',
       'La sobrealimentación corría a cargo de dos turbocompresores japoneses IHI refrigerados por agua, soplando a una presión máxima de 1.1 bar (16 psi). Para enfriar el aire de admisión comprimido, se instalaron dos masivos intercoolers aire-aire de la firma alemana Behr en la parte superior del vano motor.',
-      'El resultado oficial fue de 478 PS (471 hp) a 7.000 rpm y un demoledor par de 577 Nm a 4.000 rpm. Sin embargo, en bancos de potencia modernos se ha comprobado que muchas unidades entregaban más de 500 CV reales. La entrega de potencia era brutal: por debajo de 3.500 rpm el coche era dócil, pero al entrar el soplado de ambos turbos se producía una explosión de aceleración violenta que exigía manos de piloto profesional.',
+      'El resultado oficial fue de 478 CV (471 hp) a 7.000 rpm y un demoledor par de 577 Nm a 4.000 rpm. Sin embargo, en bancos de potencia modernos se ha comprobado que muchas unidades entregaban más de 500 CV reales. La entrega de potencia era brutal: por debajo de 3.500 rpm el coche era dócil, pero al entrar el soplado de ambos turbos se producía una explosión de aceleración violenta que exigía manos de piloto profesional.',
     ],
     highlight: {
-      value: '478 PS',
+      value: '478 CV',
       label: 'POTENCIA HOMOLOGADA OFICIAL',
       description: 'Más de 160 caballos por litro en 1987, una cifra estratosférica para su época.',
     },
@@ -368,7 +368,7 @@ export const f40MiuraChapters: Chapter[] = [
       'Ambos modelos demostraron que sus chasis de calle albergaban el alma inquebrantable de bólidos de resistencia pura.',
     ],
     highlight: {
-      value: '720 PS',
+      value: '720 CV',
       label: 'POTENCIA DEL F40 LM MICHELOTTO',
       description: 'El F40 llevado al límite extremo para las 24 Horas de Le Mans y la serie IMSA.',
     },
