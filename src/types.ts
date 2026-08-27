@@ -1,4 +1,4 @@
-export type RoutePage = 'home' | 'documentales' | 'f1' | 'xj220' | 'f40-miura' | 'countach' | 'r34' | 'supra' | 'mazda-787b' | 'nsx' | 'camaro-mustang' | 'datos' | 'foro' | 'admin-panel';
+export type RoutePage = 'home' | 'documentales' | 'shelby-cobra' | 'toyota-hilux' | 'f1' | 'xj220' | 'f40-miura' | 'countach' | 'r34' | 'supra' | 'mazda-787b' | 'nsx' | 'camaro-mustang' | 'datos' | 'foro' | 'admin-panel';
 
 export interface UserProfile {
   uid: string;

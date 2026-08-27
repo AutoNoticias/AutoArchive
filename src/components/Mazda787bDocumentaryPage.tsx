@@ -137,6 +137,7 @@ export const Mazda787bDocumentaryPage: React.FC<Mazda787bDocumentaryPageProps> =
 
       {/* Persistent Audio Narrator Bar */}
       <AudioNarrator
+        docId="mazda-787b"
         documentaryTitle="MAZDA 787B (LE MANS '91)"
         chapters={mazda787bChapters}
         accentColor="#22c55e"

@@ -48,7 +48,7 @@ Generate a fascinating, short, technical fact about automotive engineering.
 Respond ONLY with a JSON object with these keys: title, category, tag, summary, details, year, car, curiosity.`;
         
         const response = await ai.models.generateContent({
-          model: 'gemini-1.5-flash',
+          model: 'gemini-3.7-flash',
           contents: prompt,
           config: {
             maxOutputTokens: 500,

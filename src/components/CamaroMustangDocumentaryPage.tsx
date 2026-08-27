@@ -154,6 +154,7 @@ export const CamaroMustangDocumentaryPage: React.FC<CamaroMustangDocumentaryPage
 
       {/* Persistent Audio Narrator Bar */}
       <AudioNarrator
+        docId="camaro-mustang"
         documentaryTitle="CAMARO VS MUSTANG: LA GUERRA DE LOS PONY CARS"
         chapters={camaroMustangChapters}
         accentColor="#ff5500"

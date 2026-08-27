@@ -133,6 +133,7 @@ export const SupraDocumentaryPage: React.FC<SupraDocumentaryPageProps> = ({ onNa
 
       {/* Persistent Audio Narrator Bar */}
       <AudioNarrator
+        docId="supra"
         documentaryTitle="TOYOTA SUPRA MK4 (A80)"
         chapters={supraChapters}
         accentColor="#e62628"

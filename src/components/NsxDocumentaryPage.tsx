@@ -126,6 +126,7 @@ export const NsxDocumentaryPage: React.FC<NsxDocumentaryPageProps> = ({ onNaviga
 
       {/* Persistent Audio Narrator Bar */}
       <AudioNarrator
+        docId="nsx"
         documentaryTitle="HONDA NSX (NA1)"
         chapters={nsxChapters}
         accentColor="#e62628"

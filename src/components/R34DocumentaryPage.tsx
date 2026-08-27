@@ -140,6 +140,7 @@ export const R34DocumentaryPage: React.FC<R34DocumentaryPageProps> = ({ onNaviga
 
       {/* Persistent Audio Narrator Bar */}
       <AudioNarrator
+        docId="r34"
         documentaryTitle="NISSAN SKYLINE GT-R R34"
         chapters={r34Chapters}
         accentColor="#4ea0ff"

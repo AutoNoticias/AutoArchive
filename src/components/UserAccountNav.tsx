@@ -10,7 +10,8 @@ import {
   ChevronDown,
   LayoutDashboard,
   Edit3,
-  UserCheck
+  UserCheck,
+  Crown
 } from 'lucide-react';
 
 interface UserAccountNavProps {
@@ -108,7 +109,7 @@ export function UserAccountNav({
               <div className="text-[11px] text-[#8bb4d9] truncate font-mono">
                 {user.email}
               </div>
-              <div className="mt-1.5">
+              <div className="mt-1.5 flex flex-wrap gap-1">
                 {isAdmin ? (
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#ffd451]/15 text-[#ffd451] text-[9px] font-mono font-bold rounded border border-[#ffd451]/30">
                     <ShieldCheck className="w-3 h-3" /> ADMINISTRADOR OFICIAL

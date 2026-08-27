@@ -138,6 +138,7 @@ export const CountachDocumentaryPage: React.FC<CountachDocumentaryPageProps> = (
 
       {/* Persistent Audio Narrator Bar */}
       <AudioNarrator
+        docId="countach"
         documentaryTitle="LAMBORGHINI COUNTACH"
         chapters={countachChapters}
         accentColor="#ffd451"

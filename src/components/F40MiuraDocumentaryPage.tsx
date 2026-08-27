@@ -138,6 +138,7 @@ export const F40MiuraDocumentaryPage: React.FC<F40MiuraDocumentaryPageProps> = (
 
       {/* Persistent Audio Narrator Bar */}
       <AudioNarrator
+        docId="f40-miura"
         documentaryTitle="FERRARI F40 Y LAMBORGHINI MIURA SV"
         chapters={f40MiuraChapters}
         accentColor="#d92f31"

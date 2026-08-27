@@ -238,6 +238,7 @@ export const Xj220DocumentaryPage: React.FC<Xj220DocumentaryPageProps> = ({ onNa
 
       {/* Persistent Audio Narrator Bar */}
       <AudioNarrator
+        docId="xj220"
         documentaryTitle="JAGUAR XJ220"
         chapters={xj220Chapters}
         accentColor="#4ea0ff"

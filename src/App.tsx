@@ -14,6 +14,8 @@ import { Mazda787bDocumentaryPage } from './components/Mazda787bDocumentaryPage'
 import { NsxDocumentaryPage } from './components/NsxDocumentaryPage';
 import { CamaroMustangDocumentaryPage } from './components/CamaroMustangDocumentaryPage';
 import { F1DocumentaryPage } from './components/F1DocumentaryPage';
+import { ShelbyCobraDocumentaryPage } from './components/ShelbyCobraDocumentaryPage';
+import { ToyotaHiluxDocumentaryPage } from './components/ToyotaHiluxDocumentaryPage';
 import { DatosPage } from './components/DatosPage';
 import { ForoPage } from './components/ForoPage';
 import { AdminPanelPage } from './components/AdminPanelPage';
@@ -35,6 +37,8 @@ function AppContent() {
     const hash = window.location.hash.replace('#', '');
     if (
       hash === 'documentales' ||
+      hash === 'shelby-cobra' ||
+      hash === 'toyota-hilux' ||
       hash === 'f1' ||
       hash === 'camaro-mustang' ||
       hash === 'nsx' ||
@@ -61,6 +65,8 @@ function AppContent() {
       const hash = window.location.hash.replace('#', '');
       if (
         hash === 'documentales' ||
+        hash === 'shelby-cobra' ||
+        hash === 'toyota-hilux' ||
         hash === 'f1' ||
         hash === 'camaro-mustang' ||
         hash === 'nsx' ||
@@ -186,6 +192,12 @@ function AppContent() {
               onOpenAccountModal={handleOpenAccountModal}
               onOpenBroadcastModal={handleOpenBroadcastModal}
             />
+          )}
+          {currentPage === 'shelby-cobra' && (
+            <ShelbyCobraDocumentaryPage onNavigate={handleNavigate} onOpenAuthModal={handleOpenAuthModal} />
+          )}
+          {currentPage === 'toyota-hilux' && (
+            <ToyotaHiluxDocumentaryPage onNavigate={handleNavigate} onOpenAuthModal={handleOpenAuthModal} />
           )}
           {currentPage === 'f1' && (
             <F1DocumentaryPage onNavigate={handleNavigate} onOpenAuthModal={handleOpenAuthModal} />

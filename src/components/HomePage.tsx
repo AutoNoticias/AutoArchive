@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { RoutePage } from '../types';
 import { useAuth } from '../context/AuthContext';
@@ -13,6 +13,8 @@ import { countachImages } from '../data/countachData';
 import { f40MiuraImages } from '../data/f40MiuraData';
 import { camaroMustangImages } from '../data/camaroMustangData';
 import { f1Images } from '../data/f1Data';
+import { shelbyCobraImages } from '../data/shelbyCobraData';
+import { toyotaHiluxImages } from '../data/toyotaHiluxData';
 import { UserAccountNav } from './UserAccountNav';
 import { Logo } from './Logo';
 import { 
@@ -28,7 +30,8 @@ import {
   ArrowRight, 
   ChevronRight, 
   Users,
-  Volume2
+  Volume2,
+  Crown
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -45,6 +48,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onOpenBroadcastModal,
 }) => {
   const { user, isAdmin, subscribersCount } = useAuth();
+  const [activeFeaturedIdx, setActiveFeaturedIdx] = useState(0);
 
   const scrollToContent = () => {
     const el = document.getElementById('explore-sections');
@@ -53,96 +57,54 @@ export const HomePage: React.FC<HomePageProps> = ({
     }
   };
 
-  const latestDoc = {
-    id: 'f1' as RoutePage,
-    title: 'La Historia de la Fórmula 1: El Pináculo de la Velocidad',
-    number: '009',
-    era: '1950 — Presente',
-    origin: 'Silverstone, Monza, Spa & Mónaco // Global',
-    engine: 'V12 / V10 3.0L / Turbo 1.400 CV / V6 Turbo Híbrido',
-    power: '1.400+ CV (Turbo) / 1.050+ CV (Híbrido)',
-    topSpeed: '372.6 km/h',
-    image: f1Images.hero,
-    tag: '★ NUEVO ESTRENO // 75 AÑOS DE HISTORIA',
-    accent: '#e62628',
-    description:
-      'La epopeya definitiva del automovilismo mundial con 12 capítulos extendidos. Del debut en Silverstone 1950 y los 5 títulos de Juan Manuel Fangio, a la revolución del monocasco Lotus, los monstruos Turbo de 1.400 CV de los años 80, la guerra sagrada Senna vs. Prost, el sacrificio de Imola 1994, la sinfonía V10 a 20.000 RPM de Schumacher, la era híbrida y el retorno del Efecto Suelo.',
-  };
-
-  const mobileLegends = [
+  const featuredPremieres = [
     {
-      id: 'f1' as RoutePage,
-      title: 'Historia de la F1',
-      subtitle: '75 Años de Leyenda · Turbo & V10',
-      tag: 'NUEVO #009',
-      accent: '#e62628',
-      image: f1Images.hero,
+      id: 'shelby-cobra' as RoutePage,
+      title: 'Shelby Cobra 427 S/C',
+      subtitle: 'El Veneno Analógico que Derrotó a Ferrari',
+      number: '010',
+      era: '1962 — 1967',
+      origin: 'Los Ángeles & Thames Ditton // USA & UK',
+      engine: 'Ford 427 FE Big Block Side-Oiler V8 (7.0L)',
+      power: '485 CV (S/C) / 800+ CV (Super Snake)',
+      topSpeed: '298 km/h · 0-100 en 3.8 s',
+      image: shelbyCobraImages.hero,
+      tag: '★ NUEVO ESTRENO // VENENO ANALÓGICO V8',
+      watermark: 'SHELBY COBRA',
+      accent: '#38bdf8',
+      accentBg: 'bg-[#38bdf8]',
+      accentText: 'text-[#38bdf8]',
+      accentBorder: 'border-[#38bdf8]/50',
+      tagBadge: 'bg-[#38bdf8]/20 text-[#7dd3fc] border-[#38bdf8]/60',
+      shadowGlow: 'shadow-[0_0_30px_rgba(56,189,248,0.4)]',
+      description:
+        'La alianza legendaria entre Carroll Shelby y AC Cars que conquistó el Campeonato Mundial de Constructores FIA 1965 y humilló a Enzo Ferrari. Siete litros de cilindrada, chasis tubular reforzado de 4 pulgadas, carrocería artesanal de aluminio y escapes laterales atronadores.',
     },
     {
-      id: 'camaro-mustang' as RoutePage,
-      title: 'Camaro vs Mustang',
-      subtitle: 'La Guerra de Detroit · V8',
-      tag: 'EXPEDIENTE #008',
-      accent: '#ff5500',
-      image: camaroMustangImages.hero,
-    },
-    {
-      id: 'nsx' as RoutePage,
-      title: 'Honda NSX (1990)',
-      subtitle: 'Ayrton Senna · VTEC',
-      tag: 'ESTRENO #007',
-      accent: '#e62628',
-      image: nsxImages.hero,
-    },
-    {
-      id: 'mazda-787b' as RoutePage,
-      title: 'Mazda 787B',
-      subtitle: 'Wankel · Le Mans 1991',
-      tag: 'LE MANS WINNER',
-      accent: '#22c55e',
-      image: mazda787bImages.hero,
-    },
-    {
-      id: 'r34' as RoutePage,
-      title: 'Nissan Skyline R34',
-      subtitle: 'RB26DETT Twin Turbo',
-      tag: 'JDM ICON',
-      accent: '#4ea0ff',
-      image: r34Images.hero,
-    },
-    {
-      id: 'supra' as RoutePage,
-      title: 'Toyota Supra MK4',
-      subtitle: '2JZ-GTE Biturbo',
-      tag: 'LEGEND',
-      accent: '#e62628',
-      image: supraImages.hero,
-    },
-    {
-      id: 'countach' as RoutePage,
-      title: 'Lamborghini Countach',
-      subtitle: 'V12 & Cuña Espacial',
-      tag: 'POSTER CAR',
-      accent: '#ffd451',
-      image: countachImages.hero,
-    },
-    {
-      id: 'f40-miura' as RoutePage,
-      title: 'Ferrari F40 & Miura',
-      subtitle: 'V8 Turbo vs V12',
-      tag: 'DUELO',
-      accent: '#d92f31',
-      image: f40MiuraImages.f40Hero,
-    },
-    {
-      id: 'xj220' as RoutePage,
-      title: 'Jaguar XJ220',
-      subtitle: '349.4 km/h Nardò',
-      tag: 'RECORD',
-      accent: '#4ea0ff',
-      image: xj220Images.hero,
+      id: 'toyota-hilux' as RoutePage,
+      title: 'Toyota Hilux 4x4',
+      subtitle: 'El Monolito Indestructible de la Resistencia Humana',
+      number: '011',
+      era: '1968 — Presente',
+      origin: 'Hamura & Aichi, Japón // Global',
+      engine: '22R 2.4L / 1GD-FTV 2.8L Diésel / V6 Dakar',
+      power: '204 CV (Diésel) / 400 CV (Dakar V6)',
+      topSpeed: '175 km/h · Resistencia Extrema',
+      image: toyotaHiluxImages.hero,
+      tag: '★ NUEVO ESTRENO // MONOLITO INDESTRUCTIBLE',
+      watermark: 'TOYOTA HILUX',
+      accent: '#eab308',
+      accentBg: 'bg-[#eab308]',
+      accentText: 'text-[#eab308]',
+      accentBorder: 'border-[#eab308]/50',
+      tagBadge: 'bg-[#eab308]/20 text-[#fde047] border-[#eab308]/60',
+      shadowGlow: 'shadow-[0_0_30px_rgba(234,179,8,0.4)]',
+      description:
+        'El patrón indiscutible de la resistencia mecánica y la supervivencia humana con más de 19 millones de unidades en 180 países. Del motor 22R invulnerable al colapso de 23 pisos en Top Gear, la expedición al Polo Sur a -50°C y las victorias en el Rally Dakar.',
     },
   ];
+
+  const currentHeroDoc = featuredPremieres[activeFeaturedIdx];
 
   return (
     <div className="min-h-screen bg-[#0e1013] text-[#efefed] flex flex-col justify-between selection:bg-[#d92f31] selection:text-white pb-24 md:pb-0">
@@ -170,40 +132,61 @@ export const HomePage: React.FC<HomePageProps> = ({
         </header>
 
         {/* Featured Hero (Netflix Style) */}
-        <section className="relative w-full h-[65vh] min-h-[500px] flex items-end justify-center pb-12 pt-20">
+        <section className="relative w-full min-h-[540px] flex flex-col justify-end pb-10 pt-16">
           <div className="absolute inset-0 z-0">
             <img 
-              src={latestDoc.image} 
-              alt={latestDoc.title} 
-              className="w-full h-full object-cover object-center"
+              src={currentHeroDoc.image} 
+              alt={currentHeroDoc.title} 
+              className="w-full h-full object-cover object-center transition-all duration-500"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#05070a]/60 via-transparent to-[#0e1013]" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1013] via-[#0e1013]/80 to-transparent h-2/3 mt-auto" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#05070a]/80 via-[#05070a]/40 to-[#0e1013]" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1013] via-[#0e1013]/90 to-transparent h-3/4 mt-auto" />
           </div>
 
-          <div className="relative z-10 w-full px-5 flex flex-col items-center text-center space-y-4">
-            <div className="flex flex-col items-center gap-1.5">
-              <span className="px-2 py-0.5 bg-[#ff5500] text-white text-[9px] font-mono font-bold tracking-widest uppercase rounded shadow-[0_0_12px_rgba(255,85,0,0.5)]">
-                {latestDoc.tag.split('//')[0]}
+          <div className="relative z-10 w-full px-5 flex flex-col items-center text-center space-y-3.5">
+            {/* Quick Mobile Premiere Switcher */}
+            <div className="flex items-center gap-1.5 p-1 bg-black/60 backdrop-blur-md rounded-full border border-white/10 max-w-full overflow-x-auto hide-scrollbar">
+              {featuredPremieres.map((doc, idx) => (
+                <button
+                  key={doc.id}
+                  onClick={() => setActiveFeaturedIdx(idx)}
+                  className={`px-2.5 py-1 text-[9px] font-mono font-bold uppercase rounded-full transition-all whitespace-nowrap ${
+                    activeFeaturedIdx === idx
+                      ? `${doc.accentBg} text-black shadow-md font-black`
+                      : 'text-white/70 hover:text-white bg-transparent'
+                  }`}
+                >
+                  #{doc.number} {doc.id === 'shelby-cobra' ? 'Shelby Cobra' : 'Toyota Hilux'}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex flex-col items-center gap-1">
+              <span 
+                className="px-2.5 py-0.5 text-white text-[9px] font-mono font-bold tracking-widest uppercase rounded shadow-lg"
+                style={{ backgroundColor: currentHeroDoc.accent }}
+              >
+                {currentHeroDoc.tag.split('//')[0]}
               </span>
               <span className="text-[10px] font-mono text-[#ffd451] font-bold tracking-widest uppercase">
-                {latestDoc.origin}
+                {currentHeroDoc.origin}
               </span>
             </div>
             
-            <h1 className="text-4xl font-black text-white tracking-tighter uppercase leading-[0.9]">
-              {latestDoc.title}
+            <h1 className="text-3xl font-black text-white tracking-tighter uppercase leading-[0.95]">
+              {currentHeroDoc.title}
             </h1>
             
-            <p className="text-xs text-[#a0a8b5] max-w-[280px] leading-relaxed line-clamp-2">
-              {latestDoc.description}
+            <p className="text-xs text-[#a0a8b5] max-w-[290px] leading-relaxed line-clamp-2">
+              {currentHeroDoc.description}
             </p>
             
-            <div className="flex items-center gap-3 w-full max-w-[300px] pt-2">
+            <div className="flex items-center gap-3 w-full max-w-[300px] pt-1">
               <button
-                onClick={() => onNavigate(latestDoc.id)}
-                className="flex-1 py-3 bg-white text-black font-black text-[10px] tracking-wider uppercase rounded-lg transition-all flex items-center justify-center gap-1.5 active:scale-95"
+                onClick={() => onNavigate(currentHeroDoc.id)}
+                className="flex-1 py-3 text-black font-black text-[10px] tracking-wider uppercase rounded-lg transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-xl"
+                style={{ backgroundColor: currentHeroDoc.accent }}
               >
                 <Play className="w-4 h-4 fill-black" />
                 <span>Escuchar o Leer</span>
@@ -215,53 +198,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <BookOpen className="w-4 h-4" />
                 <span>Catálogo</span>
               </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Horizontal Carousel: Documentales Disponibles */}
-        <section className="px-0 py-6 space-y-3">
-          <div className="px-5">
-            <h2 className="text-sm font-bold text-white tracking-wide">Documentales Disponibles</h2>
-          </div>
-          <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-5 gap-3 pb-4">
-            {mobileLegends.map((car) => (
-              <div
-                key={car.id}
-                onClick={() => onNavigate(car.id)}
-                className="snap-start shrink-0 w-[140px] flex flex-col gap-2 cursor-pointer active:scale-95 transition-transform"
-              >
-                <div className="w-full aspect-[2/3] relative rounded-lg overflow-hidden border border-white/10 bg-[#161a22]">
-                  <img
-                    src={car.image}
-                    alt={car.title}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <div className="absolute top-2 left-2 right-2">
-                    <span 
-                      className="inline-block px-1.5 py-0.5 text-[8px] font-mono font-bold uppercase rounded-sm bg-black/50 backdrop-blur-md"
-                      style={{ color: car.accent, border: `1px solid ${car.accent}40` }}
-                    >
-                      {car.tag.split(' ')[0]}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-2 left-2 right-2">
-                    <h3 className="text-xs font-black text-white leading-tight">{car.title}</h3>
-                  </div>
-                </div>
-              </div>
-            ))}
-            {/* "Ver todos" card */}
-            <div
-              onClick={() => onNavigate('documentales')}
-              className="snap-start shrink-0 w-[140px] aspect-[2/3] flex flex-col items-center justify-center gap-2 cursor-pointer active:scale-95 transition-transform rounded-lg border border-white/10 bg-[#12161f] hover:bg-[#1a202c]"
-            >
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                <ChevronRight className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-[10px] font-bold text-[#8bb4d9] uppercase tracking-wider">Ver Todos</span>
             </div>
           </div>
         </section>
@@ -373,9 +309,9 @@ export const HomePage: React.FC<HomePageProps> = ({
               <span>SERVIDOR EDITORIAL ACTIVO</span>
             </span>
             <span className="text-white/20">|</span>
-            <span className="text-[#ffd451]">★ 8 DOCUMENTALES COMPLETOS</span>
+            <span className="text-[#ffd451]">★ 11 DOCUMENTALES COMPLETOS</span>
             <span className="text-white/20">|</span>
-            <span className="text-[#4ea0ff]">20 EXPEDIENTES Y CURIOSIDADES</span>
+            <span className="text-[#38bdf8]">NUEVOS ESTRENOS: SHELBY COBRA 427 & TOYOTA HILUX 4X4</span>
             <span className="text-white/20">|</span>
             <span className="text-[#22c55e]">FORO DE DEBATE EN VIVO</span>
           </div>
@@ -451,14 +387,14 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* ========================================================= */}
         {/* PREMIERE HERO SHOWCASE */}
         {/* ========================================================= */}
-        <section className="relative min-h-[82vh] flex flex-col justify-between px-6 sm:px-12 md:px-20 pt-16 pb-12 overflow-hidden border-b border-white/10 bg-[#070b11]">
+        <section className="relative min-h-[82vh] flex flex-col justify-between px-6 sm:px-12 md:px-20 pt-12 pb-12 overflow-hidden border-b border-white/10 bg-[#070b11]">
           {/* Background Image */}
           <div className="absolute inset-0 z-0 pointer-events-none">
             <img
-              src={latestDoc.image}
-              alt={latestDoc.title}
+              src={currentHeroDoc.image}
+              alt={currentHeroDoc.title}
               referrerPolicy="no-referrer"
-              className="w-full h-full object-cover object-center opacity-40"
+              className="w-full h-full object-cover object-center opacity-40 transition-all duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#070b11] via-[#070b11]/70 to-[#070b11]/40" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#070b11] via-[#070b11]/90 to-transparent" />
@@ -468,47 +404,74 @@ export const HomePage: React.FC<HomePageProps> = ({
           {/* Ambient Supercar Watermark Label */}
           <div
             aria-hidden="true"
-            className="absolute right-[-2vw] top-1/2 -translate-y-1/2 text-[clamp(100px,16vw,240px)] font-black text-white/[0.03] select-none pointer-events-none tracking-tighter font-mono uppercase"
+            className="absolute right-[-2vw] top-1/2 -translate-y-1/2 text-[clamp(80px,14vw,220px)] font-black text-white/[0.03] select-none pointer-events-none tracking-tighter font-mono uppercase"
           >
-            FORMULA 1
+            {currentHeroDoc.watermark}
+          </div>
+
+          {/* Interactive Premiere Selector Tabs for Desktop / Laptop */}
+          <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 p-1.5 bg-black/60 backdrop-blur-md rounded-2xl border border-white/15 max-w-fit">
+            <span className="px-3 py-1 text-[10px] font-mono font-bold uppercase text-white/50 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#ffd451]" />
+              <span>ESTRENOS DESTACADOS:</span>
+            </span>
+            {featuredPremieres.map((doc, idx) => (
+              <button
+                key={doc.id}
+                onClick={() => setActiveFeaturedIdx(idx)}
+                className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+                  activeFeaturedIdx === idx
+                    ? `${doc.accentBg} text-black font-black shadow-lg scale-105`
+                    : 'text-white/70 hover:text-white bg-white/5 hover:bg-white/10'
+                }`}
+              >
+                <span>#{doc.number}</span>
+                <span>{doc.id === 'shelby-cobra' ? 'Shelby Cobra 427' : 'Toyota Hilux 4x4'}</span>
+                {activeFeaturedIdx === idx && <ChevronRight className="w-3.5 h-3.5" />}
+              </button>
+            ))}
           </div>
 
           {/* Main Hero Content Area */}
-          <div className="relative z-10 max-w-4xl pt-6 space-y-6">
+          <div className="relative z-10 max-w-4xl pt-2 space-y-6">
             <motion.div
+              key={currentHeroDoc.id}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.4 }}
               className="space-y-5"
             >
               <div className="flex flex-wrap items-center gap-2.5">
                 <span 
-                  className="px-3 py-1 text-[10px] font-bold font-mono tracking-widest uppercase rounded shadow-lg bg-[#e62628]/20 text-[#ff4a4d] border border-[#e62628]/60"
+                  className={`px-3 py-1 text-[10px] font-bold font-mono tracking-widest uppercase rounded shadow-lg border ${currentHeroDoc.tagBadge}`}
                 >
-                  {latestDoc.tag}
+                  {currentHeroDoc.tag}
                 </span>
 
                 <span className="px-3 py-1 bg-white/5 border border-white/15 text-[10px] font-mono tracking-widest text-[#ffd451] font-bold uppercase flex items-center gap-1.5 rounded">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#ffd451] animate-pulse" />
-                  <span>EXPEDIENTE #{latestDoc.number}</span>
+                  <span>EXPEDIENTE #{currentHeroDoc.number}</span>
                 </span>
 
                 <span className="px-2.5 py-1 bg-black/40 border border-white/10 text-[10px] font-mono text-[#8a9db5] rounded">
-                  🏁 F1 GLOBAL
+                  ⚙ {currentHeroDoc.engine.split('/')[0]}
+                </span>
+                <span className="px-2.5 py-1 bg-black/40 border border-white/10 text-[10px] font-mono text-[#ffd451] rounded">
+                  ⚡ {currentHeroDoc.power.split('/')[0]}
                 </span>
               </div>
 
               <div>
                 <span className="text-xs font-mono tracking-[0.25em] text-[#8a9db5] uppercase block mb-1">
-                  {latestDoc.era} // {latestDoc.origin}
+                  {currentHeroDoc.era} // {currentHeroDoc.origin}
                 </span>
-                <h1 className="text-[clamp(34px,5vw,68px)] font-black tracking-tighter leading-[0.92] text-white uppercase max-w-3xl">
-                  {latestDoc.title}
+                <h1 className="text-[clamp(34px,5vw,64px)] font-black tracking-tighter leading-[0.92] text-white uppercase max-w-3xl">
+                  {currentHeroDoc.title}
                 </h1>
               </div>
 
               <p className="max-w-2xl text-[#b8c7d8] text-sm sm:text-base leading-relaxed font-light">
-                {latestDoc.description}
+                {currentHeroDoc.description}
               </p>
 
               {/* Action Buttons */}
@@ -516,12 +479,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <motion.button
                   whileHover={{ scale: 1.03, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  id={`hero-read-doc-${latestDoc.id}`}
-                  onClick={() => onNavigate(latestDoc.id)}
-                  className="px-8 py-4 text-white text-xs font-black tracking-[0.16em] uppercase rounded-xl transition-all shadow-2xl flex items-center justify-center gap-2.5 cursor-pointer font-mono bg-[#e62628] hover:bg-[#ff3b3e] shadow-[0_0_30px_rgba(230,38,40,0.5)]"
+                  id={`hero-read-doc-${currentHeroDoc.id}`}
+                  onClick={() => onNavigate(currentHeroDoc.id)}
+                  className={`px-8 py-4 text-black text-xs font-black tracking-[0.16em] uppercase rounded-xl transition-all shadow-2xl flex items-center justify-center gap-2.5 cursor-pointer font-mono ${currentHeroDoc.accentBg} ${currentHeroDoc.shadowGlow}`}
                 >
-                  <Play className="w-4 h-4 fill-white" />
-                  <span>LEER O ESCUCHAR DOCUMENTAL</span>
+                  <Play className="w-4 h-4 fill-black" />
+                  <span>LEER O ESCUCHAR DOCUMENTAL COMPLETO</span>
                 </motion.button>
 
                 <motion.button
@@ -531,7 +494,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   className="px-6 py-4 border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 text-white text-xs font-bold tracking-wider uppercase rounded-xl transition-all backdrop-blur-sm flex items-center justify-center gap-2 cursor-pointer font-mono"
                 >
                   <BookOpen className="w-4 h-4 text-[#ffd451]" />
-                  <span>VER CATÁLOGO COMPLETO</span>
+                  <span>VER CATÁLOGO COMPLETO (11)</span>
                 </motion.button>
               </div>
             </motion.div>
@@ -543,10 +506,129 @@ export const HomePage: React.FC<HomePageProps> = ({
               onClick={scrollToContent}
               className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer text-[11px]"
             >
-              <span>EXPLORAR COLECCIONES EDITORIALES</span>
+              <span>EXPLORAR NUEVOS ESTRENOS Y CATÁLOGO</span>
               <ChevronRight className="w-4 h-4 text-[#ffd451] rotate-90" />
             </button>
-            <span className="text-white/30 hidden lg:inline">9 GRANDES REPORTAJES · DATOS TÉCNICOS · FORO ABIERTO</span>
+            <span className="text-white/30 hidden lg:inline">11 GRANDES MONOGRAFÍAS · AUDIO HI-RES · FORO ABIERTO</span>
+          </div>
+        </section>
+
+        {/* ========================================================= */}
+        {/* DUAL PREMIERES HIGHLIGHT (SHELBY COBRA 427 & TOYOTA HILUX) */}
+        {/* ========================================================= */}
+        <section className="px-6 sm:px-12 md:px-20 py-12 bg-[#090d16] border-b border-white/10 relative">
+          <div className="max-w-7xl mx-auto space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 bg-[#38bdf8] rounded-full animate-ping" />
+                  <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-[#38bdf8] uppercase">
+                    LANZAMIENTOS EDITORIALES // AUTOARCHIVE 2026
+                  </span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight mt-1">
+                  Nuevos Estrenos Exclusivos
+                </h2>
+              </div>
+              <button
+                onClick={() => onNavigate('documentales')}
+                className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/15 text-[#8bb4d9] hover:text-white text-xs font-mono font-bold uppercase rounded-xl transition-all flex items-center gap-2 self-start sm:self-auto"
+              >
+                <span>Ver Catálogo Completo</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Dual Cards Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Card 1: Shelby Cobra 427 */}
+              <div 
+                onClick={() => onNavigate('shelby-cobra')}
+                className="group relative bg-[#0a121e] border-2 border-[#1e3a5f] hover:border-[#38bdf8] rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(56,189,248,0.25)] flex flex-col justify-between"
+              >
+                <div className="relative h-64 sm:h-72 w-full overflow-hidden">
+                  <img
+                    src={shelbyCobraImages.hero}
+                    alt="Shelby Cobra 427"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a121e] via-[#0a121e]/40 to-transparent" />
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <span className="px-3 py-1 bg-[#38bdf8] text-black font-mono font-black text-[10px] uppercase rounded-md shadow-lg">
+                      NUEVO ESTRENO #010
+                    </span>
+                    <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/20 text-[#38bdf8] font-mono text-[10px] font-bold rounded-md">
+                      485 CV · 7.0L V8
+                    </span>
+                  </div>
+                  <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md p-2 rounded-full border border-white/10 text-white/70 group-hover:text-[#38bdf8] transition-colors">
+                    <Volume2 className="w-4 h-4" />
+                  </div>
+                </div>
+
+                <div className="p-6 pt-2 space-y-3">
+                  <div className="flex items-center justify-between font-mono text-[11px] text-[#8a9db5]">
+                    <span>1962 — 1967 // USA & UK</span>
+                    <span className="text-[#38bdf8] font-bold">298 KM/H</span>
+                  </div>
+                  <h3 className="text-2xl font-black text-white uppercase group-hover:text-[#38bdf8] transition-colors">
+                    Shelby Cobra 427 S/C
+                  </h3>
+                  <p className="text-xs text-[#9eb2c9] leading-relaxed line-clamp-2">
+                    El veneno analógico de Carroll Shelby que derrotó a Ferrari en el Mundial FIA 1965. Motor 427 FE Big Block de 7 litros, chasis de 4 pulgadas y aceleración brutal de 0-100 en 3.8 segundos.
+                  </p>
+                  <div className="pt-2 flex items-center justify-between font-mono text-xs font-bold text-[#38bdf8]">
+                    <span className="uppercase tracking-wider">LEER DOCUMENTAL COMPLETO</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Toyota Hilux */}
+              <div 
+                onClick={() => onNavigate('toyota-hilux')}
+                className="group relative bg-[#131008] border-2 border-[#4d3d1a] hover:border-[#eab308] rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(234,179,8,0.25)] flex flex-col justify-between"
+              >
+                <div className="relative h-64 sm:h-72 w-full overflow-hidden">
+                  <img
+                    src={toyotaHiluxImages.hero}
+                    alt="Toyota Hilux 4x4"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#131008] via-[#131008]/40 to-transparent" />
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <span className="px-3 py-1 bg-[#eab308] text-black font-mono font-black text-[10px] uppercase rounded-md shadow-lg">
+                      NUEVO ESTRENO #011
+                    </span>
+                    <span className="px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/20 text-[#eab308] font-mono text-[10px] font-bold rounded-md">
+                      INDESTRUCTIBLE · 4X4
+                    </span>
+                  </div>
+                  <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md p-2 rounded-full border border-white/10 text-white/70 group-hover:text-[#eab308] transition-colors">
+                    <Volume2 className="w-4 h-4" />
+                  </div>
+                </div>
+
+                <div className="p-6 pt-2 space-y-3">
+                  <div className="flex items-center justify-between font-mono text-[11px] text-[#8a9db5]">
+                    <span>1968 — PRESENTE // JAPÓN</span>
+                    <span className="text-[#eab308] font-bold">TOP GEAR & DAKAR</span>
+                  </div>
+                  <h3 className="text-2xl font-black text-white uppercase group-hover:text-[#eab308] transition-colors">
+                    Toyota Hilux 4x4
+                  </h3>
+                  <p className="text-xs text-[#c9bea7] leading-relaxed line-clamp-2">
+                    El monolito indestructible de la resistencia automotriz. Más de 19 millones de unidades vendidas, el chasis invulnerable ante demoliciones de edificios, expediciones árticas y dominio absoluto en el Dakar.
+                  </p>
+                  <div className="pt-2 flex items-center justify-between font-mono text-xs font-bold text-[#eab308]">
+                    <span className="uppercase tracking-wider">LEER DOCUMENTAL COMPLETO</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -618,7 +700,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   01
                 </div>
                 <span className="px-3 py-1 bg-[#4ea0ff]/15 border border-[#4ea0ff]/40 text-[10px] tracking-[0.2em] font-bold text-[#7cbcff] uppercase font-mono rounded-full">
-                  9 DOCUMENTALES
+                  11 DOCUMENTALES
                 </span>
               </div>
 
@@ -630,12 +712,13 @@ export const HomePage: React.FC<HomePageProps> = ({
                   DOCUMENTALES
                 </h3>
                 <p className="mt-3 text-[#b5c7db] text-xs leading-relaxed">
-                  Historias completas de superdeportivos míticos, monoplazas legendarios, rivalidades de resistencia, telemetría y narración de audio interactiva.
+                  Historias completas de superdeportivos míticos, leyendas todoterreno, monoplazas de Gran Premio, telemetría y narración de audio interactiva.
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-1.5 font-mono text-[9px]">
-                  <span className="px-2 py-0.5 bg-[#e62628]/20 border border-[#e62628]/40 text-[#ff8082] font-bold rounded">HISTORIA F1</span>
-                  <span className="px-2 py-0.5 bg-[#ff5500]/20 border border-[#ff5500]/40 text-[#ffd451] rounded">CAMARO VS MUSTANG</span>
+                  <span className="px-2 py-0.5 bg-[#38bdf8]/20 border border-[#38bdf8]/40 text-[#7dd3fc] font-bold rounded">SHELBY COBRA 427</span>
+                  <span className="px-2 py-0.5 bg-[#eab308]/20 border border-[#eab308]/40 text-[#fde047] font-bold rounded">TOYOTA HILUX 4X4</span>
+                  <span className="px-2 py-0.5 bg-[#e62628]/20 border border-[#e62628]/40 text-[#ff8082] rounded">HISTORIA F1</span>
                   <span className="px-2 py-0.5 bg-[#22c55e]/20 border border-[#22c55e]/40 text-[#81b292] rounded">MAZDA 787B</span>
                 </div>
 

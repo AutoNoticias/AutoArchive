@@ -10,7 +10,7 @@ import { mazda787bImages } from '../data/mazda787bData';
 import { nsxImages } from '../data/nsxData';
 import { camaroMustangImages } from '../data/camaroMustangData';
 import { f1Images } from '../data/f1Data';
-import { User, LogOut, LogIn, ShieldCheck, LayoutDashboard, Home, BookOpen, Lightbulb, Sparkles, X, ChevronRight, Compass } from 'lucide-react';
+import { User, LogOut, LogIn, ShieldCheck, LayoutDashboard, Home, BookOpen, Lightbulb, Sparkles, X, ChevronRight, Compass, Crown } from 'lucide-react';
 
 interface NavigationProps {
   currentPage: RoutePage;
@@ -186,7 +186,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             </div>
 
             {/* Quick Link to Full Catalog */}
-            <div className="mt-3">
+            <div className="mt-3 space-y-2">
               <button
                 onClick={() => handleNavClick('documentales')}
                 className="w-full py-2.5 px-3 bg-[#4ea0ff]/15 hover:bg-[#4ea0ff]/25 border border-[#4ea0ff]/40 rounded-xl text-left flex items-center justify-between text-xs font-mono font-bold text-[#72b9ff] transition-all cursor-pointer"
@@ -300,7 +300,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         {/* FORO */}
         <button
           onClick={() => handleNavClick('foro')}
-          className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all min-h-[46px] min-w-[58px] active:scale-95 ${
+          className={`relative flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-h-[46px] min-w-[52px] active:scale-95 ${
             currentPage === 'foro'
               ? 'text-[#22c55e] font-bold bg-[#22c55e]/10 border border-[#22c55e]/30'
               : 'text-[#22c55e] hover:text-[#4ade80] bg-[#22c55e]/10 border border-[#22c55e]/20'

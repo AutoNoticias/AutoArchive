@@ -154,6 +154,7 @@ export const F1DocumentaryPage: React.FC<F1DocumentaryPageProps> = ({
 
       {/* Persistent Audio Narrator Bar */}
       <AudioNarrator
+        docId="f1"
         documentaryTitle="LA HISTORIA DE LA FÓRMULA 1: EL PINÁCULO DE LA VELOCIDAD"
         chapters={f1Chapters}
         accentColor="#e62628"

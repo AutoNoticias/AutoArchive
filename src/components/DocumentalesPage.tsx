@@ -10,6 +10,8 @@ import { mazda787bImages } from '../data/mazda787bData';
 import { nsxImages } from '../data/nsxData';
 import { camaroMustangImages } from '../data/camaroMustangData';
 import { f1Images } from '../data/f1Data';
+import { shelbyCobraImages } from '../data/shelbyCobraData';
+import { toyotaHiluxImages } from '../data/toyotaHiluxData';
 import { UserAccountNav } from './UserAccountNav';
 import { Logo } from './Logo';
 
@@ -24,10 +26,11 @@ type EraFilter = 'all' | '60s' | '70s' | '80s' | '90s' | '2000s';
 type CountryFilter = 'all' | 'italia' | 'uk' | 'japon' | 'usa' | 'global';
 
 interface DocItem {
-  id: 'countach' | 'f40-miura' | 'xj220' | 'r34' | 'supra' | 'mazda-787b' | 'nsx' | 'camaro-mustang' | 'f1';
+  id: 'shelby-cobra' | 'toyota-hilux' | 'countach' | 'f40-miura' | 'xj220' | 'r34' | 'supra' | 'mazda-787b' | 'nsx' | 'camaro-mustang' | 'f1';
   number: string;
   badge: string;
   badgeColor: string;
+  isNew?: boolean;
   country: 'italia' | 'uk' | 'japon' | 'usa' | 'global';
   era: '60s' | '70s' | '80s' | '90s' | '2000s';
   origin: string;
@@ -53,10 +56,69 @@ interface DocItem {
 
 const DOCUMENTARIES: DocItem[] = [
   {
+    id: 'shelby-cobra',
+    number: '010',
+    badge: '★ NUEVO ESTRENO // VENENO ANALÓGICO V8',
+    badgeColor: '#38bdf8',
+    isNew: true,
+    country: 'usa',
+    era: '60s',
+    origin: 'LOS ÁNGELES & THAMES DITTON // USA & UK',
+    years: '1962 — 1967',
+    title: 'SHELBY',
+    titleAccent: 'COBRA 427 S/C',
+    accentColor: '#38bdf8',
+    borderColor: 'border-[#38bdf8]/50 hover:border-[#38bdf8]',
+    bgCard: 'bg-[#081220]',
+    description:
+      'La leyenda definitiva de Carroll Shelby y Ken Miles que conquistó el Campeonato Mundial de Constructores FIA 1965 y humilló a Ferrari. Carrocería artesanal de aluminio, chasis tubular reforzado de 4 pulgadas y la fuerza bruta del motor Ford 427 FE Big Block Side-Oiler de 485 CV y 0-100 km/h en 3.8 segundos.',
+    specs: ['FORD 427 FE SIDE-OILER 7.0L', '298 KM/H', '485 CV (S/C) / 800+ CV (SUPER SNAKE)', '6 CAPÍTULOS EXTENDIDOS'],
+    topSpeed: '298 KM/H',
+    power: '485 CV @ 6.500 RPM',
+    engine: 'FORD 427 FE V8 7.0L BIG BLOCK',
+    units: '348 UNIDADES (427)',
+    chaptersCount: 6,
+    image: shelbyCobraImages.hero,
+    imageAlt: '1965 Shelby Cobra 427 S/C en Guardsman Blue',
+    audioVisualTag: 'V8 BIG BLOCK 427 & SIDE EXHAUSTS',
+    blueprintCode: 'DWG-CSX-427-1965',
+    tags: ['Carroll Shelby', 'Ken Miles', '427 FE Side-Oiler', 'FIA GT 1965', 'Semi-Competition', 'Super Snake'],
+  },
+  {
+    id: 'toyota-hilux',
+    number: '011',
+    badge: '★ NUEVO ESTRENO // EL MONOLITO INDESTRUCTIBLE',
+    badgeColor: '#eab308',
+    isNew: true,
+    country: 'japon',
+    era: '80s',
+    origin: 'HAMURA & AICHI, JAPÓN // GLOBAL',
+    years: '1968 — PRESENTE',
+    title: 'TOYOTA',
+    titleAccent: 'HILUX 4X4',
+    accentColor: '#eab308',
+    borderColor: 'border-[#eab308]/50 hover:border-[#eab308]',
+    bgCard: 'bg-[#181508]',
+    description:
+      'El patrón indiscutible de la resistencia mecánica y la supervivencia humana con más de 19 millones de unidades en 180 países. Del chasis de largueros en cajón y los indestructibles motores 22R y Diésel, al legendario test de Top Gear (mar, fuego, bola de demolición y colapso de 23 pisos), la conquista de los Polos a -50°C y las victorias en el Rally Dakar.',
+    specs: ['22R-E / 1GD-FTV DIESEL / V6 DAKAR', '3.500 KG REMOLQUE', '400 CV (DAKAR) / 1M+ KM DURABILIDAD', '6 CAPÍTULOS EXTENDIDOS'],
+    topSpeed: '175 KM/H (CALLE) / 170 KM/H (DAKAR T1+)',
+    power: '204 CV (2.8 D4-D) / 400 CV (DAKAR V6)',
+    engine: '22R 2.4L / 1GD-FTV 2.8L DIESEL / 3.5L V6 TWIN-TURBO',
+    units: '19.000.000+ UNIDADES',
+    chaptersCount: 6,
+    image: toyotaHiluxImages.hero,
+    imageAlt: 'Toyota Hilux 4x4 Off-Road Clásica y Expedición',
+    audioVisualTag: 'LADDER CHASSIS & BULLETPROOF DIESEL',
+    blueprintCode: 'DWG-RN65-1985',
+    tags: ['Top Gear Survivor', 'Motor 22R', 'Eje Rígido 4WD', 'Arctic Trucks Polar', 'Dakar Winner', 'Hino Motors'],
+  },
+  {
     id: 'f1',
     number: '009',
-    badge: '★ NUEVO ESTRENO // EL PINÁCULO DE LA VELOCIDAD (75 AÑOS)',
+    badge: '★ EL PINÁCULO DE LA VELOCIDAD (75 AÑOS)',
     badgeColor: '#e62628',
+    isNew: false,
     country: 'global',
     era: '80s',
     origin: 'SILVERSTONE, MONZA, SPA & MÓNACO // GLOBAL',
@@ -402,8 +464,8 @@ export const DocumentalesPage: React.FC<DocumentalesPageProps> = ({
 
   const filteredDocs = useMemo(() => {
     if (activeTab === 'nuevo') {
-      // "NUEVO" only shows the last/latest one, which is the first item in our sorted list
-      return [DOCUMENTARIES[0]];
+      // "NUEVO" shows all newly released documentaries
+      return DOCUMENTARIES.filter((doc) => doc.isNew);
     }
 
     // "TODOS" shows all, with search capability
@@ -548,7 +610,7 @@ export const DocumentalesPage: React.FC<DocumentalesPageProps> = ({
         ) : (
           <motion.div 
             layout
-            className={activeTab === 'nuevo' ? "max-w-3xl mx-auto" : "grid grid-cols-2 gap-3 sm:gap-6 md:gap-8"}
+            className={activeTab === 'nuevo' ? "grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto" : "grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 md:gap-8"}
           >
             <AnimatePresence mode="popLayout">
               {filteredDocs.map((doc, idx) => (
