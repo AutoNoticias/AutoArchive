@@ -90,20 +90,11 @@ function AppContent() {
   }, []);
 
   const handleNavigate = (page: RoutePage) => {
-    if (page === 'foro' && !user) {
-      handleOpenAuthModal('Debes iniciar sesión para acceder al foro comunitario');
-      return;
-    }
     setCurrentPage(page);
     window.location.hash = page;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    if (!loading && currentPage === 'foro' && !user) {
-      handleNavigate('home');
-    }
-  }, [currentPage, user, loading]);
 
   const handleOpenAuthModal = (reason?: string) => {
     setAuthModalReason(typeof reason === 'string' ? reason : undefined);

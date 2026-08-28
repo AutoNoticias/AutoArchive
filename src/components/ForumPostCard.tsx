@@ -17,30 +17,34 @@ import {
   Car, 
   Check,
   User,
-  CornerDownRight
+  Globe,
+  CornerDownRight,
+  Sparkles
 } from 'lucide-react';
 
 interface Props {
   post: ForumPost;
   onOpenAuthModal?: () => void;
   onDeletePost?: (postId: string) => void;
+  defaultExpandedComments?: boolean;
 }
 
 export const ForumPostCard: React.FC<Props> = ({
   post,
   onOpenAuthModal,
   onDeletePost,
+  defaultExpandedComments = false,
 }) => {
   const { user, userProfile, isAdmin } = useAuth();
 
-  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+  const [isCommentsOpen, setIsCommentsOpen] = useState(defaultExpandedComments);
   const [comments, setComments] = useState<ForumComment[]>([]);
   const [newCommentText, setNewCommentText] = useState('');
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  // Reddit vote tracking
+  // Reddit vote tracking for main post
   const userId = user?.uid;
   const initialUpvoted = !!(userId && post.upvotedBy && post.upvotedBy.includes(userId));
   const initialDownvoted = !!(userId && post.downvotedBy && post.downvotedBy.includes(userId));
@@ -70,15 +74,13 @@ export const ForumPostCard: React.FC<Props> = ({
     }
   }, [userId, post.upvotedBy, post.downvotedBy, post.score]);
 
-  // Subscribe to comments
+  // Real-time subscribe to public comments for this post
   useEffect(() => {
-    if (isCommentsOpen) {
-      const unsub = ForumService.subscribeComments(post.id, (loadedComments) => {
-        setComments(loadedComments);
-      });
-      return () => unsub();
-    }
-  }, [isCommentsOpen, post.id]);
+    const unsub = ForumService.subscribeComments(post.id, (loadedComments) => {
+      setComments(loadedComments);
+    });
+    return () => unsub();
+  }, [post.id]);
 
   const handleVote = async (direction: 'up' | 'down') => {
     if (!user) {
@@ -90,14 +92,12 @@ export const ForumPostCard: React.FC<Props> = ({
     let delta = 0;
 
     if (userVote === direction) {
-      // Toggle off to neutral
       nextVote = 'none';
       delta = direction === 'up' ? -1 : 1;
     } else if (userVote === 'none') {
       nextVote = direction;
       delta = direction === 'up' ? 1 : -1;
     } else {
-      // Switch from up to down or vice versa
       nextVote = direction;
       delta = direction === 'up' ? 2 : -2;
     }
@@ -111,6 +111,35 @@ export const ForumPostCard: React.FC<Props> = ({
       nextVote, 
       post.upvotedBy || [], 
       post.downvotedBy || []
+    );
+  };
+
+  // Vote on a comment
+  const handleCommentVote = async (comment: ForumComment, direction: 'up' | 'down') => {
+    if (!user) {
+      onOpenAuthModal?.();
+      return;
+    }
+
+    const currentUpvoted = comment.upvotedBy || [];
+    const currentDownvoted = comment.downvotedBy || [];
+    const hasUpvoted = currentUpvoted.includes(user.uid);
+    const hasDownvoted = currentDownvoted.includes(user.uid);
+
+    let nextVote: 'up' | 'down' | 'none' = 'none';
+    if (direction === 'up') {
+      nextVote = hasUpvoted ? 'none' : 'up';
+    } else {
+      nextVote = hasDownvoted ? 'none' : 'down';
+    }
+
+    await ForumService.voteComment(
+      post.id,
+      comment.id,
+      user.uid,
+      nextVote,
+      currentUpvoted,
+      currentDownvoted
     );
   };
 
@@ -139,6 +168,7 @@ export const ForumPostCard: React.FC<Props> = ({
     try {
       await ForumService.addComment(post.id, commentData);
       setNewCommentText('');
+      setIsCommentsOpen(true);
     } catch (err) {
       console.error('Error posting comment:', err);
       setComments(prev => [
@@ -153,13 +183,14 @@ export const ForumPostCard: React.FC<Props> = ({
         }
       ]);
       setNewCommentText('');
+      setIsCommentsOpen(true);
     } finally {
       setIsSubmittingComment(false);
     }
   };
 
   const handleShare = () => {
-    const text = `🏎️ [AutoChat] "${post.title}"\n${post.content.slice(0, 100)}...\nÚnete al debate en AutoChat.`;
+    const text = `🏎️ [AutoChat Público] "${post.title}"\n${post.content.slice(0, 100)}...\nVer pregunta y respuestas en AutoChat.`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -167,7 +198,7 @@ export const ForumPostCard: React.FC<Props> = ({
 
   const isAuthorOrAdmin = user && (user.uid === post.userId || isAdmin || user.email === 'autonoticiascontacto@gmail.com');
 
-  // Format relative time (Reddit style)
+  // Relative time format
   const formatTimeAgo = (dateStr: string) => {
     const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
     if (diff < 60) return 'hace un momento';
@@ -177,7 +208,7 @@ export const ForumPostCard: React.FC<Props> = ({
     return new Date(dateStr).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
   };
 
-  // Flair color palette
+  // Flair color styling
   const getFlairStyle = (flair: string) => {
     const lower = flair.toLowerCase();
     if (lower.includes('debate') || lower.includes('técnico')) {
@@ -200,6 +231,8 @@ export const ForumPostCard: React.FC<Props> = ({
     }
     return 'bg-white/10 text-white/80 border-white/20';
   };
+
+  const totalReplies = comments.length > 0 ? comments.length : (post.commentsCount || 0);
 
   return (
     <motion.article
@@ -263,11 +296,17 @@ export const ForumPostCard: React.FC<Props> = ({
                 </span>
               )}
 
+              {/* Public space badge */}
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded text-[10px] font-bold">
+                <Globe className="w-3 h-3" />
+                <span>PÚBLICO</span>
+              </span>
+
               <span className="font-bold text-white hover:underline cursor-pointer">
                 r/AutoChat
               </span>
               <span>•</span>
-              <span>Publicado por</span>
+              <span>Preguntado por</span>
               <span className="text-white/90 font-medium">u/{post.userName}</span>
 
               {post.userRole === 'admin' ? (
@@ -301,15 +340,15 @@ export const ForumPostCard: React.FC<Props> = ({
             {post.title}
           </h2>
 
-          {/* Car Reference Tag (if present) */}
+          {/* Car Reference Tag */}
           {post.carModel && (
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/5 border border-white/10 rounded-md text-[11px] font-mono text-[#8a9db5] mb-3">
               <Car className="w-3.5 h-3.5 text-[#ffd451]" />
-              <span>Modelo: <strong className="text-white">{post.carModel}</strong></span>
+              <span>Modelo/Motor: <strong className="text-white">{post.carModel}</strong></span>
             </div>
           )}
 
-          {/* Recommendation URL (if present) */}
+          {/* Reference URL */}
           {post.recommendationUrl && (
             <div className="mb-3">
               <a
@@ -329,19 +368,25 @@ export const ForumPostCard: React.FC<Props> = ({
             {post.content}
           </p>
 
-          {/* Reddit Action Bar */}
+          {/* Action Bar */}
           <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/5 text-xs font-mono text-[#8a9db5]">
             <div className="flex items-center gap-1 sm:gap-2">
-              {/* Comments Button */}
+              {/* Toggle Public Comments Button */}
               <button
                 onClick={() => setIsCommentsOpen(!isCommentsOpen)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-white/10 transition-all ${
-                  isCommentsOpen ? 'bg-white/15 text-white font-bold' : 'hover:text-white'
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all ${
+                  isCommentsOpen 
+                    ? 'bg-[#ff4500]/20 text-[#ff7043] font-bold border border-[#ff4500]/40' 
+                    : 'bg-white/5 hover:bg-white/10 hover:text-white text-white/80'
                 }`}
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>
-                  {comments.length > 0 ? comments.length : (post.commentsCount || 0)} Comentarios
+                  {totalReplies === 0 
+                    ? '0 Respuestas (Responder)' 
+                    : isCommentsOpen 
+                    ? `Ocultar Respuestas (${totalReplies})` 
+                    : `Ver ${totalReplies} Respuestas Públicas`}
                 </span>
               </button>
 
@@ -379,7 +424,7 @@ export const ForumPostCard: React.FC<Props> = ({
             )}
           </div>
 
-          {/* Reddit Threaded Comments Section */}
+          {/* Public Responses Section */}
           <AnimatePresence>
             {isCommentsOpen && (
               <motion.div
@@ -388,13 +433,24 @@ export const ForumPostCard: React.FC<Props> = ({
                 exit={{ opacity: 0, height: 0 }}
                 className="mt-4 pt-4 border-t border-white/10 space-y-4"
               >
-                {/* Comment Composer */}
-                <form onSubmit={handleAddComment} className="space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-mono text-[#8a9db5]">
-                    <User className="w-3.5 h-3.5" />
-                    <span>
-                      Comentar como <strong className="text-white">u/{user ? (userProfile?.displayName || user.displayName || user.email?.split('@')[0]) : 'invitado'}</strong>:
-                    </span>
+                <div className="flex items-center justify-between text-xs font-mono text-[#8a9db5] pb-1">
+                  <div className="flex items-center gap-2 font-bold text-white">
+                    <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Respuestas y Debate Público ({comments.length})</span>
+                  </div>
+                  <span className="text-[10px] text-white/50">Visible para toda la comunidad</span>
+                </div>
+
+                {/* Comment / Answer Composer */}
+                <form onSubmit={handleAddComment} className="space-y-2 bg-[#080d14] p-3.5 rounded-xl border border-white/10">
+                  <div className="flex items-center justify-between text-xs font-mono text-[#8a9db5]">
+                    <div className="flex items-center gap-1.5">
+                      <User className="w-3.5 h-3.5" />
+                      <span>
+                        Respondiendo como: <strong className="text-white">u/{user ? (userProfile?.displayName || user.displayName || user.email?.split('@')[0]) : 'visitante'}</strong>
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-emerald-400 font-bold">Respuesta Pública</span>
                   </div>
 
                   <div className="relative">
@@ -402,69 +458,111 @@ export const ForumPostCard: React.FC<Props> = ({
                       rows={2}
                       value={newCommentText}
                       onChange={(e) => setNewCommentText(e.target.value)}
-                      placeholder={user ? "¿Qué opinas de este hilo? Aporta datos técnicos o tu perspectiva..." : "Inicia sesión en AutoArchive para debatir en este hilo"}
+                      placeholder={user ? "¿Tienes la respuesta, datos técnicos o tu opinión? Escríbela aquí públicamente..." : "Inicia sesión en AutoArchive para responder públicamente a este hilo"}
                       disabled={!user || isSubmittingComment}
-                      className="w-full px-3.5 py-2.5 bg-[#080d14] border border-white/15 focus:border-[#ff4500] rounded-xl text-xs text-white placeholder-white/30 focus:outline-none resize-none disabled:opacity-50"
+                      className="w-full px-3.5 py-2.5 bg-[#05080d] border border-white/15 focus:border-[#ff4500] rounded-xl text-xs text-white placeholder-white/30 focus:outline-none resize-none disabled:opacity-50"
                     />
                   </div>
 
-                  <div className="flex items-center justify-end gap-2">
-                    {user ? (
-                      <button
-                        type="submit"
-                        disabled={!newCommentText.trim() || isSubmittingComment}
-                        className="px-4 py-2 bg-[#ff4500] hover:bg-[#ff5722] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-all disabled:opacity-40 flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,69,0,0.3)]"
-                      >
-                        <Send className="w-3.5 h-3.5" />
-                        <span>{isSubmittingComment ? 'Publicando...' : 'Comentar'}</span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={onOpenAuthModal}
-                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-lg"
-                      >
-                        Iniciar Sesión para Comentar
-                      </button>
-                    )}
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[10px] text-white/40 font-mono hidden sm:inline">
+                      Tu aporte ayudará a todos los entusiastas de AutoArchive.
+                    </span>
+                    <div className="flex items-center gap-2">
+                      {user ? (
+                        <button
+                          type="submit"
+                          disabled={!newCommentText.trim() || isSubmittingComment}
+                          className="px-4 py-2 bg-[#ff4500] hover:bg-[#ff5722] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-all disabled:opacity-40 flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,69,0,0.3)]"
+                        >
+                          <Send className="w-3.5 h-3.5" />
+                          <span>{isSubmittingComment ? 'Enviando...' : 'Publicar Respuesta'}</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={onOpenAuthModal}
+                          className="px-4 py-2 bg-[#ff4500]/20 hover:bg-[#ff4500] text-[#ff7043] hover:text-white border border-[#ff4500]/40 font-bold text-xs rounded-lg transition-all"
+                        >
+                          Iniciar Sesión para Responder
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </form>
 
-                {/* Comments List */}
-                <div className="space-y-3 pt-2">
+                {/* Public Comments List */}
+                <div className="space-y-3 pt-1">
                   {comments.length === 0 ? (
                     <div className="py-6 text-center text-xs text-white/40 font-mono bg-black/20 rounded-xl border border-white/5">
-                      No hay comentarios aún. ¡Sé el primero en aportar a este debate!
+                      No hay respuestas públicas aún. ¡Sé el primero en responder!
                     </div>
                   ) : (
-                    comments.map((comment) => (
-                      <div
-                        key={comment.id}
-                        className="p-3.5 bg-[#080d14] border border-white/5 rounded-xl space-y-1.5"
-                      >
-                        <div className="flex items-center justify-between text-xs font-mono">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-white">u/{comment.userName}</span>
-                            {comment.userRole === 'admin' ? (
-                              <span className="px-1.5 py-0.2 bg-[#ffd451]/20 text-[#ffd451] rounded text-[8px] font-black">
-                                MOD
-                              </span>
-                            ) : comment.userId === post.userId ? (
-                              <span className="px-1.5 py-0.2 bg-[#ff4500]/20 text-[#ff4500] rounded text-[8px] font-bold">
-                                OP
-                              </span>
-                            ) : null}
-                          </div>
-                          <span className="text-white/40 text-[10px]">
-                            {formatTimeAgo(comment.createdAt)}
-                          </span>
-                        </div>
+                    comments.map((comment) => {
+                      const commentScore = typeof comment.score === 'number' ? comment.score : ((comment.upvotedBy?.length || 0) - (comment.downvotedBy?.length || 0));
+                      const userUpvotedComment = !!(user && comment.upvotedBy && comment.upvotedBy.includes(user.uid));
+                      const userDownvotedComment = !!(user && comment.downvotedBy && comment.downvotedBy.includes(user.uid));
 
-                        <p className="text-xs text-[#dbe7f5] leading-relaxed pl-1">
-                          {comment.content}
-                        </p>
-                      </div>
-                    ))
+                      return (
+                        <div
+                          key={comment.id}
+                          className="p-3.5 bg-[#080d14] border border-white/10 rounded-xl space-y-2 hover:border-white/20 transition-all"
+                        >
+                          <div className="flex items-center justify-between text-xs font-mono">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-white">u/{comment.userName}</span>
+                              {comment.userRole === 'admin' ? (
+                                <span className="px-1.5 py-0.2 bg-[#ffd451]/20 text-[#ffd451] rounded text-[8px] font-black">
+                                  MOD
+                                </span>
+                              ) : comment.userId === post.userId ? (
+                                <span className="px-1.5 py-0.2 bg-[#ff4500]/20 text-[#ff4500] rounded text-[8px] font-bold">
+                                  OP
+                                </span>
+                              ) : null}
+                            </div>
+                            <span className="text-white/40 text-[10px]">
+                              {formatTimeAgo(comment.createdAt)}
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-[#dbe7f5] leading-relaxed pl-1">
+                            {comment.content}
+                          </p>
+
+                          {/* Comment votes footer */}
+                          <div className="flex items-center gap-3 pt-1 border-t border-white/5 text-[11px] font-mono text-white/50">
+                            <div className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded-lg">
+                              <button
+                                onClick={() => handleCommentVote(comment, 'up')}
+                                title="Votar respuesta"
+                                className={`p-0.5 rounded hover:text-[#ff4500] ${
+                                  userUpvotedComment ? 'text-[#ff4500] font-bold' : 'text-white/40'
+                                }`}
+                              >
+                                <ChevronUp className="w-3.5 h-3.5" />
+                              </button>
+                              <span className={`text-[10px] font-bold ${
+                                userUpvotedComment ? 'text-[#ff4500]' : userDownvotedComment ? 'text-[#7193ff]' : 'text-white/70'
+                              }`}>
+                                {commentScore}
+                              </span>
+                              <button
+                                onClick={() => handleCommentVote(comment, 'down')}
+                                title="Desaprobar respuesta"
+                                className={`p-0.5 rounded hover:text-[#7193ff] ${
+                                  userDownvotedComment ? 'text-[#7193ff] font-bold' : 'text-white/40'
+                                }`}
+                              >
+                                <ChevronDown className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+
+                            <span className="text-[10px] text-white/30">• Respuesta Pública</span>
+                          </div>
+                        </div>
+                      );
+                    })
                   )}
                 </div>
               </motion.div>

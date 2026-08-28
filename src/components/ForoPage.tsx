@@ -20,9 +20,10 @@ import {
   BookOpen, 
   Lightbulb, 
   Car,
-  Filter,
+  Globe,
   CheckCircle2,
-  ArrowRight
+  ArrowRight,
+  Eye
 } from 'lucide-react';
 
 interface Props {
@@ -209,9 +210,13 @@ export const ForoPage: React.FC<Props> = ({
                 <span className="px-2 py-0.5 bg-[#ff4500]/20 text-[#ff4500] border border-[#ff4500]/30 rounded-md text-[10px] font-mono font-bold">
                   r/AutoChat
                 </span>
+                <span className="px-2 py-0.5 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded-md text-[10px] font-mono font-bold hidden sm:inline-flex items-center gap-1">
+                  <Globe className="w-3 h-3" />
+                  <span>ESPACIO PÚBLICO</span>
+                </span>
               </div>
               <p className="text-xs sm:text-sm text-[#8a9db5] mt-0.5">
-                Comunidad abierta de debate automotriz • Crea hilos, comparte dudas y vota aportes
+                Espacio público de preguntas, respuestas y debate automotriz • Visible para toda la comunidad
               </p>
             </div>
           </div>
@@ -222,8 +227,24 @@ export const ForoPage: React.FC<Props> = ({
             className="px-5 py-2.5 bg-[#ff4500] hover:bg-[#ff5722] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_20px_rgba(255,69,0,0.3)] flex items-center gap-2 self-stretch sm:self-auto justify-center hover:scale-[1.02]"
           >
             <Plus className="w-4 h-4" />
-            <span>Crear Hilo</span>
+            <span>Publicar Pregunta o Hilo</span>
           </button>
+        </div>
+      </div>
+
+      {/* Public Notice Bar */}
+      <div className="bg-[#0e1b2b]/80 border-b border-emerald-500/20 px-4 py-2.5">
+        <div className="max-w-6xl mx-auto flex items-center justify-between text-xs font-mono">
+          <div className="flex items-center gap-2 text-emerald-400">
+            <Globe className="w-4 h-4 shrink-0" />
+            <span>
+              <strong>Comunidad Abierta y Transparente:</strong> Todas las preguntas, hilos y respuestas son públicas para que cualquier persona pueda leer y aprender.
+            </span>
+          </div>
+          <div className="hidden md:flex items-center gap-2 text-white/50">
+            <Eye className="w-3.5 h-3.5 text-white/60" />
+            <span>Lectura abierta sin restricciones</span>
+          </div>
         </div>
       </div>
 
@@ -242,7 +263,7 @@ export const ForoPage: React.FC<Props> = ({
               </div>
 
               <div className="flex-1 px-4 py-2 bg-[#080d14] border border-white/10 rounded-lg text-xs text-white/50 group-hover:border-white/20 transition-colors">
-                ¿De qué quieres hablar hoy? Crear un hilo en r/AutoChat...
+                ¿Tienes una duda o quieres debatir? Publica una pregunta abierta a todos...
               </div>
 
               <div className="flex items-center gap-1.5 text-white/40">
@@ -312,7 +333,7 @@ export const ForoPage: React.FC<Props> = ({
                   }`}
                 >
                   <MessageSquare className="w-3.5 h-3.5 text-[#4ade80]" />
-                  <span>Debatidos</span>
+                  <span>Más Respondidos</span>
                 </button>
               </div>
 
@@ -323,7 +344,7 @@ export const ForoPage: React.FC<Props> = ({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar hilos..."
+                  placeholder="Buscar preguntas..."
                   className="w-full pl-8 pr-2.5 py-1.5 bg-[#080d14] border border-white/10 focus:border-[#ff4500] rounded-lg text-xs text-white placeholder-white/30 focus:outline-none"
                 />
                 {searchQuery && (
@@ -347,7 +368,7 @@ export const ForoPage: React.FC<Props> = ({
                   onClick={() => setSelectedFlair('all')}
                   className="text-white/60 hover:text-white font-bold underline"
                 >
-                  Ver todos
+                  Ver todos los temas
                 </button>
               </div>
             )}
@@ -360,11 +381,11 @@ export const ForoPage: React.FC<Props> = ({
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white">
-                    {posts.length === 0 ? 'Aún no hay hilos en AutoChat' : 'No se encontraron hilos'}
+                    {posts.length === 0 ? 'Aún no hay preguntas ni hilos en el espacio público' : 'No se encontraron publicaciones'}
                   </h3>
                   <p className="text-xs text-[#8a9db5] max-w-sm mx-auto mt-1 leading-relaxed">
                     {posts.length === 0
-                      ? 'Sé el primero en abrir una conversación en r/AutoChat. Comparte preguntas, proyectos mecánicos, puestas a punto o recomendaciones.'
+                      ? 'Sé el primero en abrir una pregunta o tema en r/AutoChat. Todo lo que publiques será visible públicamente para que todos aporten sus respuestas.'
                       : searchQuery
                       ? 'No hay publicaciones que coincidan con la búsqueda actual.'
                       : 'No hay hilos publicados con este filtro de etiqueta.'}
@@ -385,7 +406,7 @@ export const ForoPage: React.FC<Props> = ({
                     className="px-5 py-2.5 bg-[#ff4500] hover:bg-[#ff5722] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_rgba(255,69,0,0.3)] flex items-center gap-1.5"
                   >
                     <Plus className="w-4 h-4" />
-                    <span>Crear Primer Hilo</span>
+                    <span>Publicar Primera Pregunta</span>
                   </button>
                 </div>
               </div>
@@ -409,27 +430,27 @@ export const ForoPage: React.FC<Props> = ({
             <div className="bg-[#0c141f] border border-white/10 rounded-2xl p-5 shadow-lg space-y-4">
               <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
                 <div className="w-8 h-8 rounded-xl bg-[#ff4500]/20 border border-[#ff4500]/40 flex items-center justify-center text-[#ff4500]">
-                  <Users className="w-4 h-4" />
+                  <Globe className="w-4 h-4 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Acerca de r/AutoChat</h3>
-                  <span className="text-[10px] font-mono text-white/50">Comunidad Automotriz</span>
+                  <h3 className="text-sm font-bold text-white">Espacio Público r/AutoChat</h3>
+                  <span className="text-[10px] font-mono text-emerald-400">Preguntas & Respuestas Abiertas</span>
                 </div>
               </div>
 
               <p className="text-xs text-[#8a9db5] leading-relaxed">
-                El espacio abierto de <strong>AutoArchive</strong> para debatir sobre arquitectura de motores, soluciones técnicas en pista, historias de clásicos y recomendaciones de la comunidad.
+                Este es un <strong>tablón 100% público</strong>. Cualquier persona puede leer las consultas técnicas, proyectos y respuestas de todos los miembros para aprender colectivamente.
               </p>
 
               {/* Stats */}
               <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5 font-mono text-center">
                 <div className="p-2 bg-[#080d14] rounded-lg border border-white/5">
                   <div className="text-sm font-black text-white">{posts.length}</div>
-                  <div className="text-[9px] text-[#8a9db5] uppercase">Hilos Activos</div>
+                  <div className="text-[9px] text-[#8a9db5] uppercase">Hilos Públicos</div>
                 </div>
                 <div className="p-2 bg-[#080d14] rounded-lg border border-white/5">
-                  <div className="text-sm font-black text-[#22c55e]">En Vivo</div>
-                  <div className="text-[9px] text-[#8a9db5] uppercase">Comunidad</div>
+                  <div className="text-sm font-black text-emerald-400">100% Abierto</div>
+                  <div className="text-[9px] text-[#8a9db5] uppercase">Transparente</div>
                 </div>
               </div>
 
@@ -438,7 +459,7 @@ export const ForoPage: React.FC<Props> = ({
                 className="w-full py-2.5 bg-[#ff4500] hover:bg-[#ff5722] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_rgba(255,69,0,0.3)] flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
-                <span>Crear Publicación</span>
+                <span>Hacer una Pregunta Pública</span>
               </button>
             </div>
 
@@ -446,7 +467,7 @@ export const ForoPage: React.FC<Props> = ({
             <div className="bg-[#0c141f] border border-white/10 rounded-2xl p-5 shadow-lg space-y-3">
               <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#8a9db5] uppercase">
                 <Tag className="w-3.5 h-3.5 text-[#ffd451]" />
-                <span>Filtrar por Flairs</span>
+                <span>Filtrar por Categorías</span>
               </div>
 
               <div className="flex flex-wrap gap-1.5">
@@ -480,25 +501,21 @@ export const ForoPage: React.FC<Props> = ({
             <div className="bg-[#0c141f] border border-white/10 rounded-2xl p-5 shadow-lg space-y-3">
               <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#8a9db5] uppercase">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#22c55e]" />
-                <span>Reglas de AutoChat</span>
+                <span>Normas de Convivencia</span>
               </div>
 
               <ul className="space-y-2 text-xs text-[#8a9db5] leading-relaxed">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0 mt-0.5" />
-                  <span>1. <strong>Respeto y Rigor:</strong> Debates constructivos basados en datos de ingeniería o experiencia real.</span>
+                  <span>1. <strong>Total Visibilidad:</strong> Recuerda que todo lo que escribes es visible públicamente por todos los visitantes.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0 mt-0.5" />
-                  <span>2. <strong>Etiquetas (Flairs):</strong> Asigna el flair adecuado a tu hilo para organizar la comunidad.</span>
+                  <span>2. <strong>Respuestas Constructivas:</strong> Ayuda a otros con datos precisos de mecánica, reglajes y fuentes confiables.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0 mt-0.5" />
-                  <span>3. <strong>Sin Spam:</strong> Prohibida la autopromoción agresiva o ventas no autorizadas.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0 mt-0.5" />
-                  <span>4. <strong>Pasión Automotriz:</strong> Disfruta de los motores, chasis y la historia viva del motor.</span>
+                  <span>3. <strong>Votación Justa:</strong> Usa los votos a favor para destacar las mejores respuestas y aportes técnicos.</span>
                 </li>
               </ul>
             </div>

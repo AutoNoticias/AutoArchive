@@ -11,7 +11,7 @@ import {
   AlertCircle,
   MessageSquare,
   Sparkles,
-  Layers
+  Globe
 } from 'lucide-react';
 import { ForumService } from '../services/forumService';
 
@@ -67,7 +67,7 @@ export const ForumNewPostModal: React.FC<Props> = ({
     }
 
     if (!title.trim() || !content.trim()) {
-      setError('Por favor ingresa un título y el cuerpo del hilo.');
+      setError('Por favor ingresa un título y el cuerpo de la pregunta o hilo.');
       return;
     }
 
@@ -164,12 +164,20 @@ export const ForumNewPostModal: React.FC<Props> = ({
                   r/AutoChat
                 </span>
                 <span className="text-white/40 text-xs">•</span>
-                <span className="text-xs font-mono text-white/60">Nuevo Hilo</span>
+                <span className="inline-flex items-center gap-1 text-xs font-mono text-emerald-400 font-bold">
+                  <Globe className="w-3 h-3" />
+                  Publicación Abierta
+                </span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight">
-                Crear una Publicación
+                Publicar Pregunta o Hilo Público
               </h2>
             </div>
+          </div>
+
+          <div className="mb-4 px-3.5 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-xs font-mono text-emerald-400 flex items-center gap-2">
+            <Globe className="w-4 h-4 shrink-0" />
+            <span>Este hilo y sus respuestas serán 100% públicos para toda la comunidad.</span>
           </div>
 
           {!user ? (
@@ -177,7 +185,7 @@ export const ForumNewPostModal: React.FC<Props> = ({
               <AlertCircle className="w-10 h-10 text-[#ff4500] mx-auto" />
               <h3 className="text-base font-bold">Inicia sesión para publicar en AutoChat</h3>
               <p className="text-xs text-[#8a9db5] max-w-md mx-auto">
-                Únete a la comunidad de AutoArchive para abrir debates técnicos, resolver dudas mecánicas y compartir tus proyectos.
+                Cualquier persona puede leer el foro libremente. Inicia sesión para publicar tus propias preguntas, respuestas y votar hilos.
               </p>
               <button
                 type="button"
@@ -202,7 +210,7 @@ export const ForumNewPostModal: React.FC<Props> = ({
               {/* Flair Selection */}
               <div>
                 <label className="block text-xs font-mono font-bold text-[#8a9db5] uppercase tracking-wider mb-2">
-                  Selecciona una Etiqueta (Flair):
+                  Selecciona la Categoría (Flair):
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {flairs.map((f) => (
@@ -225,7 +233,7 @@ export const ForumNewPostModal: React.FC<Props> = ({
               {/* Thread Title */}
               <div>
                 <label className="block text-xs font-mono font-bold text-[#8a9db5] uppercase tracking-wider mb-1.5">
-                  Título del Hilo:
+                  Pregunta o Título del Hilo:
                 </label>
                 <input
                   type="text"
@@ -244,12 +252,12 @@ export const ForumNewPostModal: React.FC<Props> = ({
               {/* Thread Body */}
               <div>
                 <label className="block text-xs font-mono font-bold text-[#8a9db5] uppercase tracking-wider mb-1.5">
-                  Cuerpo de la Publicación:
+                  Detalles de la Consulta o Argumentos:
                 </label>
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  placeholder="Escribe los detalles de tu consulta, argumentos técnicos, puesta a punto, especificaciones o experiencia..."
+                  placeholder="Escribe los detalles de tu consulta, especificaciones técnicas, dudas o contexto para que la comunidad te responda..."
                   rows={4}
                   required
                   className="w-full px-4 py-3 bg-[#080d14] border border-white/15 focus:border-[#ff4500] rounded-xl text-xs text-white placeholder-white/30 focus:outline-none leading-relaxed resize-none"
@@ -284,7 +292,7 @@ export const ForumNewPostModal: React.FC<Props> = ({
                       type="text"
                       value={referenceUrl}
                       onChange={(e) => setReferenceUrl(e.target.value)}
-                      placeholder="https://... o video/foro"
+                      placeholder="https://... o video/manual"
                       className="w-full pl-9 pr-3 py-2 bg-[#080d14] border border-white/15 focus:border-[#ff4500] rounded-xl text-xs text-white placeholder-white/30 focus:outline-none"
                     />
                   </div>
@@ -306,7 +314,7 @@ export const ForumNewPostModal: React.FC<Props> = ({
                   className="px-6 py-2.5 bg-[#ff4500] hover:bg-[#ff5722] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_rgba(255,69,0,0.3)] flex items-center gap-2 disabled:opacity-50"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>{isSubmitting ? 'Publicando...' : 'Publicar Hilo'}</span>
+                  <span>{isSubmitting ? 'Publicando...' : 'Publicar Pregunta'}</span>
                 </button>
               </div>
             </form>
