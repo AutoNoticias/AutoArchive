@@ -784,13 +784,13 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
             </div>
 
-            {/* 03 AUTOCHAT */}
+            {/* 03 AUTOCHAT / EN TRABAJO */}
             <div
               id="card-foro-community"
               onClick={() => onNavigate('foro')}
-              className="group relative min-h-[400px] p-7 overflow-hidden text-[#efefed] bg-gradient-to-br from-[#1a0f0a] to-[#0d0705] border-2 border-[#542114] cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(255,69,0,0.25)] hover:border-[#ff4500] flex flex-col justify-between rounded-2xl"
+              className="group relative min-h-[400px] p-7 overflow-hidden text-[#efefed] bg-gradient-to-br from-[#1a0f0a] to-[#0d0705] border-2 border-[#ff4500]/40 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(255,69,0,0.25)] hover:border-[#ff4500] flex flex-col justify-between rounded-2xl"
             >
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#ff4500] via-[#ff7043] to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#ff4500] via-[#ffd451] to-transparent animate-pulse" />
               <span
                 aria-hidden="true"
                 className="absolute right-[-10px] bottom-[-40px] text-[clamp(100px,12vw,180px)] font-black tracking-[-0.12em] leading-none text-white/[0.04] pointer-events-none select-none"
@@ -802,30 +802,29 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="inline-grid place-items-center w-11 h-11 border border-[#ff4500] bg-[#ff4500]/15 rounded-xl text-xs font-black font-mono tracking-widest text-[#ff4500] shadow-[0_0_15px_rgba(255,69,0,0.3)]">
                   03
                 </div>
-                <span className="px-3 py-1 bg-[#ff4500]/15 border border-[#ff4500]/40 text-[10px] tracking-[0.2em] font-bold text-[#ff7043] uppercase font-mono rounded-full">
-                  r/AutoChat
+                <span className="px-3 py-1 bg-[#ff4500]/20 border border-[#ff4500]/50 text-[10px] tracking-[0.2em] font-black text-[#ff7043] uppercase font-mono rounded-full animate-pulse">
+                  ¡TRABAJANDO EN ELLO!
                 </span>
               </div>
 
               <div className="relative z-10 mt-6">
                 <span className="block text-[10px] font-bold tracking-[0.22em] text-[#ff7043] uppercase font-mono">
-                  COMUNIDAD ESTILO REDDIT // 03
+                  MÓDULO EN DESARROLLO // 03
                 </span>
                 <h3 className="mt-1 text-2xl lg:text-3xl font-black tracking-tight leading-none group-hover:text-[#ff4500] transition-colors uppercase">
                   AutoChat
                 </h3>
                 <p className="mt-3 text-[#e6cdc7] text-xs leading-relaxed">
-                  Crea hilos de debate técnico, vota aportes con karma y debate con otros apasionados del motor sin ejemplos precargados.
+                  ¡Estamos trabajando en ello! Sección temporalmente en mantenimiento para incorporar mejoras técnicas y mayor rendimiento.
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-1.5 font-mono text-[9px]">
-                  <span className="px-2 py-0.5 bg-[#ff4500]/20 border border-[#ff4500]/40 text-[#ff7043] rounded">HILOS EN VIVO</span>
-                  <span className="px-2 py-0.5 bg-white/5 border border-white/10 text-white/70 rounded">VOTACIÓN REDDIT</span>
-                  <span className="px-2 py-0.5 bg-white/5 border border-white/10 text-white/70 rounded">FLAIRS TÉCNICOS</span>
+                  <span className="px-2 py-0.5 bg-[#ff4500]/20 border border-[#ff4500]/40 text-[#ff7043] font-bold rounded">EN OBRAS</span>
+                  <span className="px-2 py-0.5 bg-[#ffd451]/15 border border-[#ffd451]/30 text-[#ffd451] rounded">PRÓXIMAMENTE</span>
                 </div>
 
                 <div className="mt-6 flex items-center gap-2 text-[#ff4500] font-mono font-bold transition-transform duration-300 group-hover:translate-x-2">
-                  <span className="text-xs tracking-wider uppercase">ENTRAR A AUTOCHAT</span>
+                  <span className="text-xs tracking-wider uppercase">VER ESTADO DE DESARROLLO</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
               </div>
