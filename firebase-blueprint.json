@@ -68,30 +68,34 @@
     },
     "ForumPost": {
       "title": "ForumPost",
-      "description": "Community forum thread in Autos, Recomendaciones or General categories",
+      "description": "AutoChat Reddit-style thread in automotive community",
       "type": "object",
       "properties": {
         "userId": { "type": "string" },
         "userName": { "type": "string" },
         "userEmail": { "type": "string" },
         "userRole": { "type": "string" },
-        "category": { "type": "string", "enum": ["autos", "recomendaciones", "general"] },
+        "category": { "type": "string" },
         "tag": { "type": "string" },
+        "flair": { "type": "string" },
         "title": { "type": "string" },
         "content": { "type": "string" },
         "carModel": { "type": "string" },
         "recommendationUrl": { "type": "string" },
         "createdAt": { "type": "string" },
+        "score": { "type": "number" },
         "likesCount": { "type": "number" },
         "likedBy": { "type": "array" },
+        "upvotedBy": { "type": "array" },
+        "downvotedBy": { "type": "array" },
         "commentsCount": { "type": "number" },
         "pinned": { "type": "boolean" }
       },
-      "required": ["userId", "userName", "category", "title", "content"]
+      "required": ["userId", "userName", "title", "content"]
     },
     "ForumComment": {
       "title": "ForumComment",
-      "description": "Interactive reply to a forum thread",
+      "description": "Reddit-style comment or nested reply to a thread in AutoChat",
       "type": "object",
       "properties": {
         "postId": { "type": "string" },
@@ -100,7 +104,11 @@
         "userEmail": { "type": "string" },
         "userRole": { "type": "string" },
         "content": { "type": "string" },
-        "createdAt": { "type": "string" }
+        "createdAt": { "type": "string" },
+        "score": { "type": "number" },
+        "upvotedBy": { "type": "array" },
+        "downvotedBy": { "type": "array" },
+        "parentId": { "type": "string" }
       },
       "required": ["postId", "userId", "userName", "content"]
     }

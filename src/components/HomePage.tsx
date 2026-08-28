@@ -784,13 +784,13 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
             </div>
 
-            {/* 03 FORO & DEBATES */}
+            {/* 03 AUTOCHAT */}
             <div
               id="card-foro-community"
               onClick={() => onNavigate('foro')}
-              className="group relative min-h-[400px] p-7 overflow-hidden text-[#efefed] bg-gradient-to-br from-[#0c2415] to-[#07140b] border-2 border-[#1d4d2d] cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(34,197,94,0.25)] hover:border-[#22c55e] flex flex-col justify-between rounded-2xl"
+              className="group relative min-h-[400px] p-7 overflow-hidden text-[#efefed] bg-gradient-to-br from-[#1a0f0a] to-[#0d0705] border-2 border-[#542114] cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(255,69,0,0.25)] hover:border-[#ff4500] flex flex-col justify-between rounded-2xl"
             >
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#22c55e] via-[#4ade80] to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#ff4500] via-[#ff7043] to-transparent" />
               <span
                 aria-hidden="true"
                 className="absolute right-[-10px] bottom-[-40px] text-[clamp(100px,12vw,180px)] font-black tracking-[-0.12em] leading-none text-white/[0.04] pointer-events-none select-none"
@@ -799,32 +799,33 @@ export const HomePage: React.FC<HomePageProps> = ({
               </span>
 
               <div className="relative z-10 flex items-center justify-between">
-                <div className="inline-grid place-items-center w-11 h-11 border border-[#22c55e] bg-[#22c55e]/15 rounded-xl text-xs font-black font-mono tracking-widest text-[#22c55e] shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                <div className="inline-grid place-items-center w-11 h-11 border border-[#ff4500] bg-[#ff4500]/15 rounded-xl text-xs font-black font-mono tracking-widest text-[#ff4500] shadow-[0_0_15px_rgba(255,69,0,0.3)]">
                   03
                 </div>
-                <span className="px-3 py-1 bg-[#22c55e]/15 border border-[#22c55e]/40 text-[10px] tracking-[0.2em] font-bold text-[#4ade80] uppercase font-mono rounded-full">
-                  COMUNIDAD VIVA
+                <span className="px-3 py-1 bg-[#ff4500]/15 border border-[#ff4500]/40 text-[10px] tracking-[0.2em] font-bold text-[#ff7043] uppercase font-mono rounded-full">
+                  r/AutoChat
                 </span>
               </div>
 
               <div className="relative z-10 mt-6">
-                <span className="block text-[10px] font-bold tracking-[0.22em] text-[#4ade80] uppercase font-mono">
-                  ESPACIO INTERACTIVO // 03
+                <span className="block text-[10px] font-bold tracking-[0.22em] text-[#ff7043] uppercase font-mono">
+                  COMUNIDAD ESTILO REDDIT // 03
                 </span>
-                <h3 className="mt-1 text-2xl lg:text-3xl font-black tracking-tight leading-none group-hover:text-[#22c55e] transition-colors uppercase">
-                  FORO & DEBATES
+                <h3 className="mt-1 text-2xl lg:text-3xl font-black tracking-tight leading-none group-hover:text-[#ff4500] transition-colors uppercase">
+                  AutoChat
                 </h3>
-                <p className="mt-3 text-[#b7dbc2] text-xs leading-relaxed">
-                  Zonas dedicadas para debatir sobre <strong>AUTOS</strong> y compartir <strong>RECOMENDACIONES</strong> técnicas con la comunidad de entusiastas.
+                <p className="mt-3 text-[#e6cdc7] text-xs leading-relaxed">
+                  Crea hilos de debate técnico, vota aportes con karma y debate con otros apasionados del motor sin ejemplos precargados.
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-1.5 font-mono text-[9px]">
-                  <span className="px-2 py-0.5 bg-[#4ea0ff]/20 border border-[#4ea0ff]/40 text-[#7cbcff] rounded">ZONA AUTOS</span>
-                  <span className="px-2 py-0.5 bg-[#22c55e]/20 border border-[#22c55e]/40 text-[#4ade80] rounded">RECOMENDACIONES</span>
+                  <span className="px-2 py-0.5 bg-[#ff4500]/20 border border-[#ff4500]/40 text-[#ff7043] rounded">HILOS EN VIVO</span>
+                  <span className="px-2 py-0.5 bg-white/5 border border-white/10 text-white/70 rounded">VOTACIÓN REDDIT</span>
+                  <span className="px-2 py-0.5 bg-white/5 border border-white/10 text-white/70 rounded">FLAIRS TÉCNICOS</span>
                 </div>
 
-                <div className="mt-6 flex items-center gap-2 text-[#22c55e] font-mono font-bold transition-transform duration-300 group-hover:translate-x-2">
-                  <span className="text-xs tracking-wider uppercase">ENTRAR AL FORO</span>
+                <div className="mt-6 flex items-center gap-2 text-[#ff4500] font-mono font-bold transition-transform duration-300 group-hover:translate-x-2">
+                  <span className="text-xs tracking-wider uppercase">ENTRAR A AUTOCHAT</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
               </div>

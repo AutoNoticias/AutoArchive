@@ -10,7 +10,7 @@ import { mazda787bImages } from '../data/mazda787bData';
 import { nsxImages } from '../data/nsxData';
 import { camaroMustangImages } from '../data/camaroMustangData';
 import { f1Images } from '../data/f1Data';
-import { User, LogOut, LogIn, ShieldCheck, LayoutDashboard, Home, BookOpen, Lightbulb, Sparkles, X, ChevronRight, Compass, Crown } from 'lucide-react';
+import { User, LogOut, LogIn, ShieldCheck, LayoutDashboard, Home, BookOpen, Lightbulb, Sparkles, X, ChevronRight, MessageSquare, Crown } from 'lucide-react';
 
 interface NavigationProps {
   currentPage: RoutePage;
@@ -297,20 +297,20 @@ export const Navigation: React.FC<NavigationProps> = ({
           )}
         </button>
 
-        {/* FORO */}
+        {/* AutoChat */}
         <button
           onClick={() => handleNavClick('foro')}
           className={`relative flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-h-[46px] min-w-[52px] active:scale-95 ${
             currentPage === 'foro'
-              ? 'text-[#22c55e] font-bold bg-[#22c55e]/10 border border-[#22c55e]/30'
-              : 'text-[#22c55e] hover:text-[#4ade80] bg-[#22c55e]/10 border border-[#22c55e]/20'
+              ? 'text-[#ff4500] font-bold bg-[#ff4500]/10 border border-[#ff4500]/30'
+              : 'text-[#ff4500]/80 hover:text-[#ff4500] bg-[#ff4500]/10 border border-[#ff4500]/20'
           }`}
-          aria-label="Ir al Foro"
+          aria-label="Ir a AutoChat"
         >
-          <Compass className="w-5 h-5 mb-0.5 text-[#22c55e] animate-pulse" />
-          <span className="text-[10px] font-mono tracking-tight uppercase font-bold text-[#22c55e]">FORO</span>
+          <MessageSquare className="w-5 h-5 mb-0.5 text-[#ff4500]" />
+          <span className="text-[10px] font-mono tracking-tight uppercase font-bold text-[#ff4500]">AutoChat</span>
           {currentPage === 'foro' && (
-            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#22c55e] shadow-[0_0_8px_#22c55e]" />
+            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#ff4500] shadow-[0_0_8px_#ff4500]" />
           )}
         </button>
 

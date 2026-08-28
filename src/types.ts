@@ -95,7 +95,7 @@ export interface FactItem {
   sourceOrPlace?: string;
 }
 
-export type ForumCategory = 'autos' | 'recomendaciones' | 'general';
+export type ForumCategory = 'autos' | 'recomendaciones' | 'general' | 'debate' | 'mecanica' | 'clasicos' | 'circuitos';
 
 export interface ForumComment {
   id: string;
@@ -106,6 +106,10 @@ export interface ForumComment {
   userRole?: 'admin' | 'subscriber' | string;
   content: string;
   createdAt: string;
+  score?: number;
+  upvotedBy?: string[];
+  downvotedBy?: string[];
+  parentId?: string | null;
 }
 
 export interface ForumPost {
@@ -116,6 +120,7 @@ export interface ForumPost {
   userRole?: 'admin' | 'subscriber' | string;
   category: ForumCategory;
   tag: string;
+  flair?: string;
   title: string;
   content: string;
   carModel?: string;
@@ -124,6 +129,9 @@ export interface ForumPost {
   createdAt: string;
   likesCount: number;
   likedBy?: string[];
+  score?: number;
+  upvotedBy?: string[];
+  downvotedBy?: string[];
   commentsCount: number;
   pinned?: boolean;
 }

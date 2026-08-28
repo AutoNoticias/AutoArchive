@@ -9,17 +9,15 @@ import {
   orderBy, 
   arrayUnion, 
   arrayRemove,
-  getDocs,
-  setDoc
+  getDocs
 } from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { db } from '../firebase';
 import { ForumPost, ForumComment } from '../types';
-import { initialForumPosts, initialForumComments } from '../data/forumInitialData';
 
 const FORUM_POSTS_COLLECTION = 'forum_posts';
 
 export class ForumService {
-  // Subscribe to real-time posts from Firestore or fall back to merged dataset
+  // Subscribe to real-time posts from Firestore
   static subscribePosts(onUpdate: (posts: ForumPost[]) => void) {
     try {
       const q = query(collection(db, FORUM_POSTS_COLLECTION), orderBy('createdAt', 'desc'));
@@ -30,42 +28,54 @@ export class ForumService {
           if (!snapshot.empty) {
             const fetchedPosts: ForumPost[] = snapshot.docs.map((docSnap) => {
               const data = docSnap.data();
+              const upvotedBy = Array.isArray(data.upvotedBy) ? data.upvotedBy : (Array.isArray(data.likedBy) ? data.likedBy : []);
+              const downvotedBy = Array.isArray(data.downvotedBy) ? data.downvotedBy : [];
+              const rawScore = typeof data.score === 'number' 
+                ? data.score 
+                : typeof data.likesCount === 'number' 
+                ? data.likesCount 
+                : (upvotedBy.length - downvotedBy.length);
+
               return {
                 id: docSnap.id,
                 userId: data.userId || 'anon',
                 userName: data.userName || 'Entusiasta',
                 userEmail: data.userEmail || '',
                 userRole: data.userRole || 'subscriber',
-                category: data.category || 'autos',
+                category: data.category || 'general',
                 tag: data.tag || 'General',
+                flair: data.flair || data.tag || 'Debate',
                 title: data.title || '',
                 content: data.content || '',
                 carModel: data.carModel || '',
                 recommendationUrl: data.recommendationUrl || '',
                 recommendationType: data.recommendationType || '',
                 createdAt: data.createdAt || new Date().toISOString(),
-                likesCount: typeof data.likesCount === 'number' ? data.likesCount : (data.likedBy?.length || 0),
-                likedBy: Array.isArray(data.likedBy) ? data.likedBy : [],
+                likesCount: upvotedBy.length,
+                likedBy: upvotedBy,
+                score: rawScore,
+                upvotedBy,
+                downvotedBy,
                 commentsCount: typeof data.commentsCount === 'number' ? data.commentsCount : 0,
                 pinned: !!data.pinned,
               };
             });
             onUpdate(fetchedPosts);
           } else {
-            // Seed initial posts or provide starter list
-            onUpdate(initialForumPosts);
+            // No hardcoded examples - clean empty state for real user threads
+            onUpdate([]);
           }
         },
         (error) => {
-          console.warn('Firestore real-time subscription error, using local data:', error);
-          onUpdate(initialForumPosts);
+          console.warn('Firestore real-time subscription error, using local state:', error);
+          onUpdate([]);
         }
       );
 
       return unsubscribe;
     } catch (err) {
       console.warn('Could not initialize snapshot:', err);
-      onUpdate(initialForumPosts);
+      onUpdate([]);
       return () => {};
     }
   }
@@ -82,6 +92,10 @@ export class ForumService {
           if (!snapshot.empty) {
             const fetchedComments: ForumComment[] = snapshot.docs.map((docSnap) => {
               const data = docSnap.data();
+              const upvotedBy = Array.isArray(data.upvotedBy) ? data.upvotedBy : [];
+              const downvotedBy = Array.isArray(data.downvotedBy) ? data.downvotedBy : [];
+              const score = typeof data.score === 'number' ? data.score : (upvotedBy.length - downvotedBy.length);
+
               return {
                 id: docSnap.id,
                 postId,
@@ -91,37 +105,41 @@ export class ForumService {
                 userRole: data.userRole || 'subscriber',
                 content: data.content || '',
                 createdAt: data.createdAt || new Date().toISOString(),
+                score,
+                upvotedBy,
+                downvotedBy,
+                parentId: data.parentId || null,
               };
             });
             onUpdate(fetchedComments);
           } else {
-            // Check initial comments
-            const initial = initialForumComments[postId] || [];
-            onUpdate(initial);
+            onUpdate([]);
           }
         },
         (error) => {
-          console.warn('Firestore comments snapshot error, using local fallback:', error);
-          const initial = initialForumComments[postId] || [];
-          onUpdate(initial);
+          console.warn('Firestore comments snapshot error, using empty state:', error);
+          onUpdate([]);
         }
       );
 
       return unsubscribe;
     } catch (err) {
-      const initial = initialForumComments[postId] || [];
-      onUpdate(initial);
+      console.warn('Could not initialize comments snapshot:', err);
+      onUpdate([]);
       return () => {};
     }
   }
 
   // Create a new forum post
-  static async createPost(postData: Omit<ForumPost, 'id' | 'likesCount' | 'likedBy' | 'commentsCount'>): Promise<string> {
+  static async createPost(postData: Omit<ForumPost, 'id' | 'likesCount' | 'likedBy' | 'commentsCount' | 'score' | 'upvotedBy' | 'downvotedBy'>): Promise<string> {
     try {
       const newPost = {
         ...postData,
-        likesCount: 0,
-        likedBy: [],
+        score: 1,
+        likesCount: 1,
+        likedBy: [postData.userId],
+        upvotedBy: [postData.userId],
+        downvotedBy: [],
         commentsCount: 0,
         pinned: postData.pinned || false,
         createdAt: new Date().toISOString(),
@@ -135,19 +153,88 @@ export class ForumService {
     }
   }
 
+  // Reddit-style vote on a post (up, down, neutral)
+  static async votePost(
+    postId: string, 
+    userId: string, 
+    direction: 'up' | 'down' | 'none', 
+    currentUpvotedBy: string[] = [], 
+    currentDownvotedBy: string[] = []
+  ) {
+    try {
+      const postRef = doc(db, FORUM_POSTS_COLLECTION, postId);
+      let newUpvotes = currentUpvotedBy.filter(id => id !== userId);
+      let newDownvotes = currentDownvotedBy.filter(id => id !== userId);
+
+      if (direction === 'up') {
+        newUpvotes.push(userId);
+      } else if (direction === 'down') {
+        newDownvotes.push(userId);
+      }
+
+      const newScore = newUpvotes.length - newDownvotes.length;
+
+      await updateDoc(postRef, {
+        upvotedBy: newUpvotes,
+        downvotedBy: newDownvotes,
+        likedBy: newUpvotes,
+        likesCount: newUpvotes.length,
+        score: newScore,
+      });
+    } catch (error) {
+      console.warn('Error voting on post in Firestore (fallback applied):', error);
+    }
+  }
+
+  // Vote on a comment
+  static async voteComment(
+    postId: string,
+    commentId: string,
+    userId: string,
+    direction: 'up' | 'down' | 'none',
+    currentUpvotedBy: string[] = [],
+    currentDownvotedBy: string[] = []
+  ) {
+    try {
+      const commentRef = doc(db, FORUM_POSTS_COLLECTION, postId, 'comments', commentId);
+      let newUpvotes = currentUpvotedBy.filter(id => id !== userId);
+      let newDownvotes = currentDownvotedBy.filter(id => id !== userId);
+
+      if (direction === 'up') {
+        newUpvotes.push(userId);
+      } else if (direction === 'down') {
+        newDownvotes.push(userId);
+      }
+
+      const newScore = newUpvotes.length - newDownvotes.length;
+
+      await updateDoc(commentRef, {
+        upvotedBy: newUpvotes,
+        downvotedBy: newDownvotes,
+        score: newScore,
+      });
+    } catch (error) {
+      console.warn('Error voting on comment in Firestore:', error);
+    }
+  }
+
   // Add comment to a post
   static async addComment(postId: string, commentData: Omit<ForumComment, 'id' | 'postId'>): Promise<string> {
     try {
       const newComment = {
         ...commentData,
         postId,
+        score: 1,
+        upvotedBy: [commentData.userId],
+        downvotedBy: [],
+        parentId: commentData.parentId || null,
         createdAt: new Date().toISOString(),
       };
 
       const commentsRef = collection(db, FORUM_POSTS_COLLECTION, postId, 'comments');
       const docRef = await addDoc(commentsRef, newComment);
 
-      // Try to increment comments count on post doc
+      // Increment comments count on post doc
       try {
         const postRef = doc(db, FORUM_POSTS_COLLECTION, postId);
         const postSnap = await getDocs(query(collection(db, FORUM_POSTS_COLLECTION)));
@@ -169,26 +256,6 @@ export class ForumService {
     }
   }
 
-  // Toggle like on a post
-  static async toggleLike(postId: string, userId: string, isLiked: boolean, currentCount: number) {
-    try {
-      const postRef = doc(db, FORUM_POSTS_COLLECTION, postId);
-      if (isLiked) {
-        await updateDoc(postRef, {
-          likedBy: arrayRemove(userId),
-          likesCount: Math.max(0, currentCount - 1),
-        });
-      } else {
-        await updateDoc(postRef, {
-          likedBy: arrayUnion(userId),
-          likesCount: currentCount + 1,
-        });
-      }
-    } catch (error) {
-      console.warn('Error updating like on Firestore (fallback applied):', error);
-    }
-  }
-
   // Delete a post
   static async deletePost(postId: string) {
     try {
@@ -196,6 +263,17 @@ export class ForumService {
       await deleteDoc(postRef);
     } catch (error) {
       console.error('Error deleting post:', error);
+      throw error;
+    }
+  }
+
+  // Delete a comment
+  static async deleteComment(postId: string, commentId: string) {
+    try {
+      const commentRef = doc(db, FORUM_POSTS_COLLECTION, postId, 'comments', commentId);
+      await deleteDoc(commentRef);
+    } catch (error) {
+      console.error('Error deleting comment:', error);
       throw error;
     }
   }
