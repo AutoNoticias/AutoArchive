@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoArchive | Redirigiendo...</title>
+    <script type="text/javascript">
+      // GitHub Pages SPA single page app redirect handler
+      var segmentCount = 0;
+      var location = window.location;
+      location.replace(
+        location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') +
+        location.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
+        location.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
+        (location.search ? '&q=' + location.search.slice(1).replace(/&/g, '~and~') : '') +
+        location.hash
+      );
+    </script>
+  </head>
+  <body style="background-color: #070709; color: #f1f5f9; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <div style="text-align: center;">
+      <h2 style="font-size: 1.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">AutoArchive</h2>
+      <p style="font-size: 0.875rem; color: #94a3b8;">Cargando la aplicación...</p>
+    </div>
+  </body>
+</html>

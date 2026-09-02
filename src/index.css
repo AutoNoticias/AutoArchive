@@ -1,83 +1,122 @@
 @import "tailwindcss";
 
 :root {
-    --paper: #efefed;
-    --ink: #111214;
-    --muted: #7e8288;
-    --line: rgba(17, 18, 20, 0.16);
-    --home-accent: #d92f31;
-    --blue-accent: #4ea0ff;
-    --yellow-accent: #f2bd27;
+    --paper: #f1f5f9;
+    --ink: #070709;
+    --muted: #94a3b8;
+    --line: rgba(255, 255, 255, 0.08);
+    --charcoal-900: #070709;
+    --charcoal-800: #0d0d12;
+    --charcoal-700: #14141c;
+    --charcoal-600: #1d1d26;
+    --charcoal-500: #2a2a38;
+    --platinum: #e2e8f0;
+    --silver: #94a3b8;
 }
 
 html {
     scroll-behavior: smooth;
+    color-scheme: dark;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: #080808;
-    color: #f1f1f1;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #070709;
+    color: #f1f5f9;
     overflow-x: hidden;
+    letter-spacing: -0.01em;
 }
 
-/* Custom Scrollbar */
+h1, h2, h3, .font-display {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-serif-luxury {
+    font-family: 'Cinzel', serif;
+}
+
+.font-mono-tech {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom Luxury Minimal Scrollbar */
 ::-webkit-scrollbar {
-    width: 7px;
+    width: 6px;
+    height: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: #080808;
+    background: #070709;
 }
 ::-webkit-scrollbar-thumb {
-    background: #33363b;
-    border-radius: 8px;
+    background: #272730;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #555a62;
+    background: #3f3f4e;
 }
 
-/* AutoArchive Hero Grids & Effects */
+/* Luxury Automotive Grids & Minimalist Shaders */
 .hero-grid-pattern {
     background:
-        radial-gradient(circle at 82% 24%, rgba(217, 47, 49, 0.33), transparent 0 23%),
-        linear-gradient(115deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
-        linear-gradient(25deg, transparent 0 49.8%, rgba(255, 255, 255, 0.05) 50%, transparent 50.2%),
-        #121315;
-    background-size: auto, 48px 48px, auto, auto;
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.04), transparent 45%),
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.02), transparent 40%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        #070709;
+    background-size: auto, auto, 40px 40px, 40px 40px, auto;
 }
 
 .documentales-hero-bg {
     background:
-        radial-gradient(circle at 72% 34%, rgba(78, 160, 255, 0.34), transparent 0 24%),
-        linear-gradient(125deg, #07111d, #122d4e);
+        radial-gradient(circle at 75% 30%, rgba(255, 255, 255, 0.05), transparent 35%),
+        linear-gradient(135deg, #070709 0%, #0d0d14 50%, #13131d 100%);
 }
 
 .datos-hero-bg {
     background:
-        radial-gradient(circle at 78% 30%, rgba(242, 189, 39, 0.38), transparent 0 20%),
-        linear-gradient(135deg, #28240f, #5a4310);
+        radial-gradient(circle at 75% 30%, rgba(255, 255, 255, 0.04), transparent 30%),
+        linear-gradient(135deg, #09090c 0%, #111117 50%, #181822 100%);
 }
 
 .xj220-hero-bg {
     background:
-        radial-gradient(circle at 75% 45%, rgba(78, 160, 255, 0.18), transparent 25%),
-        linear-gradient(115deg, #030a12 0%, #0b1e32 45%, #102c49 100%);
+        radial-gradient(circle at 75% 45%, rgba(255, 255, 255, 0.05), transparent 30%),
+        linear-gradient(125deg, #070709 0%, #0c0d12 45%, #141620 100%);
 }
 
 .grid-blueprint {
     background-image:
-        linear-gradient(rgba(183, 220, 255, 0.22) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(183, 220, 255, 0.22) 1px, transparent 1px);
-    background-size: 54px 54px;
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
     mask-image: linear-gradient(to bottom, black 50%, transparent);
 }
 
 .datos-grid-blueprint {
     background-image:
-        linear-gradient(rgba(255, 244, 194, 0.2) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 244, 194, 0.2) 1px, transparent 1px);
-    background-size: 54px 54px;
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
     mask-image: linear-gradient(to bottom, black 50%, transparent);
+}
+
+/* Glassmorphic Luxury Borders */
+.glass-panel {
+    background: rgba(13, 13, 18, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-hover {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+    background: rgba(18, 18, 25, 0.9);
+    border-color: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 20px 0 rgba(255, 255, 255, 0.03);
 }
 
 @keyframes scrollArrow {
@@ -85,10 +124,10 @@ body {
         transform: translateY(0);
     }
     50% {
-        transform: translateY(6px);
+        transform: translateY(5px);
     }
 }
 
 .animate-scroll-arrow {
-    animation: scrollArrow 1.8s infinite ease-in-out;
+    animation: scrollArrow 2s infinite ease-in-out;
 }

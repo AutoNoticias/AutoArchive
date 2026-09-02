@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { RoutePage } from '../types';
 import { useAuth } from '../context/AuthContext';
+import { shelbyCobraImages } from '../data/shelbyCobraData';
+import { toyotaHiluxImages } from '../data/toyotaHiluxData';
 import { xj220Images } from '../data/xj220Data';
 import { f40MiuraImages } from '../data/f40MiuraData';
 import { countachImages } from '../data/countachData';
@@ -10,7 +12,7 @@ import { mazda787bImages } from '../data/mazda787bData';
 import { nsxImages } from '../data/nsxData';
 import { camaroMustangImages } from '../data/camaroMustangData';
 import { f1Images } from '../data/f1Data';
-import { User, LogOut, LogIn, ShieldCheck, LayoutDashboard, Home, BookOpen, Lightbulb, Sparkles, X, ChevronRight, MessageSquare, Crown } from 'lucide-react';
+import { User, ShieldCheck, Home, BookOpen, Lightbulb, Sparkles, X, ChevronRight, MessageSquare } from 'lucide-react';
 
 interface NavigationProps {
   currentPage: RoutePage;
@@ -26,7 +28,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onOpenAccountModal
 }) => {
   const [isCarDrawerOpen, setIsCarDrawerOpen] = useState(false);
-  const { user, userProfile, isAdmin, logout, subscribersCount } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   // Close menu on ESC key or navigation
   useEffect(() => {
@@ -54,20 +56,34 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   const carDocumentaries = [
     {
+      id: 'shelby-cobra' as RoutePage,
+      num: '010',
+      title: 'SHELBY COBRA 427 S/C',
+      subtitle: 'Ford 427 FE Side-Oiler · FIA GT 1965',
+      image: shelbyCobraImages.hero,
+      tag: 'ESTRENO',
+    },
+    {
+      id: 'toyota-hilux' as RoutePage,
+      num: '011',
+      title: 'TOYOTA HILUX 4X4',
+      subtitle: 'Monolito Indestructible · Dakar',
+      image: toyotaHiluxImages.hero,
+      tag: 'ESTRENO',
+    },
+    {
       id: 'f1' as RoutePage,
       num: '009',
       title: 'HISTORIA DE LA FÓRMULA 1',
       subtitle: '75 Años de Leyenda · Turbo & V10',
-      accent: '#e62628',
       image: f1Images.hero,
-      tag: 'NUEVO ESTRENO',
+      tag: 'EXPEDIENTE #009',
     },
     {
       id: 'camaro-mustang' as RoutePage,
       num: '008',
       title: 'CAMARO VS MUSTANG',
       subtitle: 'La Guerra de los Pony Cars · 60 Años',
-      accent: '#ff5500',
       image: camaroMustangImages.hero,
       tag: 'EXPEDIENTE #008',
     },
@@ -76,7 +92,6 @@ export const Navigation: React.FC<NavigationProps> = ({
       num: '007',
       title: 'HONDA NSX (NA1)',
       subtitle: 'VTEC C30A & Ayrton Senna',
-      accent: '#e62628',
       image: nsxImages.hero,
       tag: 'VTEC SOUND',
     },
@@ -85,7 +100,6 @@ export const Navigation: React.FC<NavigationProps> = ({
       num: '006',
       title: 'MAZDA 787B',
       subtitle: 'R26B Wankel · Le Mans 1991',
-      accent: '#22c55e',
       image: mazda787bImages.hero,
       tag: 'LE MANS WINNER',
     },
@@ -94,7 +108,6 @@ export const Navigation: React.FC<NavigationProps> = ({
       num: '004',
       title: 'SKYLINE GT-R R34',
       subtitle: 'RB26DETT & ATTESA E-TS Pro',
-      accent: '#4ea0ff',
       image: r34Images.hero,
       tag: 'JDM ICON',
     },
@@ -103,7 +116,6 @@ export const Navigation: React.FC<NavigationProps> = ({
       num: '005',
       title: 'TOYOTA SUPRA MK4',
       subtitle: '2JZ-GTE Biturbo Secuencial',
-      accent: '#e62628',
       image: supraImages.hero,
       tag: '2JZ LEGEND',
     },
@@ -112,7 +124,6 @@ export const Navigation: React.FC<NavigationProps> = ({
       num: '003',
       title: 'LAMBORGHINI COUNTACH',
       subtitle: 'Gandini & V12 Cuña Espacial',
-      accent: '#ffd451',
       image: countachImages.hero,
       tag: 'POSTER CAR',
     },
@@ -121,7 +132,6 @@ export const Navigation: React.FC<NavigationProps> = ({
       num: '002',
       title: 'FERRARI F40 & MIURA',
       subtitle: 'V8 Biturbo vs V12 Transversal',
-      accent: '#d92f31',
       image: f40MiuraImages.f40Hero,
       tag: 'DUELO ITALIANO',
     },
@@ -130,7 +140,6 @@ export const Navigation: React.FC<NavigationProps> = ({
       num: '001',
       title: 'JAGUAR XJ220',
       subtitle: 'Récord Mundial Nardò 349.4 km/h',
-      accent: '#4ea0ff',
       image: xj220Images.hero,
       tag: 'RECORD HOLDER',
     },
@@ -138,6 +147,8 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   const isCurrentDoc =
     currentPage === 'documentales' ||
+    currentPage === 'shelby-cobra' ||
+    currentPage === 'toyota-hilux' ||
     currentPage === 'f1' ||
     currentPage === 'camaro-mustang' ||
     currentPage === 'nsx' ||
@@ -156,29 +167,29 @@ export const Navigation: React.FC<NavigationProps> = ({
           role="dialog"
           aria-modal="true"
           aria-label="Selector rápido de documentales"
-          className="fixed inset-0 z-[995] bg-black/80 backdrop-blur-md flex flex-col justify-end md:hidden animate-in fade-in duration-200"
+          className="fixed inset-0 z-[995] bg-black/85 backdrop-blur-xl flex flex-col justify-end md:hidden animate-in fade-in duration-200"
           onClick={() => setIsCarDrawerOpen(false)}
         >
           <div
-            className="w-full max-h-[85vh] bg-[#0a111a] border-t border-white/20 rounded-t-3xl p-4 sm:p-6 overflow-y-auto flex flex-col shadow-2xl animate-in slide-in-from-bottom-6 duration-300"
+            className="w-full max-h-[85vh] bg-[#0c0d12] border-t border-white/15 rounded-t-3xl p-5 overflow-y-auto flex flex-col shadow-2xl animate-in slide-in-from-bottom-6 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Drawer Drag Bar */}
-            <div className="w-12 h-1.5 bg-white/30 rounded-full mx-auto mb-4 shrink-0" />
+            <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4 shrink-0" />
 
             {/* Drawer Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-white/10 shrink-0">
+            <div className="flex items-center justify-between pb-3.5 border-b border-white/10 shrink-0">
               <div>
-                <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-[#4ea0ff] uppercase">
-                  AUTOARCHIVE // ACCESO RÁPIDO
+                <span className="text-[10px] font-mono tracking-[0.25em] text-[#94a3b8] uppercase font-semibold">
+                  AUTOARCHIVE // EXPEDIENTES
                 </span>
-                <h3 className="text-base font-bold text-white tracking-tight">
+                <h3 className="text-base font-bold text-white tracking-tight mt-0.5">
                   Selecciona un Documental
                 </h3>
               </div>
               <button
                 onClick={() => setIsCarDrawerOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 active:scale-95 transition-all"
+                className="w-8 h-8 rounded-full bg-white/5 border border-white/10 text-white/70 hover:text-white flex items-center justify-center hover:bg-white/10 active:scale-95 transition-all"
                 aria-label="Cerrar menú"
               >
                 <X className="w-4 h-4" />
@@ -186,21 +197,21 @@ export const Navigation: React.FC<NavigationProps> = ({
             </div>
 
             {/* Quick Link to Full Catalog */}
-            <div className="mt-3 space-y-2">
+            <div className="mt-3.5">
               <button
                 onClick={() => handleNavClick('documentales')}
-                className="w-full py-2.5 px-3 bg-[#4ea0ff]/15 hover:bg-[#4ea0ff]/25 border border-[#4ea0ff]/40 rounded-xl text-left flex items-center justify-between text-xs font-mono font-bold text-[#72b9ff] transition-all cursor-pointer"
+                className="w-full py-3 px-3.5 bg-white/5 hover:bg-white/10 border border-white/15 rounded-xl text-left flex items-center justify-between text-xs font-mono font-bold text-white transition-all cursor-pointer"
               >
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-[#4ea0ff]" />
-                  <span>CATÁLOGO COMPLETO DE DOCUMENTALES</span>
+                <div className="flex items-center gap-2.5">
+                  <BookOpen className="w-4 h-4 text-[#cbd5e1]" />
+                  <span>VER CATÁLOGO COMPLETO (11)</span>
                 </div>
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4 text-white/40" />
               </button>
             </div>
 
             {/* Cars List */}
-            <div className="mt-3 space-y-2.5 pb-6">
+            <div className="mt-3.5 space-y-2 pb-6">
               {carDocumentaries.map((car) => {
                 const isActive = currentPage === car.id;
                 return (
@@ -209,8 +220,8 @@ export const Navigation: React.FC<NavigationProps> = ({
                     onClick={() => handleNavClick(car.id)}
                     className={`w-full p-2.5 rounded-xl border text-left flex items-center gap-3 transition-all active:scale-[0.98] ${
                       isActive
-                        ? 'bg-[#142336] border-[#4ea0ff] shadow-md ring-1 ring-[#4ea0ff]'
-                        : 'bg-[#0d1622] hover:bg-[#121f30] border-white/10'
+                        ? 'bg-[#181822] border-white/40 shadow-lg ring-1 ring-white/20'
+                        : 'bg-[#101017] hover:bg-[#15151f] border-white/10'
                     }`}
                   >
                     <img
@@ -221,28 +232,22 @@ export const Navigation: React.FC<NavigationProps> = ({
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span
-                          className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded"
-                          style={{
-                            backgroundColor: `${car.accent}20`,
-                            color: car.accent,
-                          }}
-                        >
-                          {car.num}
+                        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-white/10 text-white/90 border border-white/15">
+                          #{car.num}
                         </span>
-                        <span className="text-[9px] font-mono text-[#8a9db5] truncate">
+                        <span className="text-[9px] font-mono text-[#94a3b8] truncate">
                           {car.tag}
                         </span>
                       </div>
-                      <h4 className="text-xs font-bold text-white truncate mt-0.5">
+                      <h4 className="text-xs font-bold text-white truncate mt-1">
                         {car.title}
                       </h4>
-                      <p className="text-[10px] text-[#8a9db5] font-mono truncate">
+                      <p className="text-[10px] text-[#94a3b8] font-mono truncate">
                         {car.subtitle}
                       </p>
                     </div>
                     {isActive && (
-                      <span className="w-2 h-2 rounded-full bg-[#4ea0ff] shrink-0 animate-pulse" />
+                      <span className="w-2 h-2 rounded-full bg-white shrink-0 shadow-[0_0_8px_white]" />
                     )}
                   </button>
                 );
@@ -252,25 +257,25 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
       )}
 
-      {/* Persistent Mobile Bottom Navigation Bar (Optimización para Teléfonos) */}
+      {/* Persistent Mobile Bottom Navigation Bar (Optimización Elegante para Teléfonos) */}
       <nav
         aria-label="Barra de navegación móvil inferior"
-        className="fixed bottom-0 left-0 right-0 z-[990] md:hidden bg-[#070d18]/95 backdrop-blur-2xl border-t border-white/20 px-2 py-1.5 flex items-center justify-around shadow-[0_-10px_30px_rgba(0,0,0,0.9)] pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
+        className="fixed bottom-0 left-0 right-0 z-[990] md:hidden bg-[#07070a]/95 backdrop-blur-2xl border-t border-white/15 px-3 py-1.5 flex items-center justify-around shadow-[0_-10px_30px_rgba(0,0,0,0.95)] pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
       >
         {/* Inicio */}
         <button
           onClick={() => handleNavClick('home')}
-          className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all min-h-[46px] min-w-[58px] active:scale-95 ${
+          className={`relative flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all min-h-[46px] min-w-[56px] active:scale-95 ${
             currentPage === 'home'
-              ? 'text-[#ff5254] font-bold bg-[#ff5254]/10 border border-[#ff5254]/30'
-              : 'text-[#8293a6] hover:text-white'
+              ? 'text-white font-bold bg-white/10 border border-white/20'
+              : 'text-[#94a3b8] hover:text-white'
           }`}
           aria-label="Página de Inicio"
         >
           <Home className="w-5 h-5 mb-0.5" />
           <span className="text-[10px] font-mono tracking-tight uppercase">Inicio</span>
           {currentPage === 'home' && (
-            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#ff5254] shadow-[0_0_8px_#ff5254]" />
+            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_white]" />
           )}
         </button>
 
@@ -283,51 +288,51 @@ export const Navigation: React.FC<NavigationProps> = ({
               handleNavClick('documentales');
             }
           }}
-          className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all min-h-[46px] min-w-[58px] active:scale-95 ${
+          className={`relative flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all min-h-[46px] min-w-[56px] active:scale-95 ${
             isCurrentDoc
-              ? 'text-[#4ea0ff] font-bold bg-[#4ea0ff]/10 border border-[#4ea0ff]/30'
-              : 'text-[#8293a6] hover:text-white'
+              ? 'text-white font-bold bg-white/10 border border-white/20'
+              : 'text-[#94a3b8] hover:text-white'
           }`}
           aria-label="Catálogo de Documentales"
         >
           <BookOpen className="w-5 h-5 mb-0.5" />
           <span className="text-[10px] font-mono tracking-tight uppercase">Docs</span>
           {isCurrentDoc && (
-            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#4ea0ff] shadow-[0_0_8px_#4ea0ff]" />
+            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_white]" />
           )}
         </button>
 
         {/* AutoChat */}
         <button
           onClick={() => handleNavClick('foro')}
-          className={`relative flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-h-[46px] min-w-[52px] active:scale-95 ${
+          className={`relative flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all min-h-[46px] min-w-[56px] active:scale-95 ${
             currentPage === 'foro'
-              ? 'text-[#ff4500] font-bold bg-[#ff4500]/10 border border-[#ff4500]/30'
-              : 'text-[#ff4500]/80 hover:text-[#ff4500] bg-[#ff4500]/10 border border-[#ff4500]/20'
+              ? 'text-white font-bold bg-white/15 border border-white/30'
+              : 'text-[#94a3b8] hover:text-white bg-white/5 border border-white/10'
           }`}
           aria-label="Ir a AutoChat"
         >
-          <MessageSquare className="w-5 h-5 mb-0.5 text-[#ff4500]" />
-          <span className="text-[10px] font-mono tracking-tight uppercase font-bold text-[#ff4500]">AutoChat</span>
+          <MessageSquare className="w-5 h-5 mb-0.5 text-white/90" />
+          <span className="text-[10px] font-mono tracking-tight uppercase font-bold text-white">AutoChat</span>
           {currentPage === 'foro' && (
-            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#ff4500] shadow-[0_0_8px_#ff4500]" />
+            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_white]" />
           )}
         </button>
 
         {/* Datos */}
         <button
           onClick={() => handleNavClick('datos')}
-          className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all min-h-[46px] min-w-[58px] active:scale-95 ${
+          className={`relative flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all min-h-[46px] min-w-[56px] active:scale-95 ${
             currentPage === 'datos'
-              ? 'text-[#ffd451] font-bold bg-[#ffd451]/10 border border-[#ffd451]/30'
-              : 'text-[#8293a6] hover:text-white'
+              ? 'text-white font-bold bg-white/10 border border-white/20'
+              : 'text-[#94a3b8] hover:text-white'
           }`}
           aria-label="Datos Curiosos y Secretos"
         >
           <Lightbulb className="w-5 h-5 mb-0.5" />
           <span className="text-[10px] font-mono tracking-tight uppercase">Datos</span>
           {currentPage === 'datos' && (
-            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#ffd451] shadow-[0_0_8px_#ffd451]" />
+            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_white]" />
           )}
         </button>
 
@@ -346,17 +351,17 @@ export const Navigation: React.FC<NavigationProps> = ({
               handleNavClick('home');
             }
           }}
-          className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all min-h-[46px] min-w-[58px] active:scale-95 ${
+          className={`relative flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all min-h-[46px] min-w-[56px] active:scale-95 ${
             currentPage === 'admin-panel'
-              ? 'text-[#e62628] font-bold bg-[#e62628]/10 border border-[#e62628]/30'
-              : 'text-[#8293a6] hover:text-white'
+              ? 'text-white font-bold bg-white/10 border border-white/20'
+              : 'text-[#94a3b8] hover:text-white'
           }`}
           aria-label={user ? 'Mi Cuenta y Perfil' : 'Iniciar Sesión'}
         >
           {isAdmin ? (
-            <ShieldCheck className="w-5 h-5 mb-0.5 text-[#e62628]" />
+            <ShieldCheck className="w-5 h-5 mb-0.5 text-white/90" />
           ) : user ? (
-            <User className="w-5 h-5 mb-0.5 text-emerald-400" />
+            <User className="w-5 h-5 mb-0.5 text-white/90" />
           ) : (
             <User className="w-5 h-5 mb-0.5" />
           )}
@@ -364,7 +369,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             {isAdmin ? 'Admin' : user ? 'Cuenta' : 'Entrar'}
           </span>
           {currentPage === 'admin-panel' && (
-            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#e62628] shadow-[0_0_8px_#e62628]" />
+            <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_white]" />
           )}
         </button>
       </nav>

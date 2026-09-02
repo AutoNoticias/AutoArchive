@@ -2,20 +2,21 @@
 
 Aplicación web interactiva dedicada a la historia, planos técnicos y monografías documentales de los vehículos más icónicos del automovilismo mundial.
 
-## 🚀 Publicar en GitHub Pages
+---
 
-Este proyecto ya está 100% configurado para funcionar en **GitHub Pages** de forma automática:
+## 🛠️ Cómo solucionar el error «404 Page Not Found» en GitHub Pages
 
-1. **Sube este repositorio a tu cuenta de GitHub**:
-   - Puedes usar el botón **«Export to GitHub»** en la esquina superior de Google AI Studio, o subir los archivos a un nuevo repositorio en GitHub.
+El error **404 Page Not Found** en GitHub ocurre cuando el repositorio aún no tiene activada la fuente de despliegue correcta en los ajustes de GitHub.
 
-2. **Activa GitHub Pages en tu repositorio**:
-   - En tu repositorio de GitHub, ve a **Settings** (Ajustes) → **Pages**.
-   - En la sección **Build and deployment** → **Source**, selecciona **GitHub Actions**.
+Sigue estos **3 sencillos pasos** para activarlo:
 
-3. **¡Listo!**:
-   - Cada vez que hagas un push a `main` o `master`, GitHub compilará y publicará la web automáticamente en:
-     `https://tu-usuario.github.io/nombre-del-repositorio/`
+1. **Entra a tu repositorio en GitHub** y haz clic en la pestaña **⚙️ Settings** (Ajustes) en la parte superior derecha.
+2. En el menú lateral izquierdo, selecciona **Pages** (o ve a `https://github.com/TU-USUARIO/TU-REPO/settings/pages`).
+3. En la sección **Build and deployment**:
+   - En el desplegable **Source** (Fuente), cambia de *«Deploy from a branch»* a **«GitHub Actions»**.
+4. Ve a la pestaña **Actions** de tu repositorio:
+   - Verás el flujo **Deploy to GitHub Pages** ejecutándose automáticamente.
+   - En 1-2 minutos terminará con un icono verde (✓) y te proporcionará la URL pública activa (ej. `https://tu-usuario.github.io/tu-repo/`).
 
 ---
 
@@ -31,3 +32,4 @@ npm run dev
 # 3. Compilar para producción
 npm run build
 ```
+

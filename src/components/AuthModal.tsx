@@ -111,19 +111,19 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fadeIn">
       <div 
         id="auth-modal-card"
-        className="relative w-full max-w-md bg-[#0a121c] border border-[#2a4365]/70 rounded-2xl shadow-2xl overflow-hidden text-white my-auto flex flex-col"
+        className="relative w-full max-w-md bg-[#0d0d14] border border-white/15 rounded-2xl shadow-2xl overflow-hidden text-white my-auto flex flex-col"
       >
         {/* Top Decorative Accent */}
-        <div className="h-1.5 bg-gradient-to-r from-[#4ea0ff] via-[#ffd451] to-[#e62628] shrink-0" />
+        <div className="h-1 bg-gradient-to-r from-white via-white/40 to-transparent shrink-0" />
 
         {/* Close Button */}
         <button
           id="auth-modal-close-btn"
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-[#8bb4d9] hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors z-10 cursor-pointer"
+          className="absolute top-4 right-4 p-2 text-[#94a3b8] hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors z-10 cursor-pointer"
           title="Cerrar"
         >
           <X className="w-5 h-5" />
@@ -132,43 +132,43 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
         <div className="p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
           {/* Custom Context Message Banner */}
           {customMessage && (
-            <div className="flex items-center gap-2.5 p-3.5 mb-5 bg-[#ffd451]/10 border border-[#ffd451]/40 rounded-xl text-xs font-mono font-bold text-[#ffd451] shadow-lg animate-fadeIn">
-              <Headphones className="w-5 h-5 text-[#ffd451] shrink-0" />
+            <div className="flex items-center gap-2.5 p-3.5 mb-5 bg-white/5 border border-white/15 rounded-xl text-xs font-mono font-bold text-white shadow-lg animate-fadeIn">
+              <Headphones className="w-5 h-5 text-white shrink-0" />
               <span>{customMessage}</span>
             </div>
           )}
 
           {/* Header */}
           <div className="mb-6 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#12283e] border border-[#4ea0ff]/30 rounded-full text-[10px] font-mono font-bold tracking-widest text-[#72b9ff] uppercase mb-3">
-              <Shield className="w-3.5 h-3.5 text-[#ffd451]" />
-              <span>AUTOARCHIVE // COMUNIDAD</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/15 rounded-full text-[10px] font-mono font-bold tracking-widest text-[#cbd5e1] uppercase mb-3">
+              <Shield className="w-3.5 h-3.5 text-white" />
+              <span>AUTOARCHIVE // SUSCRIPCIÓN & ACCESO</span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black font-mono tracking-tight text-white">
+            <h3 className="text-xl sm:text-2xl font-black font-mono tracking-tight text-white uppercase">
               {mode === 'email-register' ? 'Crear Cuenta' : mode === 'guest' ? 'Acceso Invitado' : 'Iniciar Sesión'}
             </h3>
-            <p className="text-xs text-[#8bb4d9] mt-2 max-w-xs mx-auto font-mono leading-relaxed">
+            <p className="text-xs text-[#94a3b8] mt-2 max-w-xs mx-auto font-mono leading-relaxed">
               Disfruta de la experiencia completa de archivo automotriz, comentarios y audios.
             </p>
           </div>
 
           {/* Mode Switcher Tabs */}
-          <div className="grid grid-cols-3 gap-1 mb-6 p-1 bg-[#060c14] border border-[#192b42] rounded-xl text-[11px] font-mono">
+          <div className="grid grid-cols-3 gap-1 mb-6 p-1 bg-[#070709] border border-white/10 rounded-xl text-[11px] font-mono">
             <button
               onClick={() => { setMode('google'); setErrorMsg(''); setSuccessMsg(''); }}
-              className={`py-2 px-2 rounded-lg font-bold transition-all cursor-pointer ${mode === 'google' ? 'bg-[#1b365d] text-white shadow' : 'text-[#8bb4d9] hover:text-white'}`}
+              className={`py-2 px-2 rounded-lg font-bold transition-all cursor-pointer ${mode === 'google' ? 'bg-white text-black shadow font-extrabold' : 'text-[#94a3b8] hover:text-white'}`}
             >
               Google
             </button>
             <button
               onClick={() => { setMode('email-login'); setErrorMsg(''); setSuccessMsg(''); }}
-              className={`py-2 px-2 rounded-lg font-bold transition-all cursor-pointer ${mode === 'email-login' || mode === 'email-register' ? 'bg-[#1b365d] text-white shadow' : 'text-[#8bb4d9] hover:text-white'}`}
+              className={`py-2 px-2 rounded-lg font-bold transition-all cursor-pointer ${mode === 'email-login' || mode === 'email-register' ? 'bg-white text-black shadow font-extrabold' : 'text-[#94a3b8] hover:text-white'}`}
             >
               Correo
             </button>
             <button
               onClick={() => { setMode('guest'); setErrorMsg(''); setSuccessMsg(''); }}
-              className={`py-2 px-2 rounded-lg font-bold transition-all cursor-pointer ${mode === 'guest' ? 'bg-[#1b365d] text-white shadow' : 'text-[#8bb4d9] hover:text-white'}`}
+              className={`py-2 px-2 rounded-lg font-bold transition-all cursor-pointer ${mode === 'guest' ? 'bg-white text-black shadow font-extrabold' : 'text-[#94a3b8] hover:text-white'}`}
             >
               Invitado
             </button>
@@ -176,15 +176,15 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
 
           {/* Alerts */}
           {errorMsg && (
-            <div className="flex items-start gap-2.5 p-3 mb-5 bg-[#3d1215] border border-[#ff5356]/40 rounded-xl text-xs text-[#ffb0b2] animate-fadeIn font-mono">
-              <AlertCircle className="w-4 h-4 text-[#ff5356] shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5 p-3 mb-5 bg-[#250d0e] border border-white/20 rounded-xl text-xs text-[#fca5a5] animate-fadeIn font-mono">
+              <AlertCircle className="w-4 h-4 text-[#f87171] shrink-0 mt-0.5" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="flex items-start gap-2.5 p-3 mb-5 bg-[#0d2e1c] border border-[#38d39f]/40 rounded-xl text-xs text-[#a0f0d2] animate-fadeIn font-mono">
-              <CheckCircle2 className="w-4 h-4 text-[#38d39f] shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5 p-3 mb-5 bg-[#0e2417] border border-white/20 rounded-xl text-xs text-[#86efac] animate-fadeIn font-mono">
+              <CheckCircle2 className="w-4 h-4 text-[#4ade80] shrink-0 mt-0.5" />
               <span>{successMsg}</span>
             </div>
           )}
@@ -192,13 +192,13 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
           {/* GOOGLE MODE */}
           {mode === 'google' && (
             <div className="space-y-4">
-              <div className="p-4 bg-[#060c14] border border-[#192b42] rounded-xl space-y-2.5 text-xs font-mono">
-                <div className="flex items-center gap-2.5 text-[#a0c5ea]">
-                  <Sparkles className="w-4 h-4 text-[#ffd451] shrink-0" />
+              <div className="p-4 bg-[#070709] border border-white/10 rounded-xl space-y-2.5 text-xs font-mono">
+                <div className="flex items-center gap-2.5 text-[#cbd5e1]">
+                  <Sparkles className="w-4 h-4 text-white shrink-0" />
                   <span>Acceso rápido con un solo clic</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-[#a0c5ea]">
-                  <Headphones className="w-4 h-4 text-[#4ea0ff] shrink-0" />
+                <div className="flex items-center gap-2.5 text-[#cbd5e1]">
+                  <Headphones className="w-4 h-4 text-white shrink-0" />
                   <span>Narrador y sincronización automática</span>
                 </div>
               </div>
@@ -208,10 +208,10 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={loading}
-                className="w-full py-3.5 px-4 bg-white hover:bg-slate-100 active:scale-[0.98] text-[#0a121c] font-mono text-sm font-bold tracking-wide rounded-xl transition-all shadow-lg flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
+                className="w-full py-3.5 px-4 bg-white hover:bg-[#e2e8f0] active:scale-[0.98] text-black font-mono text-sm font-bold tracking-wide rounded-xl transition-all shadow-lg flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
               >
                 {loading ? (
-                  <span className="text-xs text-slate-700 font-bold">Conectando...</span>
+                  <span className="text-xs text-black font-bold">Conectando...</span>
                 ) : (
                   <>
                     <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
@@ -221,13 +221,13 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                     </svg>
                     <span>Continuar con Google</span>
-                    <ArrowRight className="w-4 h-4 text-slate-700 ml-auto" />
+                    <ArrowRight className="w-4 h-4 text-black ml-auto" />
                   </>
                 )}
               </button>
 
-              <p className="text-[10px] text-center text-[#587391] pt-2 font-mono">
-                ¿Problemas con el dominio en GitHub Pages? Usa la pestaña <b>Correo</b> o <b>Invitado</b> arriba.
+              <p className="text-[10px] text-center text-[#64748b] pt-2 font-mono">
+                ¿Problemas de red o dominio? Usa la pestaña <b>Correo</b> o <b>Invitado</b> arriba.
               </p>
             </div>
           )}
@@ -236,31 +236,31 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
           {mode === 'email-login' && (
             <form onSubmit={handleEmailLogin} className="space-y-4 font-mono">
               <div>
-                <label className="block text-[11px] text-[#8bb4d9] mb-1">Correo Electrónico</label>
+                <label className="block text-[11px] text-[#cbd5e1] mb-1">Correo Electrónico</label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-[#587391]" />
+                  <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-[#64748b]" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="tucorreo@ejemplo.com"
-                    className="w-full pl-10 pr-4 py-3 bg-[#060c14] border border-[#2a4365] rounded-xl text-xs text-white placeholder-[#4a6b8a] focus:outline-none focus:border-[#4ea0ff]"
+                    className="w-full pl-10 pr-4 py-3 bg-[#070709] border border-white/15 rounded-xl text-xs text-white placeholder-[#64748b] focus:outline-none focus:border-white/40"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] text-[#8bb4d9] mb-1">Contraseña</label>
+                <label className="block text-[11px] text-[#cbd5e1] mb-1">Contraseña</label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-[#587391]" />
+                  <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-[#64748b]" />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-3 bg-[#060c14] border border-[#2a4365] rounded-xl text-xs text-white placeholder-[#4a6b8a] focus:outline-none focus:border-[#4ea0ff]"
+                    className="w-full pl-10 pr-4 py-3 bg-[#070709] border border-white/15 rounded-xl text-xs text-white placeholder-[#64748b] focus:outline-none focus:border-white/40"
                   />
                 </div>
               </div>
@@ -268,7 +268,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-[#4ea0ff] hover:bg-[#3d8be6] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg shadow-[#4ea0ff]/20 disabled:opacity-50"
+                className="w-full py-3.5 bg-white hover:bg-[#e2e8f0] text-black font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg disabled:opacity-50"
               >
                 {loading ? 'Iniciando sesión...' : 'Iniciar Sesión con Correo'}
               </button>
@@ -277,7 +277,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
                 <button
                   type="button"
                   onClick={() => { setMode('email-register'); setErrorMsg(''); }}
-                  className="text-xs text-[#ffd451] hover:underline cursor-pointer"
+                  className="text-xs text-[#cbd5e1] hover:text-white underline cursor-pointer"
                 >
                   ¿No tienes cuenta? Regístrate aquí
                 </button>
@@ -288,46 +288,46 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
           {mode === 'email-register' && (
             <form onSubmit={handleEmailRegister} className="space-y-4 font-mono">
               <div>
-                <label className="block text-[11px] text-[#8bb4d9] mb-1">Nombre o Alias</label>
+                <label className="block text-[11px] text-[#cbd5e1] mb-1">Nombre o Alias</label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-3.5 w-4 h-4 text-[#587391]" />
+                  <User className="absolute left-3.5 top-3.5 w-4 h-4 text-[#64748b]" />
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Tu Nombre"
-                    className="w-full pl-10 pr-4 py-3 bg-[#060c14] border border-[#2a4365] rounded-xl text-xs text-white placeholder-[#4a6b8a] focus:outline-none focus:border-[#4ea0ff]"
+                    className="w-full pl-10 pr-4 py-3 bg-[#070709] border border-white/15 rounded-xl text-xs text-white placeholder-[#64748b] focus:outline-none focus:border-white/40"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] text-[#8bb4d9] mb-1">Correo Electrónico</label>
+                <label className="block text-[11px] text-[#cbd5e1] mb-1">Correo Electrónico</label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-[#587391]" />
+                  <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-[#64748b]" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="tucorreo@ejemplo.com"
-                    className="w-full pl-10 pr-4 py-3 bg-[#060c14] border border-[#2a4365] rounded-xl text-xs text-white placeholder-[#4a6b8a] focus:outline-none focus:border-[#4ea0ff]"
+                    className="w-full pl-10 pr-4 py-3 bg-[#070709] border border-white/15 rounded-xl text-xs text-white placeholder-[#64748b] focus:outline-none focus:border-white/40"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] text-[#8bb4d9] mb-1">Contraseña (mínimo 6 caracteres)</label>
+                <label className="block text-[11px] text-[#cbd5e1] mb-1">Contraseña (mínimo 6 caracteres)</label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-[#587391]" />
+                  <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-[#64748b]" />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-3 bg-[#060c14] border border-[#2a4365] rounded-xl text-xs text-white placeholder-[#4a6b8a] focus:outline-none focus:border-[#4ea0ff]"
+                    className="w-full pl-10 pr-4 py-3 bg-[#070709] border border-white/15 rounded-xl text-xs text-white placeholder-[#64748b] focus:outline-none focus:border-white/40"
                   />
                 </div>
               </div>
@@ -335,7 +335,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-[#38d39f] hover:bg-[#2fc48f] text-[#060c14] font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg shadow-[#38d39f]/20 disabled:opacity-50"
+                className="w-full py-3.5 bg-white hover:bg-[#e2e8f0] text-black font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg disabled:opacity-50"
               >
                 {loading ? 'Creando cuenta...' : 'Registrarme'}
               </button>
@@ -344,7 +344,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
                 <button
                   type="button"
                   onClick={() => { setMode('email-login'); setErrorMsg(''); }}
-                  className="text-xs text-[#8bb4d9] hover:text-white underline cursor-pointer"
+                  className="text-xs text-[#cbd5e1] hover:text-white underline cursor-pointer"
                 >
                   ¿Ya tienes cuenta? Inicia sesión
                 </button>
@@ -355,20 +355,20 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
           {/* GUEST MODE */}
           {mode === 'guest' && (
             <form onSubmit={handleGuestLogin} className="space-y-4 font-mono">
-              <div className="p-3 bg-[#060c14] border border-[#192b42] rounded-xl text-xs text-[#8bb4d9]">
+              <div className="p-3 bg-[#070709] border border-white/10 rounded-xl text-xs text-[#94a3b8]">
                 Entra de forma instantánea sin contraseña ni correo electrónico.
               </div>
 
               <div>
-                <label className="block text-[11px] text-[#8bb4d9] mb-1">Tu Alias o Nombre (Opcional)</label>
+                <label className="block text-[11px] text-[#cbd5e1] mb-1">Tu Alias o Nombre (Opcional)</label>
                 <div className="relative">
-                  <KeyRound className="absolute left-3.5 top-3.5 w-4 h-4 text-[#587391]" />
+                  <KeyRound className="absolute left-3.5 top-3.5 w-4 h-4 text-[#64748b]" />
                   <input
                     type="text"
                     value={guestAlias}
                     onChange={(e) => setGuestAlias(e.target.value)}
                     placeholder="Ej. Entusiasta_99"
-                    className="w-full pl-10 pr-4 py-3 bg-[#060c14] border border-[#2a4365] rounded-xl text-xs text-white placeholder-[#4a6b8a] focus:outline-none focus:border-[#4ea0ff]"
+                    className="w-full pl-10 pr-4 py-3 bg-[#070709] border border-white/15 rounded-xl text-xs text-white placeholder-[#64748b] focus:outline-none focus:border-white/40"
                   />
                 </div>
               </div>
@@ -376,7 +376,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-[#ffd451] hover:bg-[#ffca28] text-[#060c14] font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg shadow-[#ffd451]/20 disabled:opacity-50"
+                className="w-full py-3.5 bg-white hover:bg-[#e2e8f0] text-black font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-lg disabled:opacity-50"
               >
                 {loading ? 'Entrando...' : 'Entrar como Invitado'}
               </button>
@@ -384,7 +384,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', customMessag
           )}
 
           {/* Footer note */}
-          <p className="text-[10px] text-center text-[#587391] mt-6 font-mono">
+          <p className="text-[10px] text-center text-[#64748b] mt-6 font-mono">
             Autenticación segura respaldada por Firebase Auth.
           </p>
         </div>

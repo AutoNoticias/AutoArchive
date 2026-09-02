@@ -32,29 +32,38 @@ function AppContent() {
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [isAdminBroadcastModalOpen, setIsAdminBroadcastModalOpen] = useState(false);
 
-  // Sync state with URL hash
+  // Sync state with URL hash or query params
   const getInitialPage = (): RoutePage => {
-    const hash = window.location.hash.replace('#', '');
-    if (
-      hash === 'documentales' ||
-      hash === 'shelby-cobra' ||
-      hash === 'toyota-hilux' ||
-      hash === 'f1' ||
-      hash === 'camaro-mustang' ||
-      hash === 'nsx' ||
-      hash === 'mazda-787b' ||
-      hash === 'supra' ||
-      hash === 'r34' ||
-      hash === 'countach' ||
-      hash === 'f40-miura' ||
-      hash === 'xj220' ||
-      hash === 'datos' ||
-      hash === 'foro' ||
-      hash === 'admin-panel' ||
-      hash === 'home'
-    ) {
+    const validPages: RoutePage[] = [
+      'home',
+      'documentales',
+      'shelby-cobra',
+      'toyota-hilux',
+      'f1',
+      'camaro-mustang',
+      'nsx',
+      'mazda-787b',
+      'supra',
+      'r34',
+      'countach',
+      'f40-miura',
+      'xj220',
+      'datos',
+      'foro',
+      'admin-panel',
+    ];
+
+    const hash = window.location.hash.replace('#', '').trim();
+    if (validPages.includes(hash as RoutePage)) {
       return hash as RoutePage;
     }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryP = urlParams.get('p')?.replace(/^\//, '').trim();
+    if (queryP && validPages.includes(queryP as RoutePage)) {
+      return queryP as RoutePage;
+    }
+
     return 'home';
   };
 
@@ -62,25 +71,26 @@ function AppContent() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (
-        hash === 'documentales' ||
-        hash === 'shelby-cobra' ||
-        hash === 'toyota-hilux' ||
-        hash === 'f1' ||
-        hash === 'camaro-mustang' ||
-        hash === 'nsx' ||
-        hash === 'mazda-787b' ||
-        hash === 'supra' ||
-        hash === 'r34' ||
-        hash === 'countach' ||
-        hash === 'f40-miura' ||
-        hash === 'xj220' ||
-        hash === 'datos' ||
-        hash === 'foro' ||
-        hash === 'admin-panel' ||
-        hash === 'home'
-      ) {
+      const hash = window.location.hash.replace('#', '').trim();
+      const validPages: RoutePage[] = [
+        'home',
+        'documentales',
+        'shelby-cobra',
+        'toyota-hilux',
+        'f1',
+        'camaro-mustang',
+        'nsx',
+        'mazda-787b',
+        'supra',
+        'r34',
+        'countach',
+        'f40-miura',
+        'xj220',
+        'datos',
+        'foro',
+        'admin-panel',
+      ];
+      if (validPages.includes(hash as RoutePage)) {
         setCurrentPage(hash as RoutePage);
       }
     };

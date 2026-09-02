@@ -32,7 +32,7 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci || npm install
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -40,7 +40,8 @@ jobs:
       - name: Build Application
         run: |
           npm run build
-          cp dist/index.html dist/404.html
+          cp dist/index.html dist/404.html || true
+          touch dist/.nojekyll
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
