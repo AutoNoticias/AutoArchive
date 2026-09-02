@@ -3,24 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AutoArchive | Redirigiendo...</title>
+    <title>AutoArchive | Archivo Automotriz</title>
     <script type="text/javascript">
-      // GitHub Pages SPA single page app redirect handler
-      var segmentCount = 0;
-      var location = window.location;
-      location.replace(
-        location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') +
-        location.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
-        location.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
-        (location.search ? '&q=' + location.search.slice(1).replace(/&/g, '~and~') : '') +
-        location.hash
-      );
+      // GitHub Pages SPA Single Page Redirection Script
+      // Dynamically redirects deep links or 404s to index.html with the appropriate hash routing
+      (function() {
+        var path = window.location.pathname;
+        var search = window.location.search || '';
+        var hash = window.location.hash || '';
+
+        // Extract path segments
+        var segments = path.split('/').filter(Boolean);
+        
+        // If on user.github.io/repo-name/page -> segments[0] is repo-name, segments[1] is page
+        // If on custom domain (custom.com/page) -> segments[0] is page
+        var isGithubIoSubfolder = window.location.hostname.endsWith('github.io') && segments.length > 0;
+        var basePath = isGithubIoSubfolder ? '/' + segments[0] + '/' : '/';
+        var subPage = isGithubIoSubfolder 
+          ? segments.slice(1).join('/') 
+          : segments.join('/');
+
+        var targetHash = hash || (subPage ? '#' + subPage : '');
+        var redirectUrl = basePath + search + targetHash;
+
+        window.location.replace(redirectUrl);
+      })();
     </script>
   </head>
-  <body style="background-color: #070709; color: #f1f5f9; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
-    <div style="text-align: center;">
-      <h2 style="font-size: 1.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">AutoArchive</h2>
-      <p style="font-size: 0.875rem; color: #94a3b8;">Cargando la aplicación...</p>
+  <body style="background-color: #070709; color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <div style="text-align: center; padding: 24px;">
+      <h1 style="font-size: 1.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em; margin: 0 0 8px 0; color: #ffffff;">AutoArchive</h1>
+      <p style="font-size: 0.85rem; color: #94a3b8; font-family: monospace; margin: 0;">Redirigiendo al archivo técnico...</p>
     </div>
   </body>
 </html>
